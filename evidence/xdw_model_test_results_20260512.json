@@ -1,0 +1,585 @@
+{
+  "summary": {
+    "tested_at": "2026-05-12 CST",
+    "total": 26,
+    "success": 26,
+    "failed": 0,
+    "direct_count": 19,
+    "channel_test_count": 7,
+    "direct_avg_ms": 859.64,
+    "channel_test_avg_ms": 1393.53,
+    "slowest": [
+      {
+        "model": "minimax-m2.5",
+        "vendor": "MiniMax",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 2431.89,
+        "sample": "The user says: \"只回复ok\" which is Chinese for \"only reply",
+        "error": ""
+      },
+      {
+        "model": "deepseek-r1",
+        "vendor": "DeepSeek",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "vip"
+        ],
+        "evidence_type": "channel_test",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 2091.48,
+        "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.982}",
+        "error": ""
+      },
+      {
+        "model": "deepseek-r1-0528",
+        "vendor": "DeepSeek",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "vip"
+        ],
+        "evidence_type": "channel_test",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 1968.52,
+        "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.945}",
+        "error": ""
+      },
+      {
+        "model": "bge-reranker-v2-m3",
+        "vendor": "智源",
+        "endpoint": "/v1/rerank",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 1661.01,
+        "sample": "top_doc=hello world; score=0.98986953",
+        "error": ""
+      },
+      {
+        "model": "qwen3-32b",
+        "vendor": "通义千问",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "vip",
+          "agent",
+          "default"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 1474.34,
+        "sample": "<think>\n好的，用户让我只回复“ok”。我需要确认他们是否",
+        "error": ""
+      }
+    ],
+    "fastest": [
+      {
+        "model": "bge-m3",
+        "vendor": "智源",
+        "endpoint": "/v1/embeddings",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 150.87,
+        "sample": "embedding_dim=1024",
+        "error": ""
+      },
+      {
+        "model": "bge-base-zh-v1.5",
+        "vendor": "智源",
+        "endpoint": "/v1/embeddings",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 294.92,
+        "sample": "embedding_dim=1024",
+        "error": ""
+      },
+      {
+        "model": "deepseek-v2-lite-chat",
+        "vendor": "DeepSeek",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 371.68,
+        "sample": " ok",
+        "error": ""
+      },
+      {
+        "model": "qwen2.5-vl-7b-instruct",
+        "vendor": "通义千问",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 417.36,
+        "sample": "ok",
+        "error": ""
+      },
+      {
+        "model": "qwen2.5-7b-instruct",
+        "vendor": "通义千问",
+        "endpoint": "/v1/chat/completions",
+        "groups": [
+          "agent",
+          "default",
+          "vip"
+        ],
+        "evidence_type": "xdapi_direct",
+        "http_status": 200,
+        "ok": true,
+        "response_ms": 420.12,
+        "sample": "ok",
+        "error": ""
+      }
+    ]
+  },
+  "results": [
+    {
+      "model": "bge-base-zh-v1.5",
+      "vendor": "智源",
+      "endpoint": "/v1/embeddings",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 294.92,
+      "sample": "embedding_dim=1024",
+      "error": ""
+    },
+    {
+      "model": "bge-m3",
+      "vendor": "智源",
+      "endpoint": "/v1/embeddings",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 150.87,
+      "sample": "embedding_dim=1024",
+      "error": ""
+    },
+    {
+      "model": "bge-reranker-v2-m3",
+      "vendor": "智源",
+      "endpoint": "/v1/rerank",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1661.01,
+      "sample": "top_doc=hello world; score=0.98986953",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "vip"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 2091.48,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.982}",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1-0528",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "vip"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1968.52,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.945}",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1-distill-llama-70b",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1153.2,
+      "sample": "<think>Okay, so I need to figure out how to make a paper airplane. I",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1-distill-llama-8B",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1122.79,
+      "sample": "<think>Okay, so I need to figure out how to make a paper airplane. I",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-14b",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "default",
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 921.05,
+      "sample": "<think>\n好，用户让我只回复“ok”，我得先理解他的",
+      "error": ""
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-32b",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 814.99,
+      "sample": "<think>\n好，用户让我只回复“ok”，我得先理解他的",
+      "error": ""
+    },
+    {
+      "model": "deepseek-v2-lite-chat",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 371.68,
+      "sample": " ok",
+      "error": ""
+    },
+    {
+      "model": "deepseek-v3",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "default",
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 791.21,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "deepseek-v3-0324",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 998.82,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "deepseek-v3.1",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 748.2,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "deepseek-v3.2",
+      "vendor": "DeepSeek",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 964.73,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "minimax-m2.5",
+      "vendor": "MiniMax",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 2431.89,
+      "sample": "The user says: \"只回复ok\" which is Chinese for \"only reply",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-14b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 492.47,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-14b-instruct-1m",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "default",
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 595.1,
+      "sample": "OK",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-32b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 508.36,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-72b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1457.04,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.433}",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-72b-instruct-64k",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "vip"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 778.33,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 0.758}",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-7b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 420.12,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-vl-32b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1306.8,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.29}",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-vl-72b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "vip"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1337.72,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 1.318}",
+      "error": ""
+    },
+    {
+      "model": "qwen2.5-vl-7b-instruct",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "agent",
+        "default",
+        "vip"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 417.36,
+      "sample": "ok",
+      "error": ""
+    },
+    {
+      "model": "qwen3-32b",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "vip",
+        "agent",
+        "default"
+      ],
+      "evidence_type": "xdapi_direct",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 1474.34,
+      "sample": "<think>\n好的，用户让我只回复“ok”。我需要确认他们是否",
+      "error": ""
+    },
+    {
+      "model": "qwq-32b",
+      "vendor": "通义千问",
+      "endpoint": "/v1/chat/completions",
+      "groups": [
+        "vip",
+        "agent"
+      ],
+      "evidence_type": "channel_test",
+      "http_status": 200,
+      "ok": true,
+      "response_ms": 814.79,
+      "sample": "{\"message\": \"\", \"success\": true, \"time\": 0.794}",
+      "error": ""
+    }
+  ]
+}

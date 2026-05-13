@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>中国移动 MaaS 与 XD API 模型横向对比进度表</title>
+  <style>
+    :root { --bg:#f6f8fc; --card:#fff; --text:#172033; --muted:#5f6b85; --line:#d9e1f2; --accent:#0f6fff; --ok:#0d8b5f; --warn:#b26b00; --pending:#7c3aed; --direct:#0f6fff; --premium:#9a3412; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:linear-gradient(180deg,#f7f9fd 0%,#eef3fb 100%); color:var(--text); font:15px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    .wrap { max-width:1320px; margin:0 auto; padding:40px 24px 80px; }
+    .hero { background:linear-gradient(135deg,#0f172a 0%,#173b7a 56%,#0f6fff 100%); color:#fff; border-radius:22px; padding:34px 38px; box-shadow:0 24px 60px rgba(17,36,84,.18); margin-bottom:24px; }
+    .hero h1 { margin:0 0 10px; font-size:34px; line-height:1.18; }
+    .hero p { margin:0; max-width:980px; color:rgba(255,255,255,.9); }
+    .chips { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+    .chip { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.24); color:#fff; border-radius:999px; padding:6px 12px; font-size:13px; font-weight:650; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:22px; }
+    .stat,.section { background:var(--card); border:1px solid var(--line); box-shadow:0 10px 24px rgba(33,53,92,.05); }
+    .stat { border-radius:16px; padding:18px 20px; }
+    .stat .k { color:var(--muted); font-size:13px; margin-bottom:6px; }
+    .stat .v { font-size:30px; font-weight:760; }
+    .section { border-radius:18px; padding:24px 26px; margin-bottom:20px; overflow:auto; }
+    h2 { margin:0 0 12px; font-size:22px; }
+    h3 { margin:20px 0 10px; font-size:17px; }
+    p { margin:8px 0; }
+    ul { margin:10px 0 0 20px; padding:0; }
+    li { margin:5px 0; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; font-size:13.5px; }
+    th,td { border-bottom:1px solid var(--line); padding:10px 9px; text-align:left; vertical-align:top; }
+    th { background:#f8fbff; color:#27406e; font-weight:720; position:sticky; top:0; }
+    code { background:#f2f5fa; border:1px solid #e1e8f4; padding:2px 6px; border-radius:7px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.93em; }
+    .badge { display:inline-block; padding:4px 9px; border-radius:999px; font-size:12px; font-weight:740; white-space:nowrap; }
+    .ok { background:#e8f8f1; color:var(--ok); } .pending { background:#f1eaff; color:var(--pending); } .direct { background:#eaf2ff; color:var(--direct); } .premium { background:#fff0e8; color:var(--premium); }
+    .muted { color:var(--muted); } .small { font-size:13px; color:var(--muted); }
+    @media (max-width:960px) { .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+    @media (max-width:640px) { .wrap{padding:24px 14px 60px;} .grid{grid-template-columns:1fr;} .hero{padding:26px 20px;} .hero h1{font-size:27px;} .section{padding:20px 16px;} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
+      <p>本次增量补充 26 个已部署模型的实际可用性测试证据，按聊天、向量、排序三类记录 HTTP 状态、响应耗时和脱敏响应片段。Premium 模型因不对 default 分组开放，证据来源明确标为后台渠道测试。</p>
+      <div class="chips">
+        <span class="chip">更新时间：2026-05-13 10:15 CST</span>
+        <span class="chip">测试时间：2026-05-12 CST</span>
+        <span class="chip">站点：api.xingdingwangluo.cn</span>
+        <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="stat"><div class="k">已部署测试模型</div><div class="v">26</div></div>
+      <div class="stat"><div class="k">成功 / 失败</div><div class="v">26 / 0</div></div>
+      <div class="stat"><div class="k">标准池对外调用</div><div class="v">19</div></div>
+      <div class="stat"><div class="k">Premium 渠道测试</div><div class="v">7</div></div>
+    </section>
+
+    <section class="section">
+      <h2>本轮实际可用性测试结论</h2>
+      <ul>
+        <li>26 个已部署模型全部有成功证据，失败数为 0。</li>
+        <li>标准池 19 个模型通过对外 XD API Bearer 调用验证，平均耗时 859.64 ms。</li>
+        <li>Premium 7 个模型通过后台渠道测试验证，平均耗时 1393.53 ms。</li>
+        <li>本文件只保存响应片段、耗时和状态码，不保存临时 Bearer token、后台 cookie 或上游 API key。</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>按模型类型汇总</h2>
+      <table><thead><tr><th>类型</th><th>模型数</th><th>平均耗时</th><th>最快</th><th>最慢</th></tr></thead><tbody><tr><td>聊天</td><td>23</td><td>1042.65 ms</td><td><code>deepseek-v2-lite-chat</code><br><span class="muted">371.68 ms</span></td><td><code>minimax-m2.5</code><br><span class="muted">2431.89 ms</span></td></tr><tr><td>向量</td><td>2</td><td>222.90 ms</td><td><code>bge-m3</code><br><span class="muted">150.87 ms</span></td><td><code>bge-base-zh-v1.5</code><br><span class="muted">294.92 ms</span></td></tr><tr><td>排序</td><td>1</td><td>1661.01 ms</td><td><code>bge-reranker-v2-m3</code><br><span class="muted">1661.01 ms</span></td><td><code>bge-reranker-v2-m3</code><br><span class="muted">1661.01 ms</span></td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2>供应商级横向对比</h2>
+      <table>
+        <thead><tr><th>供应商</th><th>中国移动可直调</th><th>XD API 已部署</th><th>默认公开</th><th>高级池</th><th>当前结论</th></tr></thead>
+        <tbody>
+          <tr><td>DeepSeek</td><td>11</td><td>11</td><td>9</td><td>2</td><td><span class="badge ok">已完整接入，本轮 11 个均成功</span></td></tr>
+          <tr><td>通义千问（文本/推理）</td><td>8</td><td>8</td><td>6</td><td>2</td><td><span class="badge ok">已完整接入</span></td></tr>
+          <tr><td>通义千问（视觉）</td><td>3</td><td>3</td><td>1</td><td>2</td><td><span class="badge ok">已接入并补大小写映射</span></td></tr>
+          <tr><td>MiniMax</td><td>1</td><td>1</td><td>1</td><td>0</td><td><span class="badge ok">对外 XD API 调用成功</span></td></tr>
+          <tr><td>智源（向量/排序）</td><td>3</td><td>3</td><td>3</td><td>0</td><td><span class="badge ok">embedding/rerank 均成功</span></td></tr>
+          <tr><td>语音模型</td><td>2</td><td>0</td><td>0</td><td>0</td><td><span class="badge pending">暂缓，计费单位不兼容</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>已部署模型测试明细</h2>
+      <p class="small">响应片段来自实际测试结果文件，已脱敏；Premium 行的“后台渠道测试”不能等同于 default 分组可见性。</p>
+      <table><thead><tr><th>模型</th><th>类型</th><th>供应商</th><th>分组</th><th>证据来源</th><th>HTTP</th><th>耗时</th><th>响应片段</th></tr></thead><tbody><tr><td><code>deepseek-r1</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,vip</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>2091.48 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 1.982}</code></td></tr><tr><td><code>deepseek-r1-0528</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,vip</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1968.52 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 1.945}</code></td></tr><tr><td><code>deepseek-v3</code></td><td>聊天</td><td>DeepSeek</td><td><code>default,vip,agent</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>791.21 ms</td><td><code>ok</code></td></tr><tr><td><code>deepseek-v3-0324</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>998.82 ms</td><td><code>ok</code></td></tr><tr><td><code>deepseek-v3.1</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>748.20 ms</td><td><code>ok</code></td></tr><tr><td><code>deepseek-v3.2</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>964.73 ms</td><td><code>ok</code></td></tr><tr><td><code>deepseek-r1-distill-llama-8B</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1122.79 ms</td><td><code>&lt;think&gt;Okay, so I need to figure out how to make a paper airplane. I</code></td></tr><tr><td><code>deepseek-r1-distill-llama-70b</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1153.20 ms</td><td><code>&lt;think&gt;Okay, so I need to figure out how to make a paper airplane. I</code></td></tr><tr><td><code>deepseek-r1-distill-qwen-14b</code></td><td>聊天</td><td>DeepSeek</td><td><code>default,vip,agent</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>921.05 ms</td><td><code>&lt;think&gt;\n好，用户让我只回复“ok”，我得先理解他的</code></td></tr><tr><td><code>deepseek-r1-distill-qwen-32b</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>814.99 ms</td><td><code>&lt;think&gt;\n好，用户让我只回复“ok”，我得先理解他的</code></td></tr><tr><td><code>deepseek-v2-lite-chat</code></td><td>聊天</td><td>DeepSeek</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>371.68 ms</td><td><code> ok</code></td></tr><tr><td><code>qwen3-32b</code></td><td>聊天</td><td>通义千问</td><td><code>vip,agent,default</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1474.34 ms</td><td><code>&lt;think&gt;\n好的，用户让我只回复“ok”。我需要确认他们是否</code></td></tr><tr><td><code>qwen2.5-72b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>vip,agent</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1457.04 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 1.433}</code></td></tr><tr><td><code>qwen2.5-72b-instruct-64k</code></td><td>聊天</td><td>通义千问</td><td><code>agent,vip</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>778.33 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 0.758}</code></td></tr><tr><td><code>qwen2.5-32b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>508.36 ms</td><td><code>ok</code></td></tr><tr><td><code>qwen2.5-14b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>492.47 ms</td><td><code>ok</code></td></tr><tr><td><code>qwen2.5-14b-instruct-1m</code></td><td>聊天</td><td>通义千问</td><td><code>default,vip,agent</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>595.10 ms</td><td><code>OK</code></td></tr><tr><td><code>qwen2.5-7b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>420.12 ms</td><td><code>ok</code></td></tr><tr><td><code>qwq-32b</code></td><td>聊天</td><td>通义千问</td><td><code>vip,agent</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>814.79 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 0.794}</code></td></tr><tr><td><code>qwen2.5-vl-7b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>417.36 ms</td><td><code>ok</code></td></tr><tr><td><code>qwen2.5-vl-32b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>vip,agent</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1306.80 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 1.29}</code></td></tr><tr><td><code>qwen2.5-vl-72b-instruct</code></td><td>聊天</td><td>通义千问</td><td><code>agent,vip</code></td><td><span class="badge premium">后台渠道测试</span><br><code>/v1/chat/completions</code></td><td>200</td><td>1337.72 ms</td><td><code>{&quot;message&quot;: &quot;&quot;, &quot;success&quot;: true, &quot;time&quot;: 1.318}</code></td></tr><tr><td><code>minimax-m2.5</code></td><td>聊天</td><td>MiniMax</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/chat/completions</code></td><td>200</td><td>2431.89 ms</td><td><code>The user says: &quot;只回复ok&quot; which is Chinese for &quot;only reply</code></td></tr><tr><td><code>bge-m3</code></td><td>向量</td><td>智源</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/embeddings</code></td><td>200</td><td>150.87 ms</td><td><code>embedding_dim=1024</code></td></tr><tr><td><code>bge-base-zh-v1.5</code></td><td>向量</td><td>智源</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/embeddings</code></td><td>200</td><td>294.92 ms</td><td><code>embedding_dim=1024</code></td></tr><tr><td><code>bge-reranker-v2-m3</code></td><td>排序</td><td>智源</td><td><code>agent,default,vip</code></td><td><span class="badge direct">对外 XD API Bearer 调用</span><br><code>/v1/rerank</code></td><td>200</td><td>1661.01 ms</td><td><code>top_doc=hello world; score=0.98986953</code></td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2>部署与价格矩阵</h2>
+      <table><thead><tr><th>模型</th><th>供应商</th><th>类型</th><th>官方价格</th><th>XD API 状态</th><th>分组/渠道</th><th>本轮验证状态</th><th>备注</th></tr></thead><tbody><tr><td><code>deepseek-r1</code></td><td>DeepSeek</td><td>聊天</td><td>输入 4 / 输出 16 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>高价推理模型</td></tr><tr><td><code>deepseek-r1-0528</code></td><td>DeepSeek</td><td>聊天</td><td>输入 4 / 输出 16 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>高价推理模型</td></tr><tr><td><code>deepseek-v3</code></td><td>DeepSeek</td><td>聊天</td><td>输入 2 / 输出 8 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>deepseek-v3-0324</code></td><td>DeepSeek</td><td>聊天</td><td>输入 2 / 输出 8 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>deepseek-v3.1</code></td><td>DeepSeek</td><td>聊天</td><td>输入 2 / 输出 8 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>deepseek-v3.2</code></td><td>DeepSeek</td><td>聊天</td><td>输入 2 / 输出 8 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>deepseek-r1-distill-llama-8B</code></td><td>DeepSeek</td><td>聊天</td><td>0.42 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>平价蒸馏模型</td></tr><tr><td><code>deepseek-r1-distill-llama-70b</code></td><td>DeepSeek</td><td>聊天</td><td>4.13 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>平价蒸馏模型</td></tr><tr><td><code>deepseek-r1-distill-qwen-14b</code></td><td>DeepSeek</td><td>聊天</td><td>0.7 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>平价蒸馏模型</td></tr><tr><td><code>deepseek-r1-distill-qwen-32b</code></td><td>DeepSeek</td><td>聊天</td><td>1.26 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>平价蒸馏模型</td></tr><tr><td><code>deepseek-v2-lite-chat</code></td><td>DeepSeek</td><td>聊天</td><td>1.33 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>平价聊天模型</td></tr><tr><td><code>qwen3-32b</code></td><td>通义千问</td><td>聊天</td><td>输入 2 / 输出 8；思考输出 20 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>现网按非思考输出价处理</td></tr><tr><td><code>qwen2.5-72b-instruct</code></td><td>通义千问</td><td>聊天</td><td>输入 4 / 输出 12 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>高价 72B 文本模型</td></tr><tr><td><code>qwen2.5-72b-instruct-64k</code></td><td>通义千问</td><td>聊天</td><td>输入 4 / 输出 12 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>高价 72B 长上下文模型</td></tr><tr><td><code>qwen2.5-32b-instruct</code></td><td>通义千问</td><td>聊天</td><td>输入 2 / 输出 6 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>qwen2.5-14b-instruct</code></td><td>通义千问</td><td>聊天</td><td>输入 1 / 输出 3 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>qwen2.5-14b-instruct-1m</code></td><td>通义千问</td><td>聊天</td><td>输入 1 / 输出 3 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>长上下文</td></tr><tr><td><code>qwen2.5-7b-instruct</code></td><td>通义千问</td><td>聊天</td><td>输入 0.5 / 输出 1 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td></td></tr><tr><td><code>qwq-32b</code></td><td>通义千问</td><td>聊天</td><td>输入 2 / 输出 6 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>推理模型</td></tr><tr><td><code>qwen2.5-vl-7b-instruct</code></td><td>通义千问</td><td>聊天/视觉</td><td>输入 2 / 输出 5 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>已配置大小写 model_mapping</td></tr><tr><td><code>qwen2.5-vl-32b-instruct</code></td><td>通义千问</td><td>聊天/视觉</td><td>输入 8 / 输出 24 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>已配置大小写 model_mapping</td></tr><tr><td><code>qwen2.5-vl-72b-instruct</code></td><td>通义千问</td><td>聊天/视觉</td><td>输入 16 / 输出 48 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Premium / VIP,Agent</td><td>成功 / 后台渠道测试</td><td>已配置大小写 model_mapping</td></tr><tr><td><code>minimax-m2.5</code></td><td>MiniMax</td><td>聊天</td><td>输入 2.1 / 输出 8.4 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>新增 MiniMax 文本模型</td></tr><tr><td><code>bge-m3</code></td><td>智源</td><td>向量</td><td>0.5 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>/v1/embeddings</td></tr><tr><td><code>bge-base-zh-v1.5</code></td><td>智源</td><td>向量</td><td>0.5 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>/v1/embeddings</td></tr><tr><td><code>bge-reranker-v2-m3</code></td><td>智源</td><td>排序</td><td>0.5 元 / 百万 tokens</td><td><span class="badge ok">已部署</span></td><td>Standard / Default,VIP,Agent</td><td>成功 / 对外 XD API Bearer 调用</td><td>/v1/rerank</td></tr><tr><td><code>SenseVoice</code></td><td>阿里语音系</td><td>语音识别</td><td>0.0007 元 / 秒</td><td><span class="badge pending">未部署</span></td><td>未部署</td><td>暂缓，未纳入 XD API 测试</td><td>当前 token 计费结构不兼容</td></tr><tr><td><code>CosyVoice</code></td><td>阿里语音系</td><td>语音合成</td><td>2 元 / 万字符</td><td><span class="badge pending">未部署</span></td><td>未部署</td><td>暂缓，未纳入 XD API 测试</td><td>当前 token 计费结构不兼容</td></tr></tbody></table>
+    </section>
+
+    <section class="section">
+      <h2>官方来源与边界</h2>
+      <ul>
+        <li>价格总表：<code>https://ecloud.10086.cn/op-help-center/doc/article/91592</code></li>
+        <li>活跃 API 文档：<code>93315</code>、<code>93726</code>、<code>93740</code>、<code>97885</code>、<code>98272</code> 等中国移动 MoMA 文档。</li>
+        <li><code>SenseVoice</code> 和 <code>CosyVoice</code> 已确认上游 API-callable，但因官方计费单位分别为元/秒、元/万字符，本轮不纳入 XD API token 计费现网部署。</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
