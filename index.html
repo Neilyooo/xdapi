@@ -32,12 +32,20 @@
     .badge { display:inline-block; padding:4px 9px; border-radius:999px; font-size:12px; font-weight:740; white-space:nowrap; }
     .ok { background:#e8f8f1; color:var(--ok); } .pending { background:#f1eaff; color:var(--pending); } .direct { background:#eaf2ff; color:var(--direct); } .premium { background:#fff0e8; color:var(--premium); }
     .muted { color:var(--muted); } .small { font-size:13px; color:var(--muted); }
+    .navlinks { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+    .navlinks a { color:#174ea6; background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 12px; text-decoration:none; font-weight:650; }
     @media (max-width:960px) { .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
     @media (max-width:640px) { .wrap{padding:24px 14px 60px;} .grid{grid-template-columns:1fr;} .hero{padding:26px 20px;} .hero h1{font-size:27px;} .section{padding:20px 16px;} }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <nav class="navlinks">
+      <a href="./docs/cli-ide-setup-tutorial.html">小白接入教程</a>
+      <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
+      <a href="./evidence/xdw_model_test_results_20260512.json">测试证据 JSON</a>
+    </nav>
+
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
       <p>本次增量补充 26 个已部署模型的实际可用性测试证据，按聊天、向量、排序三类记录 HTTP 状态、响应耗时和脱敏响应片段。Premium 模型因不对 default 分组开放，证据来源明确标为后台渠道测试。</p>
