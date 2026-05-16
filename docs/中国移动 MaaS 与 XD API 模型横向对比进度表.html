@@ -32,17 +32,27 @@
     .badge { display:inline-block; padding:4px 9px; border-radius:999px; font-size:12px; font-weight:740; white-space:nowrap; }
     .ok { background:#e8f8f1; color:var(--ok); } .pending { background:#f1eaff; color:var(--pending); } .direct { background:#eaf2ff; color:var(--direct); } .premium { background:#fff0e8; color:var(--premium); }
     .muted { color:var(--muted); } .small { font-size:13px; color:var(--muted); }
+    .navlinks { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+    .navlinks a { color:#174ea6; background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 12px; text-decoration:none; font-weight:650; }
     @media (max-width:960px) { .grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
     @media (max-width:640px) { .wrap{padding:24px 14px 60px;} .grid{grid-template-columns:1fr;} .hero{padding:26px 20px;} .hero h1{font-size:27px;} .section{padding:20px 16px;} }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <nav class="navlinks">
+      <a href="./docs/cli-ide-setup-tutorial.html">小白接入教程</a>
+      <a href="./docs/business-framework.html">业务框架</a>
+      <a href="./docs/work-log.html">工作记录</a>
+      <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
+      <a href="./evidence/xdw_model_test_results_20260512.json">测试证据 JSON</a>
+    </nav>
+
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本次增量补充 26 个已部署模型的实际可用性测试证据，按聊天、向量、排序三类记录 HTTP 状态、响应耗时和脱敏响应片段。Premium 模型因不对 default 分组开放，证据来源明确标为后台渠道测试。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-16 起，分组不再作为模型访问门槛；所有已部署 CMCC token 计费模型可由 default 分组调用，27 个可 API 调用模型已公开到前台目录。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-05-13 10:15 CST</span>
+        <span class="chip">更新时间：2026-05-16 14:26 CST</span>
         <span class="chip">测试时间：2026-05-12 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
         <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
@@ -52,8 +62,19 @@
     <section class="grid">
       <div class="stat"><div class="k">已部署测试模型</div><div class="v">26</div></div>
       <div class="stat"><div class="k">成功 / 失败</div><div class="v">26 / 0</div></div>
-      <div class="stat"><div class="k">标准池对外调用</div><div class="v">19</div></div>
-      <div class="stat"><div class="k">Premium 渠道测试</div><div class="v">7</div></div>
+      <div class="stat"><div class="k">前台公开 CMCC 模型</div><div class="v">27</div></div>
+      <div class="stat"><div class="k">当前分组倍率</div><div class="v">1x</div></div>
+    </section>
+
+    <section class="section">
+      <h2>当前业务框架更新</h2>
+      <ul>
+        <li>当前 <code>default</code>、<code>vip</code>、<code>agent</code> 三个历史 group key 都是 <code>1.00x</code>。</li>
+        <li>标准 CMCC 渠道和高成本 CMCC 渠道都绑定 <code>default,vip,agent</code>，不再用 <code>vip/agent</code> 限制模型可用性。</li>
+        <li>匿名 <code>/api/pricing</code> 和登录态 <code>/api/user/models</code> 均已返回 27 个模型，前台目录不再停留在 20 个标准池模型。</li>
+        <li>用临时 <code>default</code> 令牌验证 <code>qwen2.5-vl-72b-instruct</code> 成功，HTTP 200，响应片段 <code>ok</code>。</li>
+        <li>详细说明见 <a href="./docs/business-framework.html">业务框架</a> 和 <a href="./docs/work-log.html">工作记录</a>。</li>
+      </ul>
     </section>
 
     <section class="section">

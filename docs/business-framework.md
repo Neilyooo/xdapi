@@ -1,10 +1,11 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-16 14:12 CST
+更新时间：2026-05-16 14:26 CST
 
 ## 当前结论
 
 - 所有已部署 CMCC token 计费模型，默认分组都可以通过 API 调用。
+- 前台 `/api/pricing` 与登录态 `/api/user/models` 均返回 27 个模型。
 - `default`、`vip`、`agent` 三个历史 group key 目前统一为 `1.00x`，只作为兼容保留。
 - 高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用 `vip/agent` 限制访问。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
@@ -23,6 +24,14 @@
 | --- | --- | --- | --- |
 | `China Mobile MaaS - Huhehaote` | 20 个标准/常用模型 | `default,vip,agent` | 常规文本、视觉、向量、排序模型 |
 | `China Mobile MaaS - Huhehaote Premium` | 7 个高成本推理/72B/VL 模型 | `default,vip,agent` | 高成本模型独立维护和观测，不再作为访问限制 |
+
+## 前台公开目录
+
+| 接口 | 验证时间 | 结果 | 结论 |
+| --- | --- | ---: | --- |
+| `/api/pricing` | 2026-05-16 14:26 CST | 27 个模型 | 匿名价格页可见完整 CMCC token 模型目录 |
+| `/api/user/models` | 2026-05-16 14:26 CST | 27 个模型 | 登录用户模型选择器可见完整 CMCC token 模型目录 |
+| `/api/user/groups` | 2026-05-16 14:26 CST | `default`，倍率 `1` | 普通用户仍只需要使用基础 1x 统一分组 |
 
 ## 验证结果
 

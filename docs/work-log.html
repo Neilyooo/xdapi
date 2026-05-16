@@ -35,6 +35,28 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-16 14:26 CST</div>
+      <h2>公开 27 个 CMCC token 计费模型到前台目录</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>确认前台公开目录已经覆盖两个 CMCC 逻辑渠道中的全部 27 个可 API 调用模型。</li>
+        <li>将文档中残留的“公开 <code>/api/pricing</code> 仍显示 20 个模型”限制更新为“已公开 27 个模型”。</li>
+        <li>继续保持普通用户只看到 <code>default</code> 1x 分组；模型公开不再依赖 <code>vip/agent</code>。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>匿名请求 <code>/api/pricing</code>，返回 27 个模型。</li>
+        <li>登录态请求 <code>/api/user/models</code>，返回同一组 27 个模型。</li>
+        <li>登录态请求 <code>/api/user/groups</code>，返回 <code>default</code>，倍率 <code>1</code>。</li>
+        <li>对比两个 CMCC 渠道的模型列表，确认没有模型缺失于公开价格目录。</li>
+      </ul>
+      <h3>注意事项</h3>
+      <ul>
+        <li>高成本模型仍保留在独立逻辑渠道中便于维护和观测，但不作为前台可见性限制。</li>
+        <li>语音类 <code>SenseVoice</code>、<code>CosyVoice</code> 暂不公开，因为当前商业计费结构仍以 token 为主。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-16 14:12 CST</div>
       <h2>统一分组策略：分组从“访问门槛”改为“速度/价格倍率档位”</h2>
       <h3>变更内容</h3>
@@ -54,7 +76,7 @@
       <h3>备份与注意事项</h3>
       <ul>
         <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。</li>
-        <li>公开 <code>/api/pricing</code> 当前仍显示 20 个模型，但 default 令牌可通过 relay 调用 27 个已部署 CMCC token 模型。</li>
+        <li>14:26 CST 已完成前台目录复核：公开 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均显示 27 个模型。</li>
         <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
       </ul>
     </article>

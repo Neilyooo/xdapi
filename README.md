@@ -2,6 +2,8 @@
 
 This repository publishes the China Mobile MaaS and XD API model progress report.
 
+Current live status as of 2026-05-16 14:26 CST: the XD API frontend catalog exposes 27 CMCC token-priced models, and ordinary users use the `default` 1x group.
+
 - GitHub Pages entry: `index.html`
 - Beginner tutorial page: `docs/cli-ide-setup-tutorial.html`
 - Beginner tutorial Markdown: `docs/cli-ide-setup-tutorial.md`
