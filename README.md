@@ -5,6 +5,8 @@ This repository publishes the China Mobile MaaS and XD API model progress report
 - GitHub Pages entry: `index.html`
 - Beginner tutorial page: `docs/cli-ide-setup-tutorial.html`
 - Beginner tutorial Markdown: `docs/cli-ide-setup-tutorial.md`
+- Business framework: `docs/business-framework.html`
+- Work log: `docs/work-log.html`
 - Source HTML report: `docs/中国移动 MaaS 与 XD API 模型横向对比进度表.html`
 - Markdown report: `docs/中国移动 MaaS 与 XD API 模型横向对比进度表.md`
 - Test evidence: `evidence/xdw_model_test_results_20260512.json`

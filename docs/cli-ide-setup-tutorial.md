@@ -6,7 +6,7 @@
 
 - API Key 是你在 `https://api.xingdingwangluo.cn` 创建的令牌。
 - 大多数 CLI / IDE 的 Base URL 填 `https://api.xingdingwangluo.cn/v1`。
-- 普通用户默认只能使用标准池模型；Premium 模型需要 VIP 或代理分组。
+- 普通用户使用 `default` 1x 统一分组；2026-05-16 起，已部署 CMCC token 计费模型不再用 `vip/agent` 做访问门槛。
 
 ## 常用 URL
 
@@ -121,7 +121,7 @@ curl https://api.xingdingwangluo.cn/v1/chat/completions \
 | 现象 | 处理 |
 | --- | --- |
 | 401 / token invalid | 重新复制或新建令牌 |
-| 403 / 无权访问分组 | 改用标准池模型，或确认 VIP/代理权限 |
+| 403 / 无权访问分组 | 新建默认分组令牌，或重新登录后再试 |
 | 404 | Base URL 大概率填错；多数工具填 `https://api.xingdingwangluo.cn/v1` |
 | 模型不存在 | 先用 `deepseek-v3` 测试 |
 

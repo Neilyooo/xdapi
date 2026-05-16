@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>XD API 工作记录</title>
+  <style>
+    :root { --bg:#f6f8fc; --card:#fff; --text:#172033; --muted:#5f6b85; --line:#d9e1f2; --accent:#0f6fff; --ok:#0d8b5f; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:linear-gradient(180deg,#f8fbff 0%,#eef3fb 100%); color:var(--text); font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    .wrap { max-width:1040px; margin:0 auto; padding:32px 20px 72px; }
+    .topbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+    .topbar a { color:#174ea6; background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 12px; text-decoration:none; font-weight:650; }
+    .hero { background:linear-gradient(135deg,#0f172a 0%,#173b7a 56%,#0f6fff 100%); color:#fff; border-radius:22px; padding:34px 38px; box-shadow:0 24px 60px rgba(17,36,84,.18); margin-bottom:20px; }
+    .hero h1 { margin:0 0 10px; font-size:34px; line-height:1.18; }
+    .hero p { margin:0; max-width:860px; color:rgba(255,255,255,.9); }
+    .entry { background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 10px 24px rgba(33,53,92,.05); padding:24px 26px; margin-bottom:18px; }
+    h2 { margin:0 0 12px; font-size:22px; }
+    h3 { margin:18px 0 8px; font-size:17px; }
+    ul { margin:10px 0 0 22px; padding:0; }
+    li { margin:6px 0; }
+    code { background:#f2f5fa; border:1px solid #e1e8f4; padding:2px 6px; border-radius:7px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.93em; }
+    .time { color:var(--muted); font-weight:700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topbar">
+      <a href="../index.html">模型进度首页</a>
+      <a href="./business-framework.html">业务框架</a>
+      <a href="./cli-ide-setup-tutorial.html">小白接入教程</a>
+    </nav>
+    <section class="hero">
+      <h1>XD API 工作记录</h1>
+      <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
+    </section>
+    <article class="entry">
+      <div class="time">2026-05-16 14:12 CST</div>
+      <h2>统一分组策略：分组从“访问门槛”改为“速度/价格倍率档位”</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>将 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>GroupGroupRatio</code> 中的 <code>default/vip/agent</code> 统一为 <code>1.00x</code>。</li>
+        <li>将标准 CMCC 渠道和高成本 CMCC 渠道的 <code>group</code> 都设为 <code>default,vip,agent</code>。</li>
+        <li><code>UserUsableGroups</code> 只保留 <code>default</code>，公开标签改为 <code>基础 1x 统一分组</code>。</li>
+        <li><code>vip</code>、<code>agent</code> 不再表示模型可用性或身份权限，只作为历史兼容 key 保留。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>创建临时 <code>default</code> 分组令牌。</li>
+        <li>调用原高成本渠道模型 <code>qwen2.5-vl-72b-instruct</code> 的 <code>/v1/chat/completions</code>。</li>
+        <li>验证返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
+        <li>验证后删除临时令牌。</li>
+      </ul>
+      <h3>备份与注意事项</h3>
+      <ul>
+        <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。</li>
+        <li>公开 <code>/api/pricing</code> 当前仍显示 20 个模型，但 default 令牌可通过 relay 调用 27 个已部署 CMCC token 模型。</li>
+        <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
+      </ul>
+    </article>
+  </div>
+</body>
+</html>

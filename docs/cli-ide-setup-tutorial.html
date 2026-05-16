@@ -55,7 +55,7 @@
       <p>这份教程给第一次使用 AI 编程工具的用户看：先拿到 XD API 令牌，再把 Base URL 和 API Key 填进 Codex、Claude Code、VS Code、Cursor、Cline、Roo Code 或国产 IDE。</p>
       <div class="chips">
         <span class="chip">Base URL： https://api.xingdingwangluo.cn/v1</span>
-        <span class="chip">普通用户：使用标准池模型</span>
+        <span class="chip">普通用户：default 1x 统一分组</span>
         <span class="chip">更新时间：2026-05-13</span>
       </div>
     </section>
@@ -81,7 +81,7 @@
           <ol>
             <li><strong>API Key</strong> 就是你在 XD API 网站里创建的令牌，不要发到群里，不要截图泄露。</li>
             <li><strong>Base URL</strong> 通常填 <code>https://api.xingdingwangluo.cn/v1</code>，不要填完整的 <code>/chat/completions</code>。</li>
-            <li><strong>普通用户</strong> 默认只能用标准池模型；Premium 模型需要 VIP 或代理分组权限。</li>
+            <li><strong>普通用户</strong> 使用 <code>default</code> 1x 统一分组；2026-05-16 起，已部署 CMCC token 计费模型不再用 <code>vip/agent</code> 做访问门槛。</li>
           </ol>
           <div class="callout">
             判断一个软件怎么填：如果它要的是 <code>Base URL</code>，填 <code>https://api.xingdingwangluo.cn/v1</code>；如果它明确要“完整接口地址”，再填 <code>https://api.xingdingwangluo.cn/v1/chat/completions</code>。
@@ -95,7 +95,7 @@
             <li>进入控制台的“令牌 / API Keys / Tokens”页面。</li>
             <li>点击“新建令牌”。新手建议先不要限制模型和 IP，确认能跑通后再收紧权限。</li>
             <li>复制生成的 Key。Key 通常只完整显示一次，丢了就重新建一个。</li>
-            <li>如果你是普通用户，令牌分组保持默认即可；如果你购买了 VIP/代理，再选择对应分组。</li>
+            <li>令牌分组保持默认即可。旧的 <code>vip/agent</code> 只作为历史兼容 key，不再代表模型权限。</li>
           </ol>
         </section>
 
@@ -183,7 +183,7 @@ claude</code></pre>
               <tr><td>API Provider</td><td><code>OpenAI Compatible</code> 或 <code>OpenAI-compatible</code></td></tr>
               <tr><td>Base URL</td><td><code>https://api.xingdingwangluo.cn/v1</code></td></tr>
               <tr><td>API Key</td><td>你的 XD API 令牌</td></tr>
-              <tr><td>Model</td><td><code>deepseek-v3</code>、<code>qwen2.5-7b-instruct</code>、<code>minimax-m2.5</code> 等标准池模型</td></tr>
+              <tr><td>Model</td><td><code>deepseek-v3</code>、<code>qwen2.5-7b-instruct</code>、<code>minimax-m2.5</code>、<code>qwen2.5-vl-72b-instruct</code> 等模型</td></tr>
             </tbody>
           </table>
         </section>
@@ -211,7 +211,7 @@ claude</code></pre>
               <tr><td>API Host / Base URL / 接口地址 / 服务地址</td><td><code>https://api.xingdingwangluo.cn/v1</code></td></tr>
               <tr><td>API Key / Token / 密钥</td><td>你的 XD API 令牌</td></tr>
               <tr><td>Provider / 接口类型</td><td><code>OpenAI Compatible</code>、<code>OpenAI</code> 或 <code>自定义 OpenAI</code></td></tr>
-              <tr><td>Model / 模型 ID</td><td>标准池模型名，例如 <code>deepseek-v3</code></td></tr>
+              <tr><td>Model / 模型 ID</td><td>模型名，例如 <code>deepseek-v3</code> 或 <code>qwen2.5-vl-72b-instruct</code></td></tr>
             </tbody>
           </table>
           <p>如果软件只支持官方账号登录，不支持自定义 Base URL，那它就不能直接接入 XD API。</p>
@@ -224,14 +224,15 @@ claude</code></pre>
             <tbody>
               <tr><td>日常代码问答</td><td><code>deepseek-v3</code></td><td>通用、稳定，适合先跑通。</td></tr>
               <tr><td>轻量中文问答</td><td><code>qwen2.5-7b-instruct</code></td><td>速度快，成本低。</td></tr>
-              <tr><td>更强中文与代码</td><td><code>qwen2.5-32b-instruct</code></td><td>标准池可用，能力更强。</td></tr>
+              <tr><td>更强中文与代码</td><td><code>qwen2.5-32b-instruct</code></td><td>能力更强。</td></tr>
               <tr><td>长上下文</td><td><code>qwen2.5-14b-instruct-1m</code></td><td>适合读长文档。</td></tr>
-              <tr><td>多模态图片理解</td><td><code>qwen2.5-vl-7b-instruct</code></td><td>标准池视觉模型。</td></tr>
+              <tr><td>多模态图片理解</td><td><code>qwen2.5-vl-7b-instruct</code></td><td>轻量视觉模型。</td></tr>
+              <tr><td>高成本视觉/余额消耗测试</td><td><code>qwen2.5-vl-72b-instruct</code></td><td>已验证 default 可调用，成本较高。</td></tr>
               <tr><td>向量检索</td><td><code>bge-m3</code></td><td>用于 embeddings，不用于普通聊天。</td></tr>
               <tr><td>重排序</td><td><code>bge-reranker-v2-m3</code></td><td>用于 rerank，不用于普通聊天。</td></tr>
             </tbody>
           </table>
-          <p class="muted">普通用户不要直接填 <code>deepseek-r1</code>、<code>qwq-32b</code>、<code>qwen2.5-72b-instruct</code> 等 Premium 模型，除非你的令牌分组有权限。</p>
+          <p class="muted">2026-05-16 起，已部署 CMCC token 计费模型不再用 <code>vip/agent</code> 做访问门槛；如果出现无可用渠道，优先检查模型名是否拼错。</p>
         </section>
 
         <section class="section" id="check">
@@ -250,7 +251,7 @@ claude</code></pre>
             <thead><tr><th>现象</th><th>原因</th><th>处理</th></tr></thead>
             <tbody>
               <tr><td>401 / token invalid</td><td>Key 填错、复制不完整、用了旧令牌</td><td>重新复制或新建令牌</td></tr>
-              <tr><td>403 / 无权访问分组</td><td>令牌分组没有模型权限</td><td>改用标准池模型，或确认 VIP/代理权限</td></tr>
+              <tr><td>403 / 无权访问分组</td><td>令牌仍使用旧分组或缓存未刷新</td><td>新建默认分组令牌，或重新登录后再试</td></tr>
               <tr><td>404</td><td>Base URL 填成了错误路径</td><td>大多数工具填 <code>https://api.xingdingwangluo.cn/v1</code></td></tr>
               <tr><td>模型不存在</td><td>模型名拼错或该分组不可见</td><td>复制报告中的模型名，先用 <code>deepseek-v3</code> 测试</td></tr>
               <tr><td>一直无响应</td><td>网络或代理问题</td><td>先用浏览器打开站点，再用 curl 测试</td></tr>

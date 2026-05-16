@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>XD API 业务框架与分组策略</title>
+  <style>
+    :root { --bg:#f6f8fc; --card:#fff; --text:#172033; --muted:#5f6b85; --line:#d9e1f2; --accent:#0f6fff; --ok:#0d8b5f; --warn:#a15c00; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:linear-gradient(180deg,#f8fbff 0%,#eef3fb 100%); color:var(--text); font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    .wrap { max-width:1120px; margin:0 auto; padding:32px 20px 72px; }
+    .topbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
+    .topbar a { color:#174ea6; background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 12px; text-decoration:none; font-weight:650; }
+    .hero { background:linear-gradient(135deg,#0f172a 0%,#173b7a 56%,#0f6fff 100%); color:#fff; border-radius:22px; padding:34px 38px; box-shadow:0 24px 60px rgba(17,36,84,.18); margin-bottom:20px; }
+    .hero h1 { margin:0 0 10px; font-size:34px; line-height:1.18; }
+    .hero p { margin:0; max-width:900px; color:rgba(255,255,255,.9); }
+    .section { background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 10px 24px rgba(33,53,92,.05); padding:24px 26px; margin-bottom:18px; overflow:auto; }
+    h2 { margin:0 0 12px; font-size:22px; }
+    h3 { margin:22px 0 8px; font-size:17px; }
+    p { margin:8px 0; }
+    ul,ol { margin:10px 0 0 22px; padding:0; }
+    li { margin:6px 0; }
+    table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+    th,td { border-bottom:1px solid var(--line); padding:10px 9px; text-align:left; vertical-align:top; }
+    th { background:#f8fbff; color:#27406e; font-weight:720; }
+    code { background:#f2f5fa; border:1px solid #e1e8f4; padding:2px 6px; border-radius:7px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.93em; }
+    .badge { display:inline-block; padding:4px 9px; border-radius:999px; font-size:12px; font-weight:740; white-space:nowrap; background:#e8f8f1; color:var(--ok); }
+    .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topbar">
+      <a href="../index.html">模型进度首页</a>
+      <a href="./work-log.html">工作记录</a>
+      <a href="./cli-ide-setup-tutorial.html">小白接入教程</a>
+    </nav>
+
+    <section class="hero">
+      <h1>XD API 业务框架与分组策略</h1>
+      <p>本页记录当前 XD API 面向中国移动 MaaS 上游的运营框架。2026-05-16 起，分组不再作为模型访问门槛；分组只表达未来速度/价格倍率档位，当前先统一为 1x。</p>
+    </section>
+
+    <section class="section">
+      <h2>当前结论</h2>
+      <ul>
+        <li><span class="badge">已生效</span> 所有已部署 CMCC token 计费模型，默认分组都可以通过 API 调用。</li>
+        <li><code>default</code>、<code>vip</code>、<code>agent</code> 三个历史 group key 目前统一为 <code>1.00x</code>，只作为兼容保留。</li>
+        <li>高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用 <code>vip/agent</code> 限制访问。</li>
+        <li>未来如果接入更快上游线路，可以新增速度档位，例如 <code>fast_1_5x</code>、<code>priority_2x</code>，但必须由实际响应速度或资源池差异支撑。</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>分组语义</h2>
+      <table>
+        <thead><tr><th>内部 key</th><th>当前倍率</th><th>当前语义</th><th>是否控制模型可用性</th></tr></thead>
+        <tbody>
+          <tr><td><code>default</code></td><td>1.00x</td><td>基础 1x 统一分组</td><td>否，所有已部署 CMCC token 模型可调用</td></tr>
+          <tr><td><code>vip</code></td><td>1.00x</td><td>历史兼容 key，不再代表 VIP 模型权限</td><td>否</td></tr>
+          <tr><td><code>agent</code></td><td>1.00x</td><td>历史兼容 key，不再代表代理模型权限</td><td>否</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>渠道策略</h2>
+      <table>
+        <thead><tr><th>渠道</th><th>模型范围</th><th>group</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td><code>China Mobile MaaS - Huhehaote</code></td><td>20 个标准/常用模型</td><td><code>default,vip,agent</code></td><td>常规文本、视觉、向量、排序模型</td></tr>
+          <tr><td><code>China Mobile MaaS - Huhehaote Premium</code></td><td>7 个高成本推理/72B/VL 模型</td><td><code>default,vip,agent</code></td><td>高成本模型独立维护和观测，不再作为访问限制</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>验证结果</h2>
+      <p>2026-05-16 14:12 CST 变更后，使用临时 <code>default</code> 分组令牌调用原高成本渠道模型：</p>
+      <table>
+        <thead><tr><th>模型</th><th>接口</th><th>HTTP</th><th>响应片段</th><th>usage</th></tr></thead>
+        <tbody>
+          <tr><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
+        </tbody>
+      </table>
+      <p class="muted">变更前备份：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。备份文件留在本地，不上传 GitHub。</p>
+    </section>
+
+    <section class="section">
+      <h2>后续规则</h2>
+      <ol>
+        <li>不要再用 <code>vip/agent</code> 做模型可用性门槛。</li>
+        <li>新分组必须表达可解释的价格/速度差异，例如更快上游资源池、更高优先级或更高限流。</li>
+        <li>涉及业务框架、渠道、分组、价格的变更，必须同步更新本 GitHub Pages 和技能文档。</li>
+      </ol>
+    </section>
+  </div>
+</body>
+</html>
