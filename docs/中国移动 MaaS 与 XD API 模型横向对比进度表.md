@@ -12,6 +12,14 @@
 - 登录态 `/api/user/groups` 只返回 `default`，倍率 `1`，普通用户仍只需要使用基础 1x 统一分组。
 - 用临时 `default` 令牌验证 `qwen2.5-vl-72b-instruct` 成功，HTTP 200，响应片段 `ok`。
 
+## 链路延迟诊断更新
+
+- 2026-05-16 15:34 CST 重新测试 27 个公开 CMCC token 计费模型，生成 102 条原始调用和 51 组 XDAPI vs 上游直连对比。
+- 51 组对比全部成功，其中 49 组判定为上游模型服务/生成吞吐主导，2 组标记为 XDAPI 额外开销嫌疑。
+- 24 个聊天模型短输出平均耗时：XDAPI 1.04s，上游直连 1.14s；128 token 吞吐平均：XDAPI 8.30s，上游直连 8.11s。
+- DeepSeek V3 / R1 / 部分 72B 系列吞吐集中在 8-12 tokens/s，500 token 输出约 1 分钟属于上游生成吞吐偏慢。
+- 详细结果见 `docs/latency-diagnosis.md`，原始脱敏数据见 `evidence/xdw_latency_diagnosis_20260516_153406.json`。
+
 ## 本轮实际可用性测试结论
 
 - 已部署模型：`26` 个

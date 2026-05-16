@@ -1,5 +1,30 @@
 # XD API 工作记录
 
+## 2026-05-16 15:34 CST
+
+### 完成 27 个模型链路延迟诊断
+
+变更内容：
+
+- 新增 `docs/latency-diagnosis.html` 和 Markdown 版本，展示 XDAPI 对外链路与中移动 MaaS 上游直连链路对比。
+- 新增脱敏证据文件 `evidence/xdw_latency_diagnosis_20260516_153406.json`。
+- 首页补充链路慢点判断，明确短响应可用性测试和长输出吞吐测试的区别。
+
+验证方式：
+
+- 覆盖 27 个已公开 CMCC token 计费模型。
+- 聊天模型执行短输出 `max_tokens=16` 和 128 token 吞吐测试。
+- embedding / rerank 模型分别调用 `/v1/embeddings` 与 `/v1/rerank`。
+- 每组均分别测试 XDAPI Bearer 链路和上游直连链路，形成 51 组可对照结果。
+
+结论：
+
+- 51 组对比全部成功，49 组判定为上游模型服务/生成吞吐主导。
+- 24 个聊天模型短输出平均耗时：XDAPI 1.04s，上游直连 1.14s。
+- 128 token 吞吐平均耗时：XDAPI 8.30s，上游直连 8.11s，平均差值 186 ms。
+- DeepSeek V3 / R1 / 部分 72B 系列吞吐约 8-12 tokens/s，是 500 token 输出接近 1 分钟的主要原因。
+- `deepseek-v3-0324` 短输出和 `qwen2.5-72b-instruct` 128 token 测试出现 XDAPI 额外开销嫌疑，建议后续重复采样确认。
+
 ## 2026-05-16 14:26 CST
 
 ### 公开 27 个 CMCC token 计费模型到前台目录

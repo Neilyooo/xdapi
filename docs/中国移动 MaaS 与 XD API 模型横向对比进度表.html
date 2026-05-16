@@ -44,6 +44,7 @@
       <a href="./docs/cli-ide-setup-tutorial.html">小白接入教程</a>
       <a href="./docs/business-framework.html">业务框架</a>
       <a href="./docs/work-log.html">工作记录</a>
+      <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>
       <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
       <a href="./evidence/xdw_model_test_results_20260512.json">测试证据 JSON</a>
     </nav>
@@ -74,6 +75,17 @@
         <li>匿名 <code>/api/pricing</code> 和登录态 <code>/api/user/models</code> 均已返回 27 个模型，前台目录不再停留在 20 个标准池模型。</li>
         <li>用临时 <code>default</code> 令牌验证 <code>qwen2.5-vl-72b-instruct</code> 成功，HTTP 200，响应片段 <code>ok</code>。</li>
         <li>详细说明见 <a href="./docs/business-framework.html">业务框架</a> 和 <a href="./docs/work-log.html">工作记录</a>。</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>链路延迟诊断更新</h2>
+      <ul>
+        <li>2026-05-16 15:34 CST 重新测试 27 个公开 CMCC token 计费模型，生成 102 条原始调用和 51 组 XDAPI vs 上游直连对比。</li>
+        <li>51 组对比全部成功，其中 49 组判定为上游模型服务/生成吞吐主导，2 组标记为 XDAPI 额外开销嫌疑。</li>
+        <li>24 个聊天模型短输出平均耗时：XDAPI 1.04s，上游直连 1.14s；128 token 吞吐平均：XDAPI 8.30s，上游直连 8.11s。</li>
+        <li>DeepSeek V3 / R1 / 部分 72B 系列吞吐集中在 8-12 tokens/s，500 token 输出约 1 分钟属于上游生成吞吐偏慢。</li>
+        <li>详细结果见 <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>，原始脱敏数据见 <a href="./evidence/xdw_latency_diagnosis_20260516_153406.json">诊断证据 JSON</a>。</li>
       </ul>
     </section>
 
