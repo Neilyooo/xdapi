@@ -8,12 +8,14 @@ Current live status as of 2026-05-16 14:26 CST: the XD API frontend catalog expo
 - Beginner tutorial page: `docs/cli-ide-setup-tutorial.html`
 - Beginner tutorial Markdown: `docs/cli-ide-setup-tutorial.md`
 - Business framework: `docs/business-framework.html`
+- Group permissions: `docs/group-permissions.html`
 - Work log: `docs/work-log.html`
 - Latency diagnosis: `docs/latency-diagnosis.html`
 - Source HTML report: `docs/中国移动 MaaS 与 XD API 模型横向对比进度表.html`
 - Markdown report: `docs/中国移动 MaaS 与 XD API 模型横向对比进度表.md`
 - Test evidence: `evidence/xdw_model_test_results_20260512.json`
 - Latency evidence: `evidence/xdw_latency_diagnosis_20260516_153406.json`
+- Group permissions evidence: `evidence/xdw_group_permissions_20260518_1051.json`
 
 Update flow:
 

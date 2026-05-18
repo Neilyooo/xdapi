@@ -1,5 +1,27 @@
 # XD API 工作记录
 
+## 2026-05-18 10:51 CST
+
+### 新增分组权限与可用模型报告
+
+变更内容：
+
+- 新增 `docs/group-permissions.html` 和 Markdown 版本，汇总现网所有 group key 的权限语义、倍率、前台可见性、限流配置和可调用模型。
+- 新增脱敏证据文件 `evidence/xdw_group_permissions_20260518_1051.json`。
+- 首页和业务框架页新增分组权限报告入口。
+
+验证方式：
+
+- 读取现网 `GroupRatio`、`TopupGroupRatio`、`UserUsableGroups`、`GroupGroupRatio` 和 `ModelRequestRateLimitGroup`。
+- 读取两个 CMCC 渠道的 `group` 与模型列表。
+- 核对匿名 `/api/pricing`、登录态 `/api/user/models` 和 `/api/user/groups`。
+
+结论：
+
+- 普通用户前台只看到 `default`，显示为 `基础 1x 统一分组`。
+- `default`、`vip`、`agent` 当前倍率均为 `1.00x`，均可路由到 27 个公开 CMCC token 模型。
+- `vip` 与 `agent` 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。
+
 ## 2026-05-16 15:34 CST
 
 ### 完成 27 个模型链路延迟诊断

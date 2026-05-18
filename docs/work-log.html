@@ -35,6 +35,28 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-18 10:51 CST</div>
+      <h2>新增分组权限与可用模型报告</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>新增 <code>docs/group-permissions.html</code> 和 Markdown 版本，汇总现网所有 group key 的权限语义、倍率、前台可见性、限流配置和可调用模型。</li>
+        <li>新增脱敏证据文件 <code>evidence/xdw_group_permissions_20260518_1051.json</code>。</li>
+        <li>首页和业务框架页新增分组权限报告入口。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>读取现网 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>UserUsableGroups</code>、<code>GroupGroupRatio</code> 和 <code>ModelRequestRateLimitGroup</code>。</li>
+        <li>读取两个 CMCC 渠道的 <code>group</code> 与模型列表。</li>
+        <li>核对匿名 <code>/api/pricing</code>、登录态 <code>/api/user/models</code> 和 <code>/api/user/groups</code>。</li>
+      </ul>
+      <h3>结论</h3>
+      <ul>
+        <li>普通用户前台只看到 <code>default</code>，显示为 <code>基础 1x 统一分组</code>。</li>
+        <li><code>default</code>、<code>vip</code>、<code>agent</code> 当前倍率均为 <code>1.00x</code>，均可路由到 27 个公开 CMCC token 模型。</li>
+        <li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-16 15:34 CST</div>
       <h2>完成 27 个模型链路延迟诊断</h2>
       <h3>变更内容</h3>
