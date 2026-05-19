@@ -35,6 +35,27 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-19 10:47 CST</div>
+      <h2>清理残留非倍率用户分组</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>复核后台用户和令牌 group 分布，确认没有活跃 <code>auto</code> 用户或 <code>auto</code> 令牌。</li>
+        <li>将 3 个仍处于 <code>default</code> 的活跃用户迁移到 <code>1x</code>。</li>
+        <li>将 1 个 group 为空的活跃令牌迁移到 <code>1x</code>。</li>
+        <li>新增脱敏证据文件 <code>evidence/xdw_user_group_cleanup_20260519_1047.json</code>。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>迁移后活跃用户分布为 <code>{'1x': 11}</code>。</li>
+        <li>迁移后活跃令牌分布为 <code>{'1x': 3}</code>。</li>
+        <li>活跃 <code>auto</code> 用户和活跃 <code>auto</code> 令牌均为空。</li>
+      </ul>
+      <h3>注意事项</h3>
+      <ul>
+        <li>后台仍可看到 1 个已删除用户保留历史 <code>default</code> 字段；它不属于活跃用户，不参与现网调用路由。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-19 10:40 CST</div>
       <h2>倍率分组发布收尾与现网复核</h2>
       <h3>变更内容</h3>

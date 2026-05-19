@@ -1,0 +1,46 @@
+{
+  "checked_at": "2026-05-19 10:47 CST",
+  "change": "Migrated remaining active default users and blank-group token to 1x; verified no active auto users or tokens.",
+  "updated_users": [
+    {
+      "id": 12,
+      "username": "a3sh2me7",
+      "from": "default",
+      "to": "1x"
+    },
+    {
+      "id": 11,
+      "username": "6d7jaxny",
+      "from": "default",
+      "to": "1x"
+    },
+    {
+      "id": 10,
+      "username": "zhouses",
+      "from": "default",
+      "to": "1x"
+    }
+  ],
+  "updated_tokens": [
+    {
+      "id": 15,
+      "name": "API 并发测试",
+      "from": "",
+      "to": "1x"
+    }
+  ],
+  "postcheck": {
+    "active_user_groups": {
+      "1x": 11
+    },
+    "active_token_groups": {
+      "1x": 3
+    },
+    "active_auto_users": [],
+    "active_auto_tokens": [],
+    "deleted_user_groups": {
+      "default": 1
+    },
+    "note": "Deleted users are ignored for active routing; the only remaining default user observed is deleted."
+  }
+}
