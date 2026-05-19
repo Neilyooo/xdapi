@@ -2,7 +2,7 @@
 
 This repository publishes the China Mobile MaaS and XD API model progress report.
 
-Current live status as of 2026-05-16 14:26 CST: the XD API frontend catalog exposes 27 CMCC token-priced models, and ordinary users use the `default` 1x group.
+Current live status as of 2026-05-18 11:11 CST: the XD API frontend catalog exposes 27 CMCC token-priced models, and public business groups are `1x`, `3x`, and `5x`.
 
 - GitHub Pages entry: `index.html`
 - Beginner tutorial page: `docs/cli-ide-setup-tutorial.html`
@@ -16,6 +16,7 @@ Current live status as of 2026-05-16 14:26 CST: the XD API frontend catalog expo
 - Test evidence: `evidence/xdw_model_test_results_20260512.json`
 - Latency evidence: `evidence/xdw_latency_diagnosis_20260516_153406.json`
 - Group permissions evidence: `evidence/xdw_group_permissions_20260518_1051.json`
+- Ratio group evidence: `evidence/xdw_ratio_groups_20260518_1111.json`
 
 Update flow:
 

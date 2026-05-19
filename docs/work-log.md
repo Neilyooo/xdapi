@@ -1,5 +1,47 @@
 # XD API 工作记录
 
+## 2026-05-19 10:40 CST
+
+### 倍率分组发布收尾与现网复核
+
+变更内容：
+
+- 将倍率分组报告、业务框架页、首页和本地 Markdown 文档同步到 GitHub Pages 发布仓库。
+- 保留 2026-05-18 的现网配置变更记录，并补齐发布证据文件 `evidence/xdw_ratio_groups_20260518_1111.json`。
+
+验证方式：
+
+- HTML 解析校验通过：首页、业务框架页、分组报告页、工作日志页和横向对比进度表页。
+- 敏感信息扫描未发现 GitHub token、Bearer token、上游 key 或完整 API key。
+- 复核公开接口：`/api/user/groups` 仅返回 `1x/3x/5x`；`/api/pricing` 返回 27 个模型，且 `enable_groups` 只包含 `1x/3x/5x`。
+
+注意事项：
+
+- `/api/user/models` 需要登录态，匿名请求返回 401 属于预期行为。
+
+## 2026-05-18 11:11 CST
+
+### 分组改为 1x / 3x / 5x 倍率体系
+
+变更内容：
+
+- 将 `GroupRatio` 改为 `1x=1.00`、`3x=3.00`、`5x=5.00`。
+- 将 `UserUsableGroups` 改为 `1x`、`3x`、`5x`，不再公开 `default/vip/agent`。
+- 关闭自动分组：`AutoGroups=[]`、`DefaultUseAutoGroup=false`，不再使用 `auto` 语义。
+- 两个 CMCC 渠道的 `group` 改为 `1x,3x,5x`。
+- 现有 admin 用户和测试令牌从 `default` 迁移到 `1x`；订阅套餐改为 `3x 加速月包` 与 `5x 优先月包`。
+
+验证方式：
+
+- 临时创建 `1x`、`3x`、`5x` 三个令牌，分别调用 `qwen2.5-vl-72b-instruct`。
+- 三组均返回 HTTP 200，响应片段 `ok`，usage 为 `prompt=11, completion=2, total=13`。
+- 核对 `/api/user/groups` 仅返回 `1x/3x/5x`，`/api/user/models` 返回 27 个模型。
+
+备份与注意事项：
+
+- 变更前备份保存在本地：`/private/tmp/xdw_backup_before_ratio_groups_1779073701.json`。
+- 当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。
+
 ## 2026-05-18 10:51 CST
 
 ### 新增分组权限与可用模型报告

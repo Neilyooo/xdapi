@@ -6,11 +6,11 @@
 
 ## 当前业务框架更新
 
-- 当前 `default`、`vip`、`agent` 三个历史 group key 都是 `1.00x`。
-- 标准 CMCC 渠道和高成本 CMCC 渠道都绑定 `default,vip,agent`，不再用 `vip/agent` 限制模型可用性。
+- 当前业务分组已改为 `1x`、`3x`、`5x` 三个倍率组，对应计费倍率 `1.00x`、`3.00x`、`5.00x`。
+- 标准 CMCC 渠道和高成本 CMCC 渠道都绑定 `1x,3x,5x`，不再用 `default/vip/agent/auto` 作为公开业务分组或渠道路由组。
 - 匿名 `/api/pricing` 和登录态 `/api/user/models` 均已返回 `27` 个模型，前台目录已覆盖所有可通过 API 调用的 CMCC token 计费模型。
-- 登录态 `/api/user/groups` 只返回 `default`，倍率 `1`，普通用户仍只需要使用基础 1x 统一分组。
-- 用临时 `default` 令牌验证 `qwen2.5-vl-72b-instruct` 成功，HTTP 200，响应片段 `ok`。
+- 登录态 `/api/user/groups` 只返回 `1x/3x/5x`，`AutoGroups=[]` 且 `DefaultUseAutoGroup=false`。
+- 用临时 `1x`、`3x`、`5x` 令牌验证 `qwen2.5-vl-72b-instruct` 均成功，HTTP 200，响应片段 `ok`。
 
 ## 链路延迟诊断更新
 

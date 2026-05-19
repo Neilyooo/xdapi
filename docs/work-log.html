@@ -35,6 +35,48 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-19 10:40 CST</div>
+      <h2>倍率分组发布收尾与现网复核</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>将倍率分组报告、业务框架页、首页和本地 Markdown 文档同步到 GitHub Pages 发布仓库。</li>
+        <li>保留 2026-05-18 的现网配置变更记录，并补齐发布证据文件 <code>evidence/xdw_ratio_groups_20260518_1111.json</code>。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>HTML 解析校验通过：首页、业务框架页、分组报告页、工作日志页和横向对比进度表页。</li>
+        <li>敏感信息扫描未发现 GitHub token、Bearer token、上游 key 或完整 API key。</li>
+        <li>复核公开接口：<code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>；<code>/api/pricing</code> 返回 27 个模型，且 <code>enable_groups</code> 只包含 <code>1x/3x/5x</code>。</li>
+      </ul>
+      <h3>注意事项</h3>
+      <ul>
+        <li><code>/api/user/models</code> 需要登录态，匿名请求返回 401 属于预期行为。</li>
+      </ul>
+    </article>
+    <article class="entry">
+      <div class="time">2026-05-18 11:11 CST</div>
+      <h2>分组改为 1x / 3x / 5x 倍率体系</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>将 <code>GroupRatio</code> 改为 <code>1x=1.00</code>、<code>3x=3.00</code>、<code>5x=5.00</code>。</li>
+        <li>将 <code>UserUsableGroups</code> 改为 <code>1x</code>、<code>3x</code>、<code>5x</code>，不再公开 <code>default/vip/agent</code>。</li>
+        <li>关闭自动分组：<code>AutoGroups=[]</code>、<code>DefaultUseAutoGroup=false</code>，不再使用 <code>auto</code> 语义。</li>
+        <li>两个 CMCC 渠道的 <code>group</code> 改为 <code>1x,3x,5x</code>。</li>
+        <li>现有 admin 用户和测试令牌从 <code>default</code> 迁移到 <code>1x</code>；订阅套餐改为 <code>3x 加速月包</code> 与 <code>5x 优先月包</code>。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>临时创建 <code>1x</code>、<code>3x</code>、<code>5x</code> 三个令牌，分别调用 <code>qwen2.5-vl-72b-instruct</code>。</li>
+        <li>三组均返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
+        <li>核对 <code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>，<code>/api/user/models</code> 返回 27 个模型。</li>
+      </ul>
+      <h3>备份与注意事项</h3>
+      <ul>
+        <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。</li>
+        <li>当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-18 10:51 CST</div>
       <h2>新增分组权限与可用模型报告</h2>
       <h3>变更内容</h3>

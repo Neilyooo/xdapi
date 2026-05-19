@@ -52,7 +52,7 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-16 起，分组不再作为模型访问门槛；所有已部署 CMCC token 计费模型可由 default 分组调用，27 个可 API 调用模型已公开到前台目录。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 27 个公开 CMCC token 模型。</p>
       <div class="chips">
         <span class="chip">更新时间：2026-05-16 14:26 CST</span>
         <span class="chip">测试时间：2026-05-12 CST</span>
@@ -65,16 +65,17 @@
       <div class="stat"><div class="k">已部署测试模型</div><div class="v">26</div></div>
       <div class="stat"><div class="k">成功 / 失败</div><div class="v">26 / 0</div></div>
       <div class="stat"><div class="k">前台公开 CMCC 模型</div><div class="v">27</div></div>
-      <div class="stat"><div class="k">当前分组倍率</div><div class="v">1x</div></div>
+      <div class="stat"><div class="k">当前分组倍率</div><div class="v">1x/3x/5x</div></div>
     </section>
 
     <section class="section">
       <h2>当前业务框架更新</h2>
       <ul>
-        <li>当前 <code>default</code>、<code>vip</code>、<code>agent</code> 三个历史 group key 都是 <code>1.00x</code>。</li>
-        <li>标准 CMCC 渠道和高成本 CMCC 渠道都绑定 <code>default,vip,agent</code>，不再用 <code>vip/agent</code> 限制模型可用性。</li>
+        <li>当前业务分组为 <code>1x</code>、<code>3x</code>、<code>5x</code>，对应计费倍率 <code>1.00x</code>、<code>3.00x</code>、<code>5.00x</code>。</li>
+        <li>标准 CMCC 渠道和高成本 CMCC 渠道都绑定 <code>1x,3x,5x</code>，不再用 <code>default/vip/agent/auto</code> 作为公开业务分组。</li>
+        <li>2026-05-19 10:40 CST 复核公开接口：<code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>，<code>/api/pricing</code> 返回 27 个模型。</li>
         <li>匿名 <code>/api/pricing</code> 和登录态 <code>/api/user/models</code> 均已返回 27 个模型，前台目录不再停留在 20 个标准池模型。</li>
-        <li>用临时 <code>default</code> 令牌验证 <code>qwen2.5-vl-72b-instruct</code> 成功，HTTP 200，响应片段 <code>ok</code>。</li>
+        <li>用临时 <code>1x</code>、<code>3x</code>、<code>5x</code> 令牌验证 <code>qwen2.5-vl-72b-instruct</code> 均成功，HTTP 200，响应片段 <code>ok</code>。</li>
         <li>详细说明见 <a href="./docs/business-framework.html">业务框架</a> 和 <a href="./docs/work-log.html">工作记录</a>。</li>
       </ul>
     </section>
@@ -82,10 +83,10 @@
     <section class="section">
       <h2>分组权限与可用模型更新</h2>
       <ul>
-        <li>2026-05-18 10:51 CST 复核现网分组：普通用户前台只看到 <code>default</code>，显示为 <code>基础 1x 统一分组</code>。</li>
-        <li><code>default</code>、<code>vip</code>、<code>agent</code> 三个内部 group key 当前倍率均为 <code>1.00x</code>，都可路由到同一批 27 个公开 CMCC token 模型。</li>
-        <li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
-        <li>详细矩阵见 <a href="./docs/group-permissions.html">分组权限报告</a>，原始脱敏数据见 <a href="./evidence/xdw_group_permissions_20260518_1051.json">分组证据 JSON</a>。</li>
+        <li>2026-05-18 11:11 CST 已将现网业务分组切换为倍率组：<code>1x</code>、<code>3x</code>、<code>5x</code>。</li>
+        <li><code>default</code>、<code>vip</code>、<code>agent</code>、<code>auto</code> 不再作为公开业务分组或渠道路由组；<code>AutoGroups=[]</code> 且 <code>DefaultUseAutoGroup=false</code>。</li>
+        <li>三个倍率组都能调用 27 个公开 CMCC token 模型，差异体现在计费倍率和 group-level 请求额度。</li>
+        <li>详细矩阵见 <a href="./docs/group-permissions.html">倍率分组报告</a>，原始脱敏数据见 <a href="./evidence/xdw_ratio_groups_20260518_1111.json">倍率分组证据 JSON</a>。</li>
       </ul>
     </section>
 

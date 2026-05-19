@@ -1,0 +1,314 @@
+{
+  "checked_at": "2026-05-18 11:11 CST",
+  "source": "live api.xingdingwangluo.cn admin/public API, secrets omitted",
+  "backup_before_change": "/private/tmp/xdw_backup_before_ratio_groups_1779073701.json",
+  "options": {
+    "GroupRatio": {
+      "1x": 1.0,
+      "3x": 3.0,
+      "5x": 5.0
+    },
+    "TopupGroupRatio": {
+      "1x": 1.0,
+      "3x": 1.0,
+      "5x": 1.0
+    },
+    "UserUsableGroups": {
+      "1x": "基础 1x",
+      "3x": "加速 3x",
+      "5x": "优先 5x"
+    },
+    "GroupGroupRatio": {
+      "1x": {
+        "1x": 1.0,
+        "3x": 3.0,
+        "5x": 5.0
+      },
+      "3x": {
+        "1x": 1.0,
+        "3x": 3.0,
+        "5x": 5.0
+      },
+      "5x": {
+        "1x": 1.0,
+        "3x": 3.0,
+        "5x": 5.0
+      }
+    },
+    "group_ratio_setting.group_special_usable_group": {},
+    "AutoGroups": [],
+    "DefaultUseAutoGroup": "false",
+    "ModelRequestRateLimitGroup": {
+      "1x": [
+        60,
+        1000
+      ],
+      "3x": [
+        180,
+        1000
+      ],
+      "5x": [
+        300,
+        1000
+      ]
+    }
+  },
+  "cmcc_channels": [
+    {
+      "id": 1,
+      "name": "China Mobile MaaS - Huhehaote",
+      "group": "1x,3x,5x",
+      "tag": "cmcc",
+      "status": 1,
+      "model_count": 20,
+      "models": [
+        "bge-base-zh-v1.5",
+        "bge-m3",
+        "bge-reranker-v2-m3",
+        "deepseek-r1-distill-llama-70b",
+        "deepseek-r1-distill-llama-8B",
+        "deepseek-r1-distill-qwen-14b",
+        "deepseek-r1-distill-qwen-32b",
+        "deepseek-v2-lite-chat",
+        "deepseek-v3",
+        "deepseek-v3-0324",
+        "deepseek-v3.1",
+        "deepseek-v3.2",
+        "deepseek-v4-flash",
+        "minimax-m2.5",
+        "qwen2.5-14b-instruct",
+        "qwen2.5-14b-instruct-1m",
+        "qwen2.5-32b-instruct",
+        "qwen2.5-7b-instruct",
+        "qwen2.5-vl-7b-instruct",
+        "qwen3-32b"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "China Mobile MaaS - Huhehaote Premium",
+      "group": "1x,3x,5x",
+      "tag": "cmcc-premium",
+      "status": 1,
+      "model_count": 7,
+      "models": [
+        "deepseek-r1",
+        "deepseek-r1-0528",
+        "qwen2.5-72b-instruct",
+        "qwen2.5-72b-instruct-64k",
+        "qwen2.5-vl-32b-instruct",
+        "qwen2.5-vl-72b-instruct",
+        "qwq-32b"
+      ]
+    }
+  ],
+  "public_pricing": {
+    "count": 27,
+    "models": [
+      "bge-base-zh-v1.5",
+      "bge-m3",
+      "bge-reranker-v2-m3",
+      "deepseek-r1",
+      "deepseek-r1-0528",
+      "deepseek-r1-distill-llama-70b",
+      "deepseek-r1-distill-llama-8B",
+      "deepseek-r1-distill-qwen-14b",
+      "deepseek-r1-distill-qwen-32b",
+      "deepseek-v2-lite-chat",
+      "deepseek-v3",
+      "deepseek-v3-0324",
+      "deepseek-v3.1",
+      "deepseek-v3.2",
+      "deepseek-v4-flash",
+      "minimax-m2.5",
+      "qwen2.5-14b-instruct",
+      "qwen2.5-14b-instruct-1m",
+      "qwen2.5-32b-instruct",
+      "qwen2.5-72b-instruct",
+      "qwen2.5-72b-instruct-64k",
+      "qwen2.5-7b-instruct",
+      "qwen2.5-vl-32b-instruct",
+      "qwen2.5-vl-72b-instruct",
+      "qwen2.5-vl-7b-instruct",
+      "qwen3-32b",
+      "qwq-32b"
+    ]
+  },
+  "authenticated_user_models": {
+    "count": 27,
+    "models": [
+      "bge-base-zh-v1.5",
+      "bge-m3",
+      "bge-reranker-v2-m3",
+      "deepseek-r1",
+      "deepseek-r1-0528",
+      "deepseek-r1-distill-llama-70b",
+      "deepseek-r1-distill-llama-8B",
+      "deepseek-r1-distill-qwen-14b",
+      "deepseek-r1-distill-qwen-32b",
+      "deepseek-v2-lite-chat",
+      "deepseek-v3",
+      "deepseek-v3-0324",
+      "deepseek-v3.1",
+      "deepseek-v3.2",
+      "deepseek-v4-flash",
+      "minimax-m2.5",
+      "qwen2.5-14b-instruct",
+      "qwen2.5-14b-instruct-1m",
+      "qwen2.5-32b-instruct",
+      "qwen2.5-72b-instruct",
+      "qwen2.5-72b-instruct-64k",
+      "qwen2.5-7b-instruct",
+      "qwen2.5-vl-32b-instruct",
+      "qwen2.5-vl-72b-instruct",
+      "qwen2.5-vl-7b-instruct",
+      "qwen3-32b",
+      "qwq-32b"
+    ]
+  },
+  "authenticated_user_groups": {
+    "1x": {
+      "desc": "基础 1x",
+      "ratio": 1
+    },
+    "3x": {
+      "desc": "加速 3x",
+      "ratio": 3
+    },
+    "5x": {
+      "desc": "优先 5x",
+      "ratio": 5
+    }
+  },
+  "tokens": [
+    {
+      "id": 8,
+      "name": "API 并发测试",
+      "group": "1x",
+      "status": 1
+    },
+    {
+      "id": 4,
+      "name": "测试令牌",
+      "group": "1x",
+      "status": 1
+    }
+  ],
+  "users": [
+    {
+      "id": 9,
+      "username": "cao521",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 8,
+      "username": "2904936948@qq.com",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 7,
+      "username": "梓行测试",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 6,
+      "username": "admin8989",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 5,
+      "username": "yaaaa",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 4,
+      "username": "scan_jtt4hi70",
+      "deleted": false,
+      "group": "1x",
+      "role": 1
+    },
+    {
+      "id": 3,
+      "username": "Sonny",
+      "deleted": false,
+      "group": "1x",
+      "role": 10
+    },
+    {
+      "id": 2,
+      "username": "test123456",
+      "deleted": true,
+      "group": "default",
+      "role": 1
+    },
+    {
+      "id": 1,
+      "username": "admin",
+      "deleted": false,
+      "group": "1x",
+      "role": 100
+    }
+  ],
+  "plans": [
+    {
+      "id": 1,
+      "title": "3x 加速月包",
+      "upgrade_group": "3x",
+      "price_amount": 99,
+      "currency": "USD"
+    },
+    {
+      "id": 2,
+      "title": "5x 优先月包",
+      "upgrade_group": "5x",
+      "price_amount": 499,
+      "currency": "USD"
+    }
+  ],
+  "verification": [
+    {
+      "group": "1x",
+      "model": "qwen2.5-vl-72b-instruct",
+      "http_status": 200,
+      "sample": "ok",
+      "usage": {
+        "prompt_tokens": 11,
+        "completion_tokens": 2,
+        "total_tokens": 13
+      }
+    },
+    {
+      "group": "3x",
+      "model": "qwen2.5-vl-72b-instruct",
+      "http_status": 200,
+      "sample": "ok",
+      "usage": {
+        "prompt_tokens": 11,
+        "completion_tokens": 2,
+        "total_tokens": 13
+      }
+    },
+    {
+      "group": "5x",
+      "model": "qwen2.5-vl-72b-instruct",
+      "http_status": 200,
+      "sample": "ok",
+      "usage": {
+        "prompt_tokens": 11,
+        "completion_tokens": 2,
+        "total_tokens": 13
+      }
+    }
+  ],
+  "conclusion": "业务分组已改为 1x/3x/5x 倍率组；default/vip/agent/auto 不再作为公开业务分组或渠道路由组。"
+}

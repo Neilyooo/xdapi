@@ -39,17 +39,17 @@
 
     <section class="hero">
       <h1>XD API 业务框架与分组策略</h1>
-      <p>本页记录当前 XD API 面向中国移动 MaaS 上游的运营框架。2026-05-16 起，分组不再作为模型访问门槛；分组只表达未来速度/价格倍率档位，当前先统一为 1x，27 个可通过 API 调用的 token 计费模型已公开到前台。</p>
+      <p>本页记录当前 XD API 面向中国移动 MaaS 上游的运营框架。2026-05-18 起，业务分组改为倍率语义：1x、3x、5x；分组不再表达身份权限，也不作为模型访问门槛。</p>
     </section>
 
     <section class="section">
       <h2>当前结论</h2>
       <ul>
-        <li><span class="badge">已生效</span> 所有已部署 CMCC token 计费模型，默认分组都可以通过 API 调用。</li>
+        <li><span class="badge">已生效</span> 所有已部署 CMCC token 计费模型，<code>1x/3x/5x</code> 三个倍率组都可以通过 API 调用。</li>
         <li><span class="badge">已公开</span> 前台 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均返回 27 个模型。</li>
-        <li><code>default</code>、<code>vip</code>、<code>agent</code> 三个历史 group key 目前统一为 <code>1.00x</code>，只作为兼容保留。</li>
-        <li>高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用 <code>vip/agent</code> 限制访问。</li>
-        <li>未来如果接入更快上游线路，可以新增速度档位，例如 <code>fast_1_5x</code>、<code>priority_2x</code>，但必须由实际响应速度或资源池差异支撑。</li>
+        <li><code>default</code>、<code>vip</code>、<code>agent</code>、<code>auto</code> 不再作为公开业务分组或渠道路由组。</li>
+        <li>高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用身份分组限制访问。</li>
+        <li>当前 3x/5x 体现更高计费倍率和更高 group-level 请求额度；若要承诺真实更快响应，还需要接入独立更快上游资源或优先级队列。</li>
       </ul>
     </section>
 
@@ -58,9 +58,9 @@
       <table>
         <thead><tr><th>内部 key</th><th>当前倍率</th><th>当前语义</th><th>是否控制模型可用性</th></tr></thead>
         <tbody>
-          <tr><td><code>default</code></td><td>1.00x</td><td>基础 1x 统一分组</td><td>否，所有已部署 CMCC token 模型可调用</td></tr>
-          <tr><td><code>vip</code></td><td>1.00x</td><td>历史兼容 key，不再代表 VIP 模型权限</td><td>否</td></tr>
-          <tr><td><code>agent</code></td><td>1.00x</td><td>历史兼容 key，不再代表代理模型权限</td><td>否</td></tr>
+          <tr><td><code>1x</code></td><td>1.00x</td><td>基础倍率组</td><td>否，所有已部署 CMCC token 模型可调用</td></tr>
+          <tr><td><code>3x</code></td><td>3.00x</td><td>加速倍率组</td><td>否，模型范围与 1x 一致</td></tr>
+          <tr><td><code>5x</code></td><td>5.00x</td><td>优先倍率组</td><td>否，模型范围与 1x 一致</td></tr>
         </tbody>
       </table>
       <p class="muted">详细分组权限、限流配置和 27 个模型列表见 <a href="./group-permissions.html">分组权限报告</a>。</p>
@@ -71,8 +71,8 @@
       <table>
         <thead><tr><th>渠道</th><th>模型范围</th><th>group</th><th>用途</th></tr></thead>
         <tbody>
-          <tr><td><code>China Mobile MaaS - Huhehaote</code></td><td>20 个标准/常用模型</td><td><code>default,vip,agent</code></td><td>常规文本、视觉、向量、排序模型</td></tr>
-          <tr><td><code>China Mobile MaaS - Huhehaote Premium</code></td><td>7 个高成本推理/72B/VL 模型</td><td><code>default,vip,agent</code></td><td>高成本模型独立维护和观测，不再作为访问限制</td></tr>
+          <tr><td><code>China Mobile MaaS - Huhehaote</code></td><td>20 个标准/常用模型</td><td><code>1x,3x,5x</code></td><td>常规文本、视觉、向量、排序模型</td></tr>
+          <tr><td><code>China Mobile MaaS - Huhehaote Premium</code></td><td>7 个高成本推理/72B/VL 模型</td><td><code>1x,3x,5x</code></td><td>高成本模型独立维护和观测，不再作为访问限制</td></tr>
         </tbody>
       </table>
     </section>
@@ -84,27 +84,29 @@
         <tbody>
           <tr><td><code>/api/pricing</code></td><td>2026-05-16 14:26 CST</td><td>27 个模型</td><td>匿名价格页可见完整 CMCC token 模型目录</td></tr>
           <tr><td><code>/api/user/models</code></td><td>2026-05-16 14:26 CST</td><td>27 个模型</td><td>登录用户模型选择器可见完整 CMCC token 模型目录</td></tr>
-          <tr><td><code>/api/user/groups</code></td><td>2026-05-16 14:26 CST</td><td><code>default</code>，倍率 <code>1</code></td><td>普通用户仍只需要使用基础 1x 统一分组</td></tr>
+          <tr><td><code>/api/user/groups</code></td><td>2026-05-18 11:11 CST</td><td><code>1x</code>、<code>3x</code>、<code>5x</code></td><td>前台只展示倍率分组</td></tr>
         </tbody>
       </table>
     </section>
 
     <section class="section">
       <h2>验证结果</h2>
-      <p>2026-05-16 14:12 CST 变更后，使用临时 <code>default</code> 分组令牌调用原高成本渠道模型：</p>
+      <p>2026-05-18 11:11 CST 倍率分组变更后，分别使用临时 <code>1x</code>、<code>3x</code>、<code>5x</code> 令牌调用原高成本渠道模型：</p>
       <table>
-        <thead><tr><th>模型</th><th>接口</th><th>HTTP</th><th>响应片段</th><th>usage</th></tr></thead>
+        <thead><tr><th>分组</th><th>模型</th><th>接口</th><th>HTTP</th><th>响应片段</th><th>usage</th></tr></thead>
         <tbody>
-          <tr><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
+          <tr><td><code>1x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
+          <tr><td><code>3x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
+          <tr><td><code>5x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
         </tbody>
       </table>
-      <p class="muted">变更前备份：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。备份文件留在本地，不上传 GitHub。</p>
+      <p class="muted">变更前备份：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。备份文件留在本地，不上传 GitHub。</p>
     </section>
 
     <section class="section">
       <h2>后续规则</h2>
       <ol>
-        <li>不要再用 <code>vip/agent</code> 做模型可用性门槛。</li>
+        <li>不要再用 <code>default/vip/agent/auto</code> 做公开业务分组或模型可用性门槛。</li>
         <li>新分组必须表达可解释的价格/速度差异，例如更快上游资源池、更高优先级或更高限流。</li>
         <li>涉及业务框架、渠道、分组、价格的变更，必须同步更新本 GitHub Pages 和技能文档。</li>
       </ol>
