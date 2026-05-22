@@ -15,7 +15,8 @@
 
 - 9 个候选模型及常见大小写变体通过当前华北-呼和浩特 `/v1/chat/completions` 渠道测试，结果均未成功，典型失败为上游 404。
 - 回滚后复核：公开 `/api/pricing` 仍为 27 个模型，候选模型均未出现在前台价格目录；标准渠道也未保留候选模型。
-- 新增脱敏证据文件：`evidence/xdw_live_snapshot_20260522.json`、`evidence/xdw_new_qwen_family_probe_20260522.json`、`evidence/xdw_new_qwen_family_variant_probe_20260522.json`。
+- 这轮测试证据已经写入本页的验证摘要：canonical 小写模型名直打 `/v1/chat/completions`，9 个候选都出现上游 `404`；常见大小写变体里，部分在本地价格校验阶段就被拦截，能够走到上游的同样返回 `404`。
+- 回滚后的复核结果也写在本页：公开 `/api/pricing` 仍是 `27` 个模型，候选模型没有残留在前台价格目录或渠道模型列表里。
 
 注意事项：
 
