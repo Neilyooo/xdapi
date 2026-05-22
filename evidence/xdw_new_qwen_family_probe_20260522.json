@@ -1,0 +1,343 @@
+{
+  "checked_at": "2026-05-22 16:02:41 CST",
+  "method": "temporary XDAPI pricing/channel exposure for channel-test only, restored after probe",
+  "candidates": [
+    "qwen3.6-plus",
+    "qwen3-vl-plus",
+    "qwen-mt-plus",
+    "qwen3-omni-flash",
+    "gui-plus",
+    "qwen-mt-flash",
+    "glm-5.1",
+    "qwen3.5-plus",
+    "qwen3-max"
+  ],
+  "results": [
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3.6-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.084,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:39.639+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"7634f0ba-2931901\"}"
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "Qwen3.6-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 Qwen3.6-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3.6-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3.6-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.024,
+      "message": "模型 qwen3.6-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3.6-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3_6_plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.03,
+      "message": "模型 qwen3_6_plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3_6_plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "qwen3-vl-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.084,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:39.801+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"3e5f039e-2932885\"}"
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "Qwen3-VL-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 Qwen3-VL-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-VL-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "qwen3-vl-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 qwen3-vl-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3-vl-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "Qwen3-VL-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.021,
+      "message": "模型 Qwen3-VL-plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-VL-plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "qwen-mt-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.085,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:39.948+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"9fd216c5-2924341\"}"
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "Qwen-MT-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.02,
+      "message": "模型 Qwen-MT-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen-MT-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "qwen-mt-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 qwen-mt-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen-mt-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "Qwen-MT-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 Qwen-MT-plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen-MT-plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "qwen3-omni-flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.081,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.096+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"70a39170-2924347\"}"
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "Qwen3-Omni-Flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.02,
+      "message": "模型 Qwen3-Omni-Flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-Omni-Flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "qwen3-omni-Flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.021,
+      "message": "模型 qwen3-omni-Flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3-omni-Flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "Qwen3-Omni-flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.021,
+      "message": "模型 Qwen3-Omni-flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-Omni-flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "gui-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.086,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.244+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"ef108dc9-2924351\"}"
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "GUI-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.021,
+      "message": "模型 GUI-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model GUI-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "Gui-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 Gui-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Gui-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "gui-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.02,
+      "message": "模型 gui-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model gui-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "qwen-mt-flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.081,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.388+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"d87b62ad-2924358\"}"
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "Qwen-MT-Flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.026,
+      "message": "模型 Qwen-MT-Flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen-MT-Flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "qwen-mt-Flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.023,
+      "message": "模型 qwen-mt-Flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen-mt-Flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "Qwen-MT-flash",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.025,
+      "message": "模型 Qwen-MT-flash 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen-MT-flash price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "glm-5.1",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.086,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.545+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"d61cfb62-2933821\"}"
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "GLM-5.1",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.023,
+      "message": "模型 GLM-5.1 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model GLM-5.1 price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "glm-5.1-air",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.021,
+      "message": "模型 glm-5.1-air 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model glm-5.1-air price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "GLM-5.1-Air",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 GLM-5.1-Air 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model GLM-5.1-Air price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3.5-plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.083,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.696+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"2ff28316-2932899\"}"
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "Qwen3.5-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 Qwen3.5-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3.5-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3.5-Plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.022,
+      "message": "模型 qwen3.5-Plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3.5-Plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3_5_plus",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.044,
+      "message": "模型 qwen3_5_plus 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3_5_plus price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "qwen3-max",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.095,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:02:40.870+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"636d12eb-2932907\"}"
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "Qwen3-Max",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.038,
+      "message": "模型 Qwen3-Max 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-Max price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "qwen3-Max",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.036,
+      "message": "模型 qwen3-Max 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model qwen3-Max price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "Qwen3-max",
+      "ok": false,
+      "http_status": 200,
+      "elapsed_sec": 0.027,
+      "message": "模型 Qwen3-max 的价格未配置。请前往「系统设置 → 运营设置」开启自用模式，或在「系统设置 → 分组与模型定价设置」中为该模型配置价格；Model Qwen3-max price not configured. Go to System Settings → Operation Settings to enable self-use mode, or configure the model price in System Settings → Group & Model Pricing."
+    }
+  ],
+  "success_by_candidate": {
+    "qwen3.6-plus": false,
+    "qwen3-vl-plus": false,
+    "qwen-mt-plus": false,
+    "qwen3-omni-flash": false,
+    "gui-plus": false,
+    "qwen-mt-flash": false,
+    "glm-5.1": false,
+    "qwen3.5-plus": false,
+    "qwen3-max": false
+  },
+  "postcheck": {
+    "public_pricing_count": 27,
+    "candidate_visible_after_restore": {
+      "qwen3.6-plus": false,
+      "qwen3-vl-plus": false,
+      "qwen-mt-plus": false,
+      "qwen3-omni-flash": false,
+      "gui-plus": false,
+      "qwen-mt-flash": false,
+      "glm-5.1": false,
+      "qwen3.5-plus": false,
+      "qwen3-max": false
+    },
+    "channel_1_group": "1x,3x,5x",
+    "channel_1_has_candidates_after_restore": {
+      "qwen3.6-plus": false,
+      "qwen3-vl-plus": false,
+      "qwen-mt-plus": false,
+      "qwen3-omni-flash": false,
+      "gui-plus": false,
+      "qwen-mt-flash": false,
+      "glm-5.1": false,
+      "qwen3.5-plus": false,
+      "qwen3-max": false
+    }
+  },
+  "caveat": "Temporary prices were not treated as source-backed prices. Do not publish candidates unless runtime succeeds and MaaS source price/metadata is collected."
+}

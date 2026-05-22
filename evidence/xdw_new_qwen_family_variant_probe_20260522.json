@@ -1,0 +1,305 @@
+{
+  "checked_at": "2026-05-22 16:04:43 CST",
+  "method": "temporary price/channel exposure for canonical and case variants, restored after tests",
+  "results": [
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3.6-plus",
+      "ok": false,
+      "elapsed_sec": 0.16,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.561+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"e7abf0c4-2935281\"}"
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "Qwen3.6-Plus",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.630+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"a22e192b-2937189\"}"
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3.6-Plus",
+      "ok": false,
+      "elapsed_sec": 0.07,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.700+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"cbd14f72-2927716\"}"
+    },
+    {
+      "canonical": "qwen3.6-plus",
+      "tested_model": "qwen3_6_plus",
+      "ok": false,
+      "elapsed_sec": 0.073,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.771+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"21a64215-2937193\"}"
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "qwen3-vl-plus",
+      "ok": false,
+      "elapsed_sec": 0.071,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.843+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"d87b62ad-2927719\"}"
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "Qwen3-VL-Plus",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.914+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"e1ad5615-2937196\"}"
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "qwen3-vl-Plus",
+      "ok": false,
+      "elapsed_sec": 0.071,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:40.982+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"c0d2296a-2936265\"}"
+    },
+    {
+      "canonical": "qwen3-vl-plus",
+      "tested_model": "Qwen3-VL-plus",
+      "ok": false,
+      "elapsed_sec": 0.068,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.052+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"3c338236-2927734\"}"
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "qwen-mt-plus",
+      "ok": false,
+      "elapsed_sec": 0.067,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.119+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"a7e614e9-2936281\"}"
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "Qwen-MT-Plus",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.187+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"d3a4360a-2936284\"}"
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "qwen-mt-Plus",
+      "ok": false,
+      "elapsed_sec": 0.073,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.263+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"77c01262-2936286\"}"
+    },
+    {
+      "canonical": "qwen-mt-plus",
+      "tested_model": "Qwen-MT-plus",
+      "ok": false,
+      "elapsed_sec": 0.067,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.328+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"835ea53a-2927744\"}"
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "qwen3-omni-flash",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.394+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"81ced424-2936288\"}"
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "Qwen3-Omni-Flash",
+      "ok": false,
+      "elapsed_sec": 0.072,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.467+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"5bb15228-2927749\"}"
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "qwen3-omni-Flash",
+      "ok": false,
+      "elapsed_sec": 0.071,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.538+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"9efeefed-2936292\"}"
+    },
+    {
+      "canonical": "qwen3-omni-flash",
+      "tested_model": "Qwen3-Omni-flash",
+      "ok": false,
+      "elapsed_sec": 0.078,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.610+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"6d35b576-2935314\"}"
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "gui-plus",
+      "ok": false,
+      "elapsed_sec": 0.071,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.687+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"39b91129-2936296\"}"
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "GUI-Plus",
+      "ok": false,
+      "elapsed_sec": 0.115,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.804+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"50f61bb7-2927762\"}"
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "Gui-Plus",
+      "ok": false,
+      "elapsed_sec": 0.072,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.874+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"19c2fff3-2937226\"}"
+    },
+    {
+      "canonical": "gui-plus",
+      "tested_model": "gui-Plus",
+      "ok": false,
+      "elapsed_sec": 0.08,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:41.948+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"cea7321d-2937228\"}"
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "qwen-mt-flash",
+      "ok": false,
+      "elapsed_sec": 0.077,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.030+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"6cf35598-2937231\"}"
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "Qwen-MT-Flash",
+      "ok": false,
+      "elapsed_sec": 0.115,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.104+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"d332c164-2935328\"}"
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "qwen-mt-Flash",
+      "ok": false,
+      "elapsed_sec": 0.07,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.216+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"c83ca128-2936312\"}"
+    },
+    {
+      "canonical": "qwen-mt-flash",
+      "tested_model": "Qwen-MT-flash",
+      "ok": false,
+      "elapsed_sec": 0.078,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.288+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"c43de9ad-2937248\"}"
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "glm-5.1",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.366+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"bb8bd337-2927785\"}"
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "GLM-5.1",
+      "ok": false,
+      "elapsed_sec": 0.07,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.435+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"b1a232a3-2927788\"}"
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "glm-5.1-air",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.505+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"7bf50787-2936327\"}"
+    },
+    {
+      "canonical": "glm-5.1",
+      "tested_model": "GLM-5.1-Air",
+      "ok": false,
+      "elapsed_sec": 0.07,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.574+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"39b91129-2936329\"}"
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3.5-plus",
+      "ok": false,
+      "elapsed_sec": 0.069,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.645+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"f64d43f0-2937258\"}"
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "Qwen3.5-Plus",
+      "ok": false,
+      "elapsed_sec": 0.073,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.714+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"c64015f0-2935355\"}"
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3.5-Plus",
+      "ok": false,
+      "elapsed_sec": 0.08,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.795+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"e20197fc-2937264\"}"
+    },
+    {
+      "canonical": "qwen3.5-plus",
+      "tested_model": "qwen3_5_plus",
+      "ok": false,
+      "elapsed_sec": 0.073,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.868+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4a2728f3-2937269\"}"
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "qwen3-max",
+      "ok": false,
+      "elapsed_sec": 0.081,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:42.941+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"2fb62d7d-2935368\"}"
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "Qwen3-Max",
+      "ok": false,
+      "elapsed_sec": 0.074,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:43.022+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"7f8d6547-2927806\"}"
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "qwen3-Max",
+      "ok": false,
+      "elapsed_sec": 0.068,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:43.095+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"29fdbc45-2935373\"}"
+    },
+    {
+      "canonical": "qwen3-max",
+      "tested_model": "Qwen3-max",
+      "ok": false,
+      "elapsed_sec": 0.076,
+      "status": 200,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T08:04:43.169+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4df4c01c-2935374\"}"
+    }
+  ],
+  "success_by_candidate": {
+    "qwen3.6-plus": false,
+    "qwen3-vl-plus": false,
+    "qwen-mt-plus": false,
+    "qwen3-omni-flash": false,
+    "gui-plus": false,
+    "qwen-mt-flash": false,
+    "glm-5.1": false,
+    "qwen3.5-plus": false,
+    "qwen3-max": false
+  }
+}

@@ -1,5 +1,27 @@
 # XD API 工作记录
 
+## 2026-05-22 16:05 CST
+
+### 扩展新增 Qwen/通义候选模型准入测试
+
+变更内容：
+
+- 重新读取现网渠道和公开价格目录：`/api/pricing` 仍为 27 个公开模型，两个 CMCC 渠道均绑定 `1x,3x,5x`。
+- 上游 `fetch_models` 当前可见 9 个未公开候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
+- 为验证运行时可用性，短暂给候选模型及大小写变体写入临时兜底价格并加入标准渠道；测试完成后立即回滚。
+- 把用户截图里能确认的模型广场卡片信息写入源站信息审计页；没有详情页参数表的上下文/最大输出不硬填。
+
+验证方式：
+
+- 9 个候选模型及常见大小写变体通过当前华北-呼和浩特 `/v1/chat/completions` 渠道测试，结果均未成功，典型失败为上游 404。
+- 回滚后复核：公开 `/api/pricing` 仍为 27 个模型，候选模型均未出现在前台价格目录；标准渠道也未保留候选模型。
+- 新增脱敏证据文件：`evidence/xdw_live_snapshot_20260522.json`、`evidence/xdw_new_qwen_family_probe_20260522.json`、`evidence/xdw_new_qwen_family_variant_probe_20260522.json`。
+
+注意事项：
+
+- “模型广场/上游列表可见”不等于当前 API key 和当前运行时 endpoint 可调用。
+- 新模型上线仍需要同时满足运行时 API 成功、官方/截图价格证据可核对、上下文/最大输出证据可核对或明确标注缺口。
+
 ## 2026-05-22 11:53 CST
 
 ### 补充 DeepSeek-V4-Flash 移动 MaaS 详情页证据

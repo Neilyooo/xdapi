@@ -1,276 +1,267 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>XD API 工作记录</title>
   <style>
-    :root { --bg:#f6f8fc; --card:#fff; --text:#172033; --muted:#5f6b85; --line:#d9e1f2; --accent:#0f6fff; --ok:#0d8b5f; }
-    * { box-sizing:border-box; }
-    body { margin:0; background:linear-gradient(180deg,#f8fbff 0%,#eef3fb 100%); color:var(--text); font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
-    .wrap { max-width:1040px; margin:0 auto; padding:32px 20px 72px; }
-    .topbar { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px; }
-    .topbar a { color:#174ea6; background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 12px; text-decoration:none; font-weight:650; }
-    .hero { background:linear-gradient(135deg,#0f172a 0%,#173b7a 56%,#0f6fff 100%); color:#fff; border-radius:22px; padding:34px 38px; box-shadow:0 24px 60px rgba(17,36,84,.18); margin-bottom:20px; }
-    .hero h1 { margin:0 0 10px; font-size:34px; line-height:1.18; }
-    .hero p { margin:0; max-width:860px; color:rgba(255,255,255,.9); }
-    .entry { background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:0 10px 24px rgba(33,53,92,.05); padding:24px 26px; margin-bottom:18px; }
-    h2 { margin:0 0 12px; font-size:22px; }
-    h3 { margin:18px 0 8px; font-size:17px; }
-    ul { margin:10px 0 0 22px; padding:0; }
-    li { margin:6px 0; }
-    code { background:#f2f5fa; border:1px solid #e1e8f4; padding:2px 6px; border-radius:7px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.93em; }
-    .time { color:var(--muted); font-weight:700; }
+    :root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}
+    *{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
+    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}
+    .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
+    h2{margin:0 0 12px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
+    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <nav class="topbar">
-      <a href="../index.html">模型进度首页</a>
-      <a href="./business-framework.html">业务框架</a>
-      <a href="./cli-ide-setup-tutorial.html">小白接入教程</a>
-    </nav>
-    <section class="hero">
-      <h1>XD API 工作记录</h1>
-      <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
-    </section>
-    <article class="entry">
-      <div class="time">2026-05-22 11:53 CST</div>
-      <h2>补充 DeepSeek-V4-Flash 移动 MaaS 详情页证据</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>根据用户提供的移动 MaaS 模型详情页完整截图，补充 <code>DeepSeek-V4-Flash</code> 的模型详情页截图证据。</li>
-        <li>记录该页面显示：上下文长度 <code>1024K</code>，最大输出长度 <code>384K</code>，总参数 <code>284B</code>，激活参数 <code>13B</code>，更新于 <code>2026-04-24 17:52:36</code>。</li>
-        <li>修正文档表述：之前“拿不到”指的是 XDAPI 现网 <code>/api/pricing</code> 没有返回这些字段，不是说移动 MaaS 详情页没有这些信息。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>用户截图包含模型名 <code>DeepSeek-V4-Flash</code> 和对应上下文/最大输出字段，满足“详情页截图证据”的最低条件。</li>
-        <li>现网 <code>/api/pricing</code> 仍不返回这些 metadata 字段，因此 XDAPI 前端不能从该接口直接获得这些事实参数。</li>
-      </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li>截图证据可以用于人工审计和文档记录；如果要让 XDAPI 前台稳定展示，需要把这些字段做成后端 source-backed metadata，而不是前端 mock。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-22 11:22 CST</div>
-      <h2>修正价格详情页事实参数展示口径</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>核对现网 <code>/api/pricing</code>，确认 <code>deepseek-v4-flash</code> 没有返回 <code>context_length</code>、<code>max_output_tokens</code>、<code>knowledge_cutoff</code>、<code>release_date</code>。</li>
-        <li>定位到价格详情页的 <code>8.2K</code> 上下文、<code>8.2K</code> 最大输出、知识截止和发布时间来自前端确定性 mock / inference，不是移动 MaaS 原文。</li>
-        <li>本地前端已改为：上下文、最大输出、知识截止、发布时间、参数量只在后端显式返回时展示；缺失时隐藏，不再由前端合成。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>现网 <code>/api/pricing</code> 返回的 <code>deepseek-v4-flash</code> 仅包含价格、描述、标签、分组和 endpoint，不含上述事实参数字段。</li>
-        <li>本地 diff 已移除 <code>model-metadata.ts</code> 中针对事实参数的随机桶/模型名 hash 兜底逻辑。</li>
-      </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li>这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。</li>
-        <li>本机未安装 <code>bun</code>，且当前目录缺少 <code>tsc</code>，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 <code>bun run typecheck</code> 或等价检查。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-22 11:08 CST</div>
-      <h2>明确上下文/最大输出证据口径</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>修正源站信息对齐审计页的表述，明确“未采到官方帮助中心表格证据”不等于“上游没有上下文数据”。</li>
-        <li>新增上下文/最大输出证据分级：官方 API 文档表格可直接写入；包含模型名和来源的详情页截图可作为截图证据；缺少模型名或无法对应模型的局部截图不写入正式字段。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>复核当前页面没有把缺少逐模型来源的数据写成正式上下文/最大输出参数。</li>
-        <li>GitHub Pages 发布前进行 HTML 解析和敏感信息扫描。</li>
-      </ul>
-      <h3>结论</h3>
-      <ul>
-        <li>后续模型信息维护必须保留可核对来源；不能用历史配置、同系列外推或缺少模型名的截图片段补参数。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-22 10:50 CST</div>
-      <h2>新增 Qwen 模型准入测试与源站信息审计</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>检查上游 <code>fetch_models</code>，确认 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code> 已在模型列表中可见。</li>
-        <li>为验证运行时可用性，短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚。</li>
-        <li>新增 <code>docs/model-source-audit.html</code> 和 Markdown 版本，记录模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</li>
-        <li>新增脱敏证据文件 <code>evidence/xdw_model_source_audit_20260522.json</code>、<code>evidence/xdw_add_qwen_plus_models_20260522.json</code>、<code>evidence/xdw_qwen_plus_case_probe_20260522.json</code>。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>当前 <code>/api/channel/fetch_models/1</code> 能看到 3 个新增 Qwen 模型。</li>
-        <li>通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 测试 3 个新增模型及常见大小写变体，均返回 404。</li>
-        <li>回滚后复核公开 <code>/api/pricing</code> 仍为 27 个模型，新增 3 个模型未公开。</li>
-        <li>采集移动云帮助中心官方文章：token 价格、Qwen-VL 图片/视频、embedding、rerank、MiniMax API 文档。</li>
-      </ul>
-      <h3>结论</h3>
-      <ul>
-        <li>这 3 个新增模型暂不加入 XDAPI 前台，原因是模型广场/上游列表可见但当前运行时 endpoint 不可调用。</li>
-        <li>27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
-        <li>上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-19 10:47 CST</div>
-      <h2>清理残留非倍率用户分组</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>复核后台用户和令牌 group 分布，确认没有活跃 <code>auto</code> 用户或 <code>auto</code> 令牌。</li>
-        <li>将 3 个仍处于 <code>default</code> 的活跃用户迁移到 <code>1x</code>。</li>
-        <li>将 1 个 group 为空的活跃令牌迁移到 <code>1x</code>。</li>
-        <li>新增脱敏证据文件 <code>evidence/xdw_user_group_cleanup_20260519_1047.json</code>。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>迁移后活跃用户分布为 <code>{'1x': 11}</code>。</li>
-        <li>迁移后活跃令牌分布为 <code>{'1x': 3}</code>。</li>
-        <li>活跃 <code>auto</code> 用户和活跃 <code>auto</code> 令牌均为空。</li>
-      </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li>后台仍可看到 1 个已删除用户保留历史 <code>default</code> 字段；它不属于活跃用户，不参与现网调用路由。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-19 10:40 CST</div>
-      <h2>倍率分组发布收尾与现网复核</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>将倍率分组报告、业务框架页、首页和本地 Markdown 文档同步到 GitHub Pages 发布仓库。</li>
-        <li>保留 2026-05-18 的现网配置变更记录，并补齐发布证据文件 <code>evidence/xdw_ratio_groups_20260518_1111.json</code>。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>HTML 解析校验通过：首页、业务框架页、分组报告页、工作日志页和横向对比进度表页。</li>
-        <li>敏感信息扫描未发现 GitHub token、Bearer token、上游 key 或完整 API key。</li>
-        <li>复核公开接口：<code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>；<code>/api/pricing</code> 返回 27 个模型，且 <code>enable_groups</code> 只包含 <code>1x/3x/5x</code>。</li>
-      </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li><code>/api/user/models</code> 需要登录态，匿名请求返回 401 属于预期行为。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-18 11:11 CST</div>
-      <h2>分组改为 1x / 3x / 5x 倍率体系</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>将 <code>GroupRatio</code> 改为 <code>1x=1.00</code>、<code>3x=3.00</code>、<code>5x=5.00</code>。</li>
-        <li>将 <code>UserUsableGroups</code> 改为 <code>1x</code>、<code>3x</code>、<code>5x</code>，不再公开 <code>default/vip/agent</code>。</li>
-        <li>关闭自动分组：<code>AutoGroups=[]</code>、<code>DefaultUseAutoGroup=false</code>，不再使用 <code>auto</code> 语义。</li>
-        <li>两个 CMCC 渠道的 <code>group</code> 改为 <code>1x,3x,5x</code>。</li>
-        <li>现有 admin 用户和测试令牌从 <code>default</code> 迁移到 <code>1x</code>；订阅套餐改为 <code>3x 加速月包</code> 与 <code>5x 优先月包</code>。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>临时创建 <code>1x</code>、<code>3x</code>、<code>5x</code> 三个令牌，分别调用 <code>qwen2.5-vl-72b-instruct</code>。</li>
-        <li>三组均返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
-        <li>核对 <code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>，<code>/api/user/models</code> 返回 27 个模型。</li>
-      </ul>
-      <h3>备份与注意事项</h3>
-      <ul>
-        <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。</li>
-        <li>当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-18 10:51 CST</div>
-      <h2>新增分组权限与可用模型报告</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>新增 <code>docs/group-permissions.html</code> 和 Markdown 版本，汇总现网所有 group key 的权限语义、倍率、前台可见性、限流配置和可调用模型。</li>
-        <li>新增脱敏证据文件 <code>evidence/xdw_group_permissions_20260518_1051.json</code>。</li>
-        <li>首页和业务框架页新增分组权限报告入口。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>读取现网 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>UserUsableGroups</code>、<code>GroupGroupRatio</code> 和 <code>ModelRequestRateLimitGroup</code>。</li>
-        <li>读取两个 CMCC 渠道的 <code>group</code> 与模型列表。</li>
-        <li>核对匿名 <code>/api/pricing</code>、登录态 <code>/api/user/models</code> 和 <code>/api/user/groups</code>。</li>
-      </ul>
-      <h3>结论</h3>
-      <ul>
-        <li>普通用户前台只看到 <code>default</code>，显示为 <code>基础 1x 统一分组</code>。</li>
-        <li><code>default</code>、<code>vip</code>、<code>agent</code> 当前倍率均为 <code>1.00x</code>，均可路由到 27 个公开 CMCC token 模型。</li>
-        <li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-16 15:34 CST</div>
-      <h2>完成 27 个模型链路延迟诊断</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>新增 <code>docs/latency-diagnosis.html</code> 和 Markdown 版本，展示 XDAPI 对外链路与中移动 MaaS 上游直连链路对比。</li>
-        <li>新增脱敏证据文件 <code>evidence/xdw_latency_diagnosis_20260516_153406.json</code>。</li>
-        <li>首页补充链路慢点判断，明确短响应可用性测试和长输出吞吐测试的区别。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>覆盖 27 个已公开 CMCC token 计费模型。</li>
-        <li>聊天模型执行短输出 <code>max_tokens=16</code> 和 128 token 吞吐测试。</li>
-        <li>embedding / rerank 模型分别调用 <code>/v1/embeddings</code> 与 <code>/v1/rerank</code>。</li>
-        <li>每组均分别测试 XDAPI Bearer 链路和上游直连链路，形成 51 组可对照结果。</li>
-      </ul>
-      <h3>结论</h3>
-      <ul>
-        <li>51 组对比全部成功，49 组判定为上游模型服务/生成吞吐主导。</li>
-        <li>24 个聊天模型短输出平均耗时：XDAPI 1.04s，上游直连 1.14s。</li>
-        <li>128 token 吞吐平均耗时：XDAPI 8.30s，上游直连 8.11s，平均差值 186 ms。</li>
-        <li>DeepSeek V3 / R1 / 部分 72B 系列吞吐约 8-12 tokens/s，是 500 token 输出接近 1 分钟的主要原因。</li>
-        <li><code>deepseek-v3-0324</code> 短输出和 <code>qwen2.5-72b-instruct</code> 128 token 测试出现 XDAPI 额外开销嫌疑，建议后续重复采样确认。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-16 14:26 CST</div>
-      <h2>公开 27 个 CMCC token 计费模型到前台目录</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>确认前台公开目录已经覆盖两个 CMCC 逻辑渠道中的全部 27 个可 API 调用模型。</li>
-        <li>将文档中残留的“公开 <code>/api/pricing</code> 仍显示 20 个模型”限制更新为“已公开 27 个模型”。</li>
-        <li>继续保持普通用户只看到 <code>default</code> 1x 分组；模型公开不再依赖 <code>vip/agent</code>。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>匿名请求 <code>/api/pricing</code>，返回 27 个模型。</li>
-        <li>登录态请求 <code>/api/user/models</code>，返回同一组 27 个模型。</li>
-        <li>登录态请求 <code>/api/user/groups</code>，返回 <code>default</code>，倍率 <code>1</code>。</li>
-        <li>对比两个 CMCC 渠道的模型列表，确认没有模型缺失于公开价格目录。</li>
-      </ul>
-      <h3>注意事项</h3>
-      <ul>
-        <li>高成本模型仍保留在独立逻辑渠道中便于维护和观测，但不作为前台可见性限制。</li>
-        <li>语音类 <code>SenseVoice</code>、<code>CosyVoice</code> 暂不公开，因为当前商业计费结构仍以 token 为主。</li>
-      </ul>
-    </article>
-    <article class="entry">
-      <div class="time">2026-05-16 14:12 CST</div>
-      <h2>统一分组策略：分组从“访问门槛”改为“速度/价格倍率档位”</h2>
-      <h3>变更内容</h3>
-      <ul>
-        <li>将 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>GroupGroupRatio</code> 中的 <code>default/vip/agent</code> 统一为 <code>1.00x</code>。</li>
-        <li>将标准 CMCC 渠道和高成本 CMCC 渠道的 <code>group</code> 都设为 <code>default,vip,agent</code>。</li>
-        <li><code>UserUsableGroups</code> 只保留 <code>default</code>，公开标签改为 <code>基础 1x 统一分组</code>。</li>
-        <li><code>vip</code>、<code>agent</code> 不再表示模型可用性或身份权限，只作为历史兼容 key 保留。</li>
-      </ul>
-      <h3>验证方式</h3>
-      <ul>
-        <li>创建临时 <code>default</code> 分组令牌。</li>
-        <li>调用原高成本渠道模型 <code>qwen2.5-vl-72b-instruct</code> 的 <code>/v1/chat/completions</code>。</li>
-        <li>验证返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
-        <li>验证后删除临时令牌。</li>
-      </ul>
-      <h3>备份与注意事项</h3>
-      <ul>
-        <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。</li>
-        <li>14:26 CST 已完成前台目录复核：公开 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均显示 27 个模型。</li>
-        <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
-      </ul>
-    </article>
-  </div>
-</body>
-</html>
+<body><div class="wrap">
+  <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
+  <section class="hero"><h1>XD API 工作记录</h1><p>记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。</p></section>
+  
+<section class="section"><h2>2026-05-22 16:05 CST</h2>
+<h3>扩展新增 Qwen/通义候选模型准入测试</h3>
+<p>变更内容：</p>
+<ul>
+<li>重新读取现网渠道和公开价格目录：<code>/api/pricing</code> 仍为 27 个公开模型，两个 CMCC 渠道均绑定 <code>1x,3x,5x</code>。</li>
+<li>上游 <code>fetch_models</code> 当前可见 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>为验证运行时可用性，短暂给候选模型及大小写变体写入临时兜底价格并加入标准渠道；测试完成后立即回滚。</li>
+<li>把用户截图里能确认的模型广场卡片信息写入源站信息审计页；没有详情页参数表的上下文/最大输出不硬填。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>9 个候选模型及常见大小写变体通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 渠道测试，结果均未成功，典型失败为上游 404。</li>
+<li>回滚后复核：公开 <code>/api/pricing</code> 仍为 27 个模型，候选模型均未出现在前台价格目录；标准渠道也未保留候选模型。</li>
+<li>新增脱敏证据文件：<code>evidence/xdw_live_snapshot_20260522.json</code>、<code>evidence/xdw_new_qwen_family_probe_20260522.json</code>、<code>evidence/xdw_new_qwen_family_variant_probe_20260522.json</code>。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>“模型广场/上游列表可见”不等于当前 API key 和当前运行时 endpoint 可调用。</li>
+<li>新模型上线仍需要同时满足运行时 API 成功、官方/截图价格证据可核对、上下文/最大输出证据可核对或明确标注缺口。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-22 11:53 CST</h2>
+<h3>补充 DeepSeek-V4-Flash 移动 MaaS 详情页证据</h3>
+<p>变更内容：</p>
+<ul>
+<li>根据用户提供的移动 MaaS 模型详情页完整截图，补充 <code>DeepSeek-V4-Flash</code> 的模型详情页截图证据。</li>
+<li>记录该页面显示：上下文长度 <code>1024K</code>，最大输出长度 <code>384K</code>，总参数 <code>284B</code>，激活参数 <code>13B</code>，更新于 <code>2026-04-24 17:52:36</code>。</li>
+<li>修正文档表述：之前“拿不到”指的是 XDAPI 现网 <code>/api/pricing</code> 没有返回这些字段，不是说移动 MaaS 详情页没有这些信息。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>用户截图包含模型名 <code>DeepSeek-V4-Flash</code> 和对应上下文/最大输出字段，满足“详情页截图证据”的最低条件。</li>
+<li>现网 <code>/api/pricing</code> 仍不返回这些 metadata 字段，因此 XDAPI 前端不能从该接口直接获得这些事实参数。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>截图证据可以用于人工审计和文档记录；如果要让 XDAPI 前台稳定展示，需要把这些字段做成后端 source-backed metadata，而不是前端 mock。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-22 11:22 CST</h2>
+<h3>修正价格详情页事实参数展示口径</h3>
+<p>变更内容：</p>
+<ul>
+<li>核对现网 <code>/api/pricing</code>，确认 <code>deepseek-v4-flash</code> 没有返回 <code>context_length</code>、<code>max_output_tokens</code>、<code>knowledge_cutoff</code>、<code>release_date</code>。</li>
+<li>定位到价格详情页的 <code>8.2K</code> 上下文、<code>8.2K</code> 最大输出、知识截止和发布时间来自前端确定性 mock / inference，不是移动 MaaS 原文。</li>
+<li>本地前端已改为：上下文、最大输出、知识截止、发布时间、参数量只在后端显式返回时展示；缺失时隐藏，不再由前端合成。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>现网 <code>/api/pricing</code> 返回的 <code>deepseek-v4-flash</code> 仅包含价格、描述、标签、分组和 endpoint，不含上述事实参数字段。</li>
+<li>本地 diff 已移除 <code>model-metadata.ts</code> 中针对事实参数的随机桶/模型名 hash 兜底逻辑。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。</li>
+<li>本机未安装 <code>bun</code>，且当前目录缺少 <code>tsc</code>，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 <code>bun run typecheck</code> 或等价检查。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-22 11:08 CST</h2>
+<h3>明确上下文/最大输出证据口径</h3>
+<p>变更内容：</p>
+<ul>
+<li>修正源站信息对齐审计页的表述，明确“未采到官方帮助中心表格证据”不等于“上游没有上下文数据”。</li>
+<li>新增上下文/最大输出证据分级：官方 API 文档表格可直接写入；包含模型名和来源的详情页截图可作为截图证据；缺少模型名或无法对应模型的局部截图不写入正式字段。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>复核当前页面没有把缺少逐模型来源的数据写成正式上下文/最大输出参数。</li>
+<li>GitHub Pages 发布前进行 HTML 解析和敏感信息扫描。</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>后续模型信息维护必须保留可核对来源；不能用历史配置、同系列外推或缺少模型名的截图片段补参数。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-22 10:50 CST</h2>
+<h3>新增 Qwen 模型准入测试与源站信息审计</h3>
+<p>变更内容：</p>
+<ul>
+<li>检查上游 <code>fetch_models</code>，确认 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code> 已在模型列表中可见。</li>
+<li>为验证运行时可用性，短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚。</li>
+<li>新增 <code>docs/model-source-audit.html</code> 和 Markdown 版本，记录模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</li>
+<li>新增脱敏证据文件 <code>evidence/xdw_model_source_audit_20260522.json</code>、<code>evidence/xdw_add_qwen_plus_models_20260522.json</code>、<code>evidence/xdw_qwen_plus_case_probe_20260522.json</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>当前 <code>/api/channel/fetch_models/1</code> 能看到 3 个新增 Qwen 模型。</li>
+<li>通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 测试 3 个新增模型及常见大小写变体，均返回 404。</li>
+<li>回滚后复核公开 <code>/api/pricing</code> 仍为 27 个模型，新增 3 个模型未公开。</li>
+<li>采集移动云帮助中心官方文章：token 价格、Qwen-VL 图片/视频、embedding、rerank、MiniMax API 文档。</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>这 3 个新增模型暂不加入 XDAPI 前台，原因是模型广场/上游列表可见但当前运行时 endpoint 不可调用。</li>
+<li>27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
+<li>上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-19 10:47 CST</h2>
+<h3>清理残留非倍率用户分组</h3>
+<p>变更内容：</p>
+<ul>
+<li>复核后台用户和令牌 group 分布，确认没有活跃 <code>auto</code> 用户或 <code>auto</code> 令牌。</li>
+<li>将 3 个仍处于 <code>default</code> 的活跃用户迁移到 <code>1x</code>。</li>
+<li>将 1 个 group 为空的活跃令牌迁移到 <code>1x</code>。</li>
+<li>新增脱敏证据文件 <code>evidence/xdw_user_group_cleanup_20260519_1047.json</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>迁移后活跃用户分布为 <code>{&#x27;1x&#x27;: 11}</code>。</li>
+<li>迁移后活跃令牌分布为 <code>{&#x27;1x&#x27;: 3}</code>。</li>
+<li>活跃 <code>auto</code> 用户和活跃 <code>auto</code> 令牌均为空。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>后台仍可看到 1 个已删除用户保留历史 <code>default</code> 字段；它不属于活跃用户，不参与现网调用路由。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-19 10:40 CST</h2>
+<h3>倍率分组发布收尾与现网复核</h3>
+<p>变更内容：</p>
+<ul>
+<li>将倍率分组报告、业务框架页、首页和本地 Markdown 文档同步到 GitHub Pages 发布仓库。</li>
+<li>保留 2026-05-18 的现网配置变更记录，并补齐发布证据文件 <code>evidence/xdw_ratio_groups_20260518_1111.json</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>HTML 解析校验通过：首页、业务框架页、分组报告页、工作日志页和横向对比进度表页。</li>
+<li>敏感信息扫描未发现 GitHub token、Bearer token、上游 key 或完整 API key。</li>
+<li>复核公开接口：<code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>；<code>/api/pricing</code> 返回 27 个模型，且 <code>enable_groups</code> 只包含 <code>1x/3x/5x</code>。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li><code>/api/user/models</code> 需要登录态，匿名请求返回 401 属于预期行为。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-18 11:11 CST</h2>
+<h3>分组改为 1x / 3x / 5x 倍率体系</h3>
+<p>变更内容：</p>
+<ul>
+<li>将 <code>GroupRatio</code> 改为 <code>1x=1.00</code>、<code>3x=3.00</code>、<code>5x=5.00</code>。</li>
+<li>将 <code>UserUsableGroups</code> 改为 <code>1x</code>、<code>3x</code>、<code>5x</code>，不再公开 <code>default/vip/agent</code>。</li>
+<li>关闭自动分组：<code>AutoGroups=[]</code>、<code>DefaultUseAutoGroup=false</code>，不再使用 <code>auto</code> 语义。</li>
+<li>两个 CMCC 渠道的 <code>group</code> 改为 <code>1x,3x,5x</code>。</li>
+<li>现有 admin 用户和测试令牌从 <code>default</code> 迁移到 <code>1x</code>；订阅套餐改为 <code>3x 加速月包</code> 与 <code>5x 优先月包</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>临时创建 <code>1x</code>、<code>3x</code>、<code>5x</code> 三个令牌，分别调用 <code>qwen2.5-vl-72b-instruct</code>。</li>
+<li>三组均返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
+<li>核对 <code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>，<code>/api/user/models</code> 返回 27 个模型。</li>
+</ul>
+<p>备份与注意事项：</p>
+<ul>
+<li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。</li>
+<li>当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-18 10:51 CST</h2>
+<h3>新增分组权限与可用模型报告</h3>
+<p>变更内容：</p>
+<ul>
+<li>新增 <code>docs/group-permissions.html</code> 和 Markdown 版本，汇总现网所有 group key 的权限语义、倍率、前台可见性、限流配置和可调用模型。</li>
+<li>新增脱敏证据文件 <code>evidence/xdw_group_permissions_20260518_1051.json</code>。</li>
+<li>首页和业务框架页新增分组权限报告入口。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>读取现网 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>UserUsableGroups</code>、<code>GroupGroupRatio</code> 和 <code>ModelRequestRateLimitGroup</code>。</li>
+<li>读取两个 CMCC 渠道的 <code>group</code> 与模型列表。</li>
+<li>核对匿名 <code>/api/pricing</code>、登录态 <code>/api/user/models</code> 和 <code>/api/user/groups</code>。</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>普通用户前台只看到 <code>default</code>，显示为 <code>基础 1x 统一分组</code>。</li>
+<li><code>default</code>、<code>vip</code>、<code>agent</code> 当前倍率均为 <code>1.00x</code>，均可路由到 27 个公开 CMCC token 模型。</li>
+<li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-16 15:34 CST</h2>
+<h3>完成 27 个模型链路延迟诊断</h3>
+<p>变更内容：</p>
+<ul>
+<li>新增 <code>docs/latency-diagnosis.html</code> 和 Markdown 版本，展示 XDAPI 对外链路与中移动 MaaS 上游直连链路对比。</li>
+<li>新增脱敏证据文件 <code>evidence/xdw_latency_diagnosis_20260516_153406.json</code>。</li>
+<li>首页补充链路慢点判断，明确短响应可用性测试和长输出吞吐测试的区别。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>覆盖 27 个已公开 CMCC token 计费模型。</li>
+<li>聊天模型执行短输出 <code>max_tokens=16</code> 和 128 token 吞吐测试。</li>
+<li>embedding / rerank 模型分别调用 <code>/v1/embeddings</code> 与 <code>/v1/rerank</code>。</li>
+<li>每组均分别测试 XDAPI Bearer 链路和上游直连链路，形成 51 组可对照结果。</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>51 组对比全部成功，49 组判定为上游模型服务/生成吞吐主导。</li>
+<li>24 个聊天模型短输出平均耗时：XDAPI 1.04s，上游直连 1.14s。</li>
+<li>128 token 吞吐平均耗时：XDAPI 8.30s，上游直连 8.11s，平均差值 186 ms。</li>
+<li>DeepSeek V3 / R1 / 部分 72B 系列吞吐约 8-12 tokens/s，是 500 token 输出接近 1 分钟的主要原因。</li>
+<li><code>deepseek-v3-0324</code> 短输出和 <code>qwen2.5-72b-instruct</code> 128 token 测试出现 XDAPI 额外开销嫌疑，建议后续重复采样确认。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-16 14:26 CST</h2>
+<h3>公开 27 个 CMCC token 计费模型到前台目录</h3>
+<p>变更内容：</p>
+<ul>
+<li>确认前台公开目录已经覆盖两个 CMCC 逻辑渠道中的全部 27 个可 API 调用模型。</li>
+<li>将文档中残留的“公开 <code>/api/pricing</code> 仍显示 20 个模型”限制更新为“已公开 27 个模型”。</li>
+<li>继续保持普通用户只看到 <code>default</code> 1x 分组；模型公开不再依赖 <code>vip/agent</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>匿名请求 <code>/api/pricing</code>，返回 27 个模型。</li>
+<li>登录态请求 <code>/api/user/models</code>，返回同一组 27 个模型。</li>
+<li>登录态请求 <code>/api/user/groups</code>，返回 <code>default</code>，倍率 <code>1</code>。</li>
+<li>对比两个 CMCC 渠道的模型列表，确认没有模型缺失于公开价格目录。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>高成本模型仍保留在独立逻辑渠道中便于维护和观测，但不作为前台可见性限制。</li>
+<li>语音类 <code>SenseVoice</code>、<code>CosyVoice</code> 暂不公开，因为当前商业计费结构仍以 token 为主。</li>
+</ul>
+<section class="section"><h2>2026-05-16 14:12 CST</h2>
+<h3>统一分组策略：分组从“访问门槛”改为“速度/价格倍率档位”</h3>
+<p>变更内容：</p>
+<ul>
+<li>将 <code>GroupRatio</code>、<code>TopupGroupRatio</code>、<code>GroupGroupRatio</code> 中的 <code>default/vip/agent</code> 统一为 <code>1.00x</code>。</li>
+<li>将标准 CMCC 渠道和高成本 CMCC 渠道的 <code>group</code> 都设为 <code>default,vip,agent</code>。</li>
+<li><code>UserUsableGroups</code> 只保留 <code>default</code>，公开标签改为 <code>基础 1x 统一分组</code>。</li>
+<li><code>vip</code>、<code>agent</code> 不再表示模型可用性或身份权限，只作为历史兼容 key 保留。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>创建临时 <code>default</code> 分组令牌。</li>
+<li>调用原高成本渠道模型 <code>qwen2.5-vl-72b-instruct</code> 的 <code>/v1/chat/completions</code>。</li>
+<li>验证返回 HTTP 200，响应片段 <code>ok</code>，usage 为 <code>prompt=11, completion=2, total=13</code>。</li>
+<li>验证后删除临时令牌。</li>
+</ul>
+<p>备份与注意事项：</p>
+<ul>
+<li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_group_unify_1778911778.json</code>。</li>
+<li>14:26 CST 已完成前台目录复核：公开 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均显示 27 个模型。</li>
+<li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
+</ul>
+</section>
+</div></body></html>

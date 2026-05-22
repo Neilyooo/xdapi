@@ -10,101 +10,102 @@
     .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
     .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}
     .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
-    h2{margin:0 0 12px;font-size:21px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
-    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.ok{color:var(--ok);font-weight:700}.warn{color:var(--warn);font-weight:700}.bad{color:var(--bad);font-weight:700}
+    h2{margin:0 0 12px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
+    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <nav class="topbar">
-      <a href="../index.html">首页</a>
-      <a href="./business-framework.html">业务框架</a>
-      <a href="./work-log.html">工作记录</a>
-      <a href="./group-permissions.html">倍率分组</a>
-    </nav>
-    <section class="hero">
-      <h1>XD API 模型源站信息对齐审计</h1>
-      <p>更新时间：2026-05-22 11:53 CST。本页记录新增 Qwen 模型准入测试，以及现有模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</p>
-    </section>
-    <section class="section">
-      <h2>本轮结论</h2>
-      <ul>
-        <li>上游 <code>fetch_models</code> 已能看到 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code>。</li>
-        <li>这 3 个模型通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 运行时测试均返回 <span class="bad">404</span>；常见大小写变体同样返回 404。</li>
-        <li>因运行时不可调用，已回滚临时价格和渠道配置，没有把这 3 个模型留在 XDAPI 前台。</li>
-        <li>XDAPI 公开价格目录仍为 <code>27</code> 个模型，新增 3 个模型均未公开。</li>
-        <li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
-      </ul>
-    </section>
-    <section class="section">
-      <h2>官方原文来源</h2>
-      <table><thead><tr><th>来源</th><th>用途</th></tr></thead><tbody>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/91592">预置模型服务-token按量计费</a></td><td>token 价格来源</td></tr>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93315">Qwen模型图片理解API调用</a></td><td>Qwen2.5-VL 图片理解模型上下文/最大输入/最大输出</td></tr>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93726">embedding模型API调用</a></td><td>bge embedding 上下文</td></tr>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93740">bge系列模型API调用</a></td><td>bge rerank 上下文</td></tr>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/97885">Qwen模型视频理解API调用</a></td><td>Qwen-VL 视频理解调用方式</td></tr>
-        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/98272">MiniMax模型API调用</a></td><td>MiniMax-M2.5 上下文/最大输入/最大回复</td></tr>
-      </tbody></table>
-    </section>
-    <section class="section">
-      <h2>对齐状态</h2>
-      <table><tbody>
-        <tr><th>公开模型数</th><td>27</td></tr>
-        <tr><th>新增截图模型公开状态</th><td><span class="warn">未公开，因运行时 404</span></td></tr>
-        <tr><th>价格原文覆盖</th><td>26/27 个公开模型在已采集官方 token 价格文章中有对应价格行</td></tr>
-        <tr><th>价格原文缺口</th><td><code>deepseek-v4-flash</code> 未在本轮采集到的官方价格表中找到对应行</td></tr>
-        <tr><th>上下文/最大输出原文覆盖</th><td>7/27 个公开模型有官方 API 文档表格证据</td></tr>
-        <tr><th>上下文/最大输出原文缺口</th><td>多数纯文本聊天模型在本轮采集到的官方帮助中心 API 文档中没有上下文/最大输出表格；这不是断言上游没有数据，只表示本轮没有采到可逐模型核对的原文证据</td></tr>
-      </tbody></table>
-    </section>
-    <section class="section">
-      <h2>上下文数据证据口径</h2>
-      <table><thead><tr><th>证据类型</th><th>是否写入模型事实字段</th><th>说明</th></tr></thead><tbody>
-        <tr><td>官方帮助中心 API 文档表格，且能对应到具体模型</td><td class="ok">是</td><td>例如 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5</td></tr>
-        <tr><td>模型广场/详情页截图，且截图包含模型名、上下文、最大输出、采集时间或可复核 URL</td><td class="warn">可写入，但标注为“详情页截图证据”</td><td>需要保留截图或导出的页面数据作为证据</td></tr>
-        <tr><td>只有局部截图，缺少模型名或无法确认对应模型</td><td class="bad">否</td><td>不作为正式模型参数，只能作为待补证线索</td></tr>
-        <tr><td>历史配置、推测值、同系列模型外推</td><td class="bad">否</td><td>不写入上下文/最大输出字段</td></tr>
-      </tbody></table>
-    </section>
-    <section class="section">
-      <h2>模型详情页截图证据</h2>
-      <table><thead><tr><th>模型</th><th>来源</th><th>上下文长度</th><th>最大输出长度</th><th>其他页面信息</th><th>证据口径</th></tr></thead><tbody>
-        <tr>
-          <td><code>DeepSeek-V4-Flash</code> / <code>deepseek-v4-flash</code></td>
-          <td>用户提供的移动 MaaS 模型详情页完整截图，采集于 2026-05-22 对话上下文</td>
-          <td><code>1024K</code></td>
-          <td><code>384K</code></td>
-          <td>总参数 284B、激活参数 13B、标配 100 万 token 超长上下文窗口、支持思考模式切换、函数调用和 JSON 结构化输出、更新于 2026-04-24 17:52:36</td>
-          <td>可作为详情页截图证据；仍需后续用可导出的上游页面数据或官方接口补强</td>
-        </tr>
-      </tbody></table>
-    </section>
-    <section class="section">
-      <h2>已发现的前端展示问题</h2>
-      <ul>
-        <li>2026-05-22 11:22 CST 已确认价格详情页曾对缺失的事实参数做前端 mock / inference。</li>
-        <li>例如 <code>deepseek-v4-flash</code> 的现网 <code>/api/pricing</code> 没有返回上下文、最大输出、知识截止、发布时间，但 XDAPI 详情页此前显示了 <code>8.2K</code> 等值。</li>
-        <li>这些 <code>8.2K</code> 等值不是移动 MaaS 原文；移动 MaaS 详情页截图证据显示该模型上下文为 <code>1024K</code>、最大输出为 <code>384K</code>。</li>
-        <li>本地前端已改为缺失时隐藏，待新版前端部署；后续应改为由后端返回来源明确的 metadata。</li>
-      </ul>
-    </section>
-    <section class="section">
-      <h2>新增模型准入结果</h2>
-      <table><thead><tr><th>模型</th><th>上游模型列表</th><th>/v1/chat/completions</th><th>结论</th></tr></thead><tbody>
-        <tr><td><code>qwen3.6-plus</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
-        <tr><td><code>qwen3-max</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
-        <tr><td><code>qwen3.5-plus</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
-      </tbody></table>
-    </section>
-    <section class="section">
-      <h2>注意事项</h2>
-      <ul>
-        <li>“模型广场可见”不等于当前 API key 在当前运行时 endpoint 可调用。</li>
-        <li>新模型必须同时满足：上游模型列表可见、运行时 API 成功、价格有可核对原文、上下文/最大输出有可核对原文或明确标注缺口。</li>
-        <li>本轮曾为探测短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚，公开 <code>/api/pricing</code> 未暴露这 3 个模型。</li>
-      </ul>
-    </section>
-  </div>
-</body>
-</html>
+<body><div class="wrap">
+  <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
+  <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
+  <p>更新时间：2026-05-22 16:05 CST</p>
+<section class="section"><h2>本轮结论</h2>
+<ul>
+<li>上游 <code>fetch_models</code> 已能看到 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>这 9 个模型通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 运行时测试均返回 404；常见大小写变体同样未通过。</li>
+<li>因运行时不可调用，已回滚临时价格和渠道配置，没有把这 9 个候选模型留在 XDAPI 前台。</li>
+<li>XDAPI 公开价格目录仍为 27 个模型，新增候选均未公开。</li>
+<li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
+</ul>
+</section>
+<section class="section"><h2>官方原文来源</h2>
+<table><thead><tr><th>来源</th><th>用途</th></tr></thead><tbody>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/91592">预置模型服务-token按量计费</a></td><td>token 价格来源</td></tr>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93315">Qwen模型图片理解API调用</a></td><td>Qwen2.5-VL 图片理解模型上下文/最大输入/最大输出</td></tr>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93726">embedding模型API调用</a></td><td>bge embedding 上下文</td></tr>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93740">bge系列模型API调用</a></td><td>bge rerank 上下文</td></tr>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/97885">Qwen模型视频理解API调用</a></td><td>Qwen-VL 视频理解调用方式</td></tr>
+<tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/98272">MiniMax模型API调用</a></td><td>MiniMax-M2.5 上下文/最大输入/最大回复</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>对齐状态</h2>
+<table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody>
+<tr><td>公开模型数</td><td>27</td></tr>
+<tr><td>新增候选模型公开状态</td><td>未公开，因运行时 404</td></tr>
+<tr><td>价格原文覆盖</td><td>26/27 个公开模型在已采集官方 token 价格文章中有对应价格行</td></tr>
+<tr><td>价格原文缺口</td><td><code>deepseek-v4-flash</code> 未在本轮采集到的官方价格表中找到对应行</td></tr>
+<tr><td>上下文/最大输出原文覆盖</td><td>7/27 个公开模型有官方 API 文档表格证据</td></tr>
+<tr><td>上下文/最大输出原文缺口</td><td>多数纯文本聊天模型在本轮采集到的官方帮助中心 API 文档中没有上下文/最大输出表格；这不是断言上游没有数据，只表示本轮没有采到可逐模型核对的原文证据</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>模型详情页截图证据</h2>
+<table><thead><tr><th>模型</th><th>来源</th><th>上下文长度</th><th>最大输出长度</th><th>其他页面信息</th><th>证据口径</th></tr></thead><tbody>
+<tr><td><code>DeepSeek-V4-Flash</code> / <code>deepseek-v4-flash</code></td><td>用户提供的移动 MaaS 模型详情页完整截图，采集于 2026-05-22 对话上下文</td><td>1024K</td><td>384K</td><td>总参数 284B、激活参数 13B、标配 100 万 token 超长上下文窗口、支持思考模式切换、函数调用和 JSON 结构化输出、更新于 2026-04-24 17:52:36</td><td>可作为详情页截图证据；仍需后续用可导出的上游页面数据或官方接口补强</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>模型广场卡片证据</h2>
+<table><thead><tr><th>模型</th><th>卡片信息</th><th>上下文/最大输出</th><th>证据口径</th></tr></thead><tbody>
+<tr><td><code>qwen3.6-plus</code></td><td>通义千问旗舰闭源模型；面向高复杂度任务；卡片显示“百万级上下文理解能力”和 Agentic Coding 能力；更新于 2026-05-11 14:05:37</td><td>卡片未给最大输出；上下文只写“百万级”，未给精确 K 值</td><td>用户截图的模型广场卡片证据，不能替代详情页参数表</td></tr>
+<tr><td><code>qwen3-max</code></td><td>通义千问 Qwen3 系列旗舰模型；万亿参数 MoE 架构；适合复杂任务，支持思考模式和内置工具调用；更新于 2026-04-29 09:40:00</td><td>卡片未给上下文/最大输出</td><td>用户截图的模型广场卡片证据</td></tr>
+<tr><td><code>qwen3.5-plus</code></td><td>新一代高性能 MoE 模型；卡片显示 <code>397B</code> 总参 / <code>17B</code> 激活，支持百万级上下文和多模态理解；更新于 2026-04-20 10:00:00</td><td>卡片未给最大输出；上下文只写“百万级”，未给精确 K 值</td><td>用户截图的模型广场卡片证据，不能替代详情页参数表</td></tr>
+<tr><td><code>qwen3-vl-plus</code></td><td>通义千问 3 VL Plus 旗舰视觉语言模型，支持图像/视频理解、深度思考、视觉问答、图表分析、文档解析；卡片显示 <code>32B</code> 和 <code>256K</code> 上下文；更新于 2026-04-20 10:00:00</td><td>上下文 <code>256K</code>；卡片未给最大输出</td><td>用户截图的模型广场卡片证据</td></tr>
+<tr><td><code>gui-plus</code></td><td>GUI Plus 屏幕交互专用模型，基于通义千问 VL，用于理解屏幕截图并转化为 GUI 操作序列；卡片显示 <code>7B</code>；更新于 2026-04-20 10:00:00</td><td>卡片未给上下文/最大输出</td><td>用户截图的模型广场卡片证据</td></tr>
+<tr><td><code>qwen-mt-plus</code></td><td>基于 Qwen3 优化的旗舰机器翻译模型，支持 92 种语言互译，复杂文本理解与结构化内容处理优势明显；更新于 2026-04-29 10:13:18</td><td>卡片未给上下文/最大输出</td><td>用户截图的模型广场卡片证据</td></tr>
+<tr><td><code>qwen-mt-flash</code></td><td>基于 Qwen3 优化的轻量级机器翻译模型，支持 92 种语言互译和术语干预，速度快、成本低；更新于 2026-04-29 10:04:50</td><td>卡片未给上下文/最大输出</td><td>用户截图的模型广场卡片证据</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>上下文数据证据口径</h2>
+<table><thead><tr><th>证据类型</th><th>是否写入模型事实字段</th><th>说明</th></tr></thead><tbody>
+<tr><td>官方帮助中心 API 文档表格，且能对应到具体模型</td><td>是</td><td>例如 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5</td></tr>
+<tr><td>模型广场/详情页截图，且截图包含模型名、上下文、最大输出、采集时间或可复核 URL</td><td>可写入，但标注为“详情页截图证据”</td><td>需要保留截图或导出的页面数据作为证据</td></tr>
+<tr><td>只有局部截图，缺少模型名或无法确认对应模型</td><td>否</td><td>不作为正式模型参数，只能作为待补证线索</td></tr>
+<tr><td>历史配置、推测值、同系列模型外推</td><td>否</td><td>不写入上下文/最大输出字段</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>已发现的前端展示问题</h2>
+<ul>
+<li>2026-05-22 11:22 CST 已确认价格详情页曾对缺失的事实参数做前端 mock / inference。</li>
+<li>例如 <code>deepseek-v4-flash</code> 的现网 <code>/api/pricing</code> 没有返回上下文、最大输出、知识截止、发布时间，但 XDAPI 详情页此前显示了 <code>8.2K</code> 等值。</li>
+<li>这些 <code>8.2K</code> 等值不是移动 MaaS 原文；移动 MaaS 详情页截图证据显示该模型上下文为 <code>1024K</code>、最大输出为 <code>384K</code>。</li>
+<li>本地前端已改为缺失时隐藏，待新版前端部署；后续应改为由后端返回来源明确的 metadata。</li>
+</ul>
+</section>
+<section class="section"><h2>新增模型准入结果</h2>
+<table><thead><tr><th>模型</th><th>上游模型列表</th><th><code>/v1/chat/completions</code></th><th>结论</th></tr></thead><tbody>
+<tr><td><code>qwen3.6-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen3-vl-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen-mt-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen3-omni-flash</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>gui-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen-mt-flash</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>glm-5.1</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen3-max</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+<tr><td><code>qwen3.5-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>注意事项</h2>
+<ul>
+<li>“模型广场可见”不等于当前 API key 在当前运行时 endpoint 可调用。</li>
+<li>新模型必须同时满足：上游模型列表可见、运行时 API 成功、价格有可核对原文、上下文/最大输出有可核对原文或明确标注缺口。</li>
+<li>本轮曾为探测短暂写入临时高价兜底价格和标准渠道模型列表；测试失败后已回滚，公开 <code>/api/pricing</code> 未暴露这 9 个候选模型。</li>
+</ul>
+<p>脱敏证据文件：</p>
+<ul>
+<li><code>evidence/xdw_add_qwen_plus_models_20260522.json</code></li>
+<li><code>evidence/xdw_qwen_plus_case_probe_20260522.json</code></li>
+<li><code>evidence/xdw_model_source_audit_20260522.json</code></li>
+<li><code>evidence/xdw_live_snapshot_20260522.json</code></li>
+<li><code>evidence/xdw_new_qwen_family_probe_20260522.json</code></li>
+<li><code>evidence/xdw_new_qwen_family_variant_probe_20260522.json</code></li>
+</ul>
+</section>
+</div></body></html>
