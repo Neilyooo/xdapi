@@ -33,6 +33,8 @@
 <li>回滚后复核：公开 <code>/api/pricing</code> 仍为 27 个模型，候选模型均未出现在前台价格目录；标准渠道也未保留候选模型。</li>
 <li>这轮测试证据已经写入本页的验证摘要：canonical 小写模型名直打 <code>/v1/chat/completions</code>，9 个候选都出现上游 <code>404</code>；常见大小写变体里，部分在本地价格校验阶段就被拦截，能够走到上游的同样返回 <code>404</code>。</li>
 <li>回滚后的复核结果也写在本页：公开 <code>/api/pricing</code> 仍是 <code>27</code> 个模型，候选模型没有残留在前台价格目录或渠道模型列表里。</li>
+<li>进一步复测了 <code>openai-response</code> 枚举值，结果同样返回上游 <code>404</code>；这说明问题不只是 <code>chat/completions</code> 路径选错，而是上游 runtime 对这些候选的 API 面还没真正打通。</li>
+<li><code>openai-response-compact</code> 这一路在本地会先触发 <code>-openai-compact</code> 价格别名校验，不能把它当成上游可用性的证据。</li>
 </ul>
 <p>注意事项：</p>
 <ul>

@@ -80,6 +80,12 @@
 | `qwen3-max` | 可见 | 404 | 暂不公开 |
 | `qwen3.5-plus` | 可见 | 404 | 暂不公开 |
 
+## 追加路由复核
+
+- `openai-response` 端点也返回上游 `404`，所以这批候选不是单纯的 OpenAI chat 路径填错。
+- `openai-response-compact` 在本地会先命中 `-openai-compact` 的价格别名校验，不能拿来证明上游 runtime 已接通。
+- 结论保持不变：它们当前更像是“授权/目录可见，但 runtime 尚未打通”的候选。
+
 ## 注意事项
 
 - “模型广场可见”不等于当前 API key 在当前运行时 endpoint 可调用。

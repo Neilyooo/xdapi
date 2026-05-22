@@ -92,6 +92,13 @@
 <tr><td><code>qwen3.5-plus</code></td><td>可见</td><td>404</td><td>暂不公开</td></tr>
 </tbody></table>
 </section>
+<section class="section"><h2>追加路由复核</h2>
+<ul>
+<li><code>openai-response</code> 端点也返回上游 <code>404</code>，所以这批候选不是单纯的 OpenAI chat 路径填错。</li>
+<li><code>openai-response-compact</code> 在本地会先命中 <code>-openai-compact</code> 的价格别名校验，不能拿来证明上游 runtime 已接通。</li>
+<li>结论保持不变：它们当前更像是“授权/目录可见，但 runtime 尚未打通”的候选。</li>
+</ul>
+</section>
 <section class="section"><h2>注意事项</h2>
 <ul>
 <li>“模型广场可见”不等于当前 API key 在当前运行时 endpoint 可调用。</li>
