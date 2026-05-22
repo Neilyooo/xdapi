@@ -24,7 +24,7 @@
     </nav>
     <section class="hero">
       <h1>XD API 模型源站信息对齐审计</h1>
-      <p>更新时间：2026-05-22 11:08 CST。本页记录新增 Qwen 模型准入测试，以及现有模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</p>
+      <p>更新时间：2026-05-22 11:53 CST。本页记录新增 Qwen 模型准入测试，以及现有模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</p>
     </section>
     <section class="section">
       <h2>本轮结论</h2>
@@ -68,11 +68,25 @@
       </tbody></table>
     </section>
     <section class="section">
+      <h2>模型详情页截图证据</h2>
+      <table><thead><tr><th>模型</th><th>来源</th><th>上下文长度</th><th>最大输出长度</th><th>其他页面信息</th><th>证据口径</th></tr></thead><tbody>
+        <tr>
+          <td><code>DeepSeek-V4-Flash</code> / <code>deepseek-v4-flash</code></td>
+          <td>用户提供的移动 MaaS 模型详情页完整截图，采集于 2026-05-22 对话上下文</td>
+          <td><code>1024K</code></td>
+          <td><code>384K</code></td>
+          <td>总参数 284B、激活参数 13B、标配 100 万 token 超长上下文窗口、支持思考模式切换、函数调用和 JSON 结构化输出、更新于 2026-04-24 17:52:36</td>
+          <td>可作为详情页截图证据；仍需后续用可导出的上游页面数据或官方接口补强</td>
+        </tr>
+      </tbody></table>
+    </section>
+    <section class="section">
       <h2>已发现的前端展示问题</h2>
       <ul>
         <li>2026-05-22 11:22 CST 已确认价格详情页曾对缺失的事实参数做前端 mock / inference。</li>
-        <li>例如 <code>deepseek-v4-flash</code> 的现网 <code>/api/pricing</code> 没有返回上下文、最大输出、知识截止、发布时间，但详情页显示了 <code>8.2K</code> 等值。</li>
-        <li>这些值不是移动 MaaS 原文；本地前端已改为缺失时隐藏，待新版前端部署。</li>
+        <li>例如 <code>deepseek-v4-flash</code> 的现网 <code>/api/pricing</code> 没有返回上下文、最大输出、知识截止、发布时间，但 XDAPI 详情页此前显示了 <code>8.2K</code> 等值。</li>
+        <li>这些 <code>8.2K</code> 等值不是移动 MaaS 原文；移动 MaaS 详情页截图证据显示该模型上下文为 <code>1024K</code>、最大输出为 <code>384K</code>。</li>
+        <li>本地前端已改为缺失时隐藏，待新版前端部署；后续应改为由后端返回来源明确的 metadata。</li>
       </ul>
     </section>
     <section class="section">
