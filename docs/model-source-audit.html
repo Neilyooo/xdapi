@@ -68,6 +68,14 @@
       </tbody></table>
     </section>
     <section class="section">
+      <h2>已发现的前端展示问题</h2>
+      <ul>
+        <li>2026-05-22 11:22 CST 已确认价格详情页曾对缺失的事实参数做前端 mock / inference。</li>
+        <li>例如 <code>deepseek-v4-flash</code> 的现网 <code>/api/pricing</code> 没有返回上下文、最大输出、知识截止、发布时间，但详情页显示了 <code>8.2K</code> 等值。</li>
+        <li>这些值不是移动 MaaS 原文；本地前端已改为缺失时隐藏，待新版前端部署。</li>
+      </ul>
+    </section>
+    <section class="section">
       <h2>新增模型准入结果</h2>
       <table><thead><tr><th>模型</th><th>上游模型列表</th><th>/v1/chat/completions</th><th>结论</th></tr></thead><tbody>
         <tr><td><code>qwen3.6-plus</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>

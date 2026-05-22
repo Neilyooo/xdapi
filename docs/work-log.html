@@ -35,6 +35,26 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-22 11:22 CST</div>
+      <h2>修正价格详情页事实参数展示口径</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>核对现网 <code>/api/pricing</code>，确认 <code>deepseek-v4-flash</code> 没有返回 <code>context_length</code>、<code>max_output_tokens</code>、<code>knowledge_cutoff</code>、<code>release_date</code>。</li>
+        <li>定位到价格详情页的 <code>8.2K</code> 上下文、<code>8.2K</code> 最大输出、知识截止和发布时间来自前端确定性 mock / inference，不是移动 MaaS 原文。</li>
+        <li>本地前端已改为：上下文、最大输出、知识截止、发布时间、参数量只在后端显式返回时展示；缺失时隐藏，不再由前端合成。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>现网 <code>/api/pricing</code> 返回的 <code>deepseek-v4-flash</code> 仅包含价格、描述、标签、分组和 endpoint，不含上述事实参数字段。</li>
+        <li>本地 diff 已移除 <code>model-metadata.ts</code> 中针对事实参数的随机桶/模型名 hash 兜底逻辑。</li>
+      </ul>
+      <h3>注意事项</h3>
+      <ul>
+        <li>这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。</li>
+        <li>本机未安装 <code>bun</code>，且当前目录缺少 <code>tsc</code>，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 <code>bun run typecheck</code> 或等价检查。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-22 11:08 CST</div>
       <h2>明确上下文/最大输出证据口径</h2>
       <h3>变更内容</h3>

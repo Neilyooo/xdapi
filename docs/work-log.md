@@ -1,5 +1,25 @@
 # XD API 工作记录
 
+## 2026-05-22 11:22 CST
+
+### 修正价格详情页事实参数展示口径
+
+变更内容：
+
+- 核对现网 `/api/pricing`，确认 `deepseek-v4-flash` 没有返回 `context_length`、`max_output_tokens`、`knowledge_cutoff`、`release_date`。
+- 定位到价格详情页的 `8.2K` 上下文、`8.2K` 最大输出、知识截止和发布时间来自前端确定性 mock / inference，不是移动 MaaS 原文。
+- 本地前端已改为：上下文、最大输出、知识截止、发布时间、参数量只在后端显式返回时展示；缺失时隐藏，不再由前端合成。
+
+验证方式：
+
+- 现网 `/api/pricing` 返回的 `deepseek-v4-flash` 仅包含价格、描述、标签、分组和 endpoint，不含上述事实参数字段。
+- 本地 diff 已移除 `model-metadata.ts` 中针对事实参数的随机桶/模型名 hash 兜底逻辑。
+
+注意事项：
+
+- 这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。
+- 本机未安装 `bun`，且当前目录缺少 `tsc`，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 `bun run typecheck` 或等价检查。
+
 ## 2026-05-22 11:08 CST
 
 ### 明确上下文/最大输出证据口径
