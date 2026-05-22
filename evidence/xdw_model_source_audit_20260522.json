@@ -1,0 +1,834 @@
+{
+  "checked_at": "2026-05-22 10:50 CST",
+  "official_sources": {
+    "91592": {
+      "title": "预置模型服务-token按量计费",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/91592",
+      "content_uid": "64ec46cbfd7c535db501aff43df5a788"
+    },
+    "93315": {
+      "title": "Qwen模型图片理解API调用",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/93315",
+      "content_uid": "7d1a11eed4a969080141984a49393d48"
+    },
+    "93726": {
+      "title": "embedding模型API调用",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/93726",
+      "content_uid": "95a7766a93c36cb8b653959c5662a874"
+    },
+    "93740": {
+      "title": "bge系列模型API调用",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/93740",
+      "content_uid": "22796ec1f2b271cddac3bab18fff7f25"
+    },
+    "97885": {
+      "title": "Qwen模型视频理解API调用",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/97885",
+      "content_uid": "e8fa48de6915349817943fc1074d6051"
+    },
+    "98272": {
+      "title": "MiniMax模型API调用",
+      "url": "https://ecloud.10086.cn/op-help-center/doc/article/98272",
+      "content_uid": "6d3ca1cbaf7bf0e5170c5575c2e2daf3"
+    }
+  },
+  "pricing_audit": [
+    {
+      "model": "bge-base-zh-v1.5",
+      "xdapi_model_ratio": 0.175,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 0.5,
+      "xdapi_price_output_cny_per_1m": 0.5,
+      "official_price": {
+        "flat": 0.5,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "1k",
+        "max_input": "not separately stated",
+        "max_output": "N/A embedding",
+        "source": "93726"
+      },
+      "context_alignment": "documented",
+      "description": "Flat price: 0.5 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "bge-m3",
+      "xdapi_model_ratio": 0.175,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 0.5,
+      "xdapi_price_output_cny_per_1m": 0.5,
+      "official_price": {
+        "flat": 0.5,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "8k",
+        "max_input": "not separately stated",
+        "max_output": "N/A embedding",
+        "source": "93726"
+      },
+      "context_alignment": "documented",
+      "description": "Flat price: 0.5 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "bge-reranker-v2-m3",
+      "xdapi_model_ratio": 0.175,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 0.5,
+      "xdapi_price_output_cny_per_1m": 0.5,
+      "official_price": {
+        "flat": 0.5,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "8k",
+        "max_input": "not separately stated",
+        "max_output": "N/A rerank",
+        "source": "93740"
+      },
+      "context_alignment": "documented",
+      "description": "Flat price: 0.5 CNY / 1M tokens.",
+      "groups": [
+        "3x",
+        "5x",
+        "1x"
+      ]
+    },
+    {
+      "model": "deepseek-r1",
+      "xdapi_model_ratio": 1.4,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 4.0,
+      "xdapi_price_output_cny_per_1m": 16.0,
+      "official_price": {
+        "input": 4,
+        "output": 16,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 4 CNY / 1M tokens, output 16 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-r1-0528",
+      "xdapi_model_ratio": 1.4,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 4.0,
+      "xdapi_price_output_cny_per_1m": 16.0,
+      "official_price": {
+        "input": 4,
+        "output": 16,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 4 CNY / 1M tokens, output 16 CNY / 1M tokens.",
+      "groups": [
+        "5x",
+        "1x",
+        "3x"
+      ]
+    },
+    {
+      "model": "deepseek-r1-distill-llama-70b",
+      "xdapi_model_ratio": 1.445,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 4.1286,
+      "xdapi_price_output_cny_per_1m": 4.1286,
+      "official_price": {
+        "flat": 4.13,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Flat price: 4.13 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-r1-distill-llama-8B",
+      "xdapi_model_ratio": 0.15,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 0.4286,
+      "xdapi_price_output_cny_per_1m": 0.4286,
+      "official_price": {
+        "flat": 0.42,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Flat price: 0.42 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-14b",
+      "xdapi_model_ratio": 0.25,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 0.7143,
+      "xdapi_price_output_cny_per_1m": 0.7143,
+      "official_price": {
+        "flat": 0.7,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Flat price: 0.7 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-r1-distill-qwen-32b",
+      "xdapi_model_ratio": 0.63,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 1.8,
+      "xdapi_price_output_cny_per_1m": 1.8,
+      "official_price": {
+        "flat": 1.26,
+        "source": "91592"
+      },
+      "price_alignment": "mismatch",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Flat price: 1.26 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-v2-lite-chat",
+      "xdapi_model_ratio": 0.665,
+      "xdapi_completion_ratio": 1,
+      "xdapi_price_input_cny_per_1m": 1.9,
+      "xdapi_price_output_cny_per_1m": 1.9,
+      "official_price": {
+        "flat": 1.33,
+        "source": "91592"
+      },
+      "price_alignment": "mismatch",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Flat price: 1.33 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-v3",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 8.0,
+      "official_price": {
+        "input": 2,
+        "output": 8,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 8 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-v3-0324",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 8.0,
+      "official_price": {
+        "input": 2,
+        "output": 8,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 8 CNY / 1M tokens.",
+      "groups": [
+        "3x",
+        "5x",
+        "1x"
+      ]
+    },
+    {
+      "model": "deepseek-v3.1",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 8.0,
+      "official_price": {
+        "input": 2,
+        "output": 8,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 8 CNY / 1M tokens.",
+      "groups": [
+        "5x",
+        "1x",
+        "3x"
+      ]
+    },
+    {
+      "model": "deepseek-v3.2",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 8.0,
+      "official_price": {
+        "input": 2,
+        "output": 8,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 8 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "xdapi_model_ratio": 0.1,
+      "xdapi_completion_ratio": 2.5,
+      "xdapi_price_input_cny_per_1m": 0.2857,
+      "xdapi_price_output_cny_per_1m": 0.7143,
+      "official_price": null,
+      "price_alignment": "missing_source",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "DeepSeek lightweight MoE text model with long-context support, reasoning mode switching, and function calling support.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "minimax-m2.5",
+      "xdapi_model_ratio": 0.735,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.1,
+      "xdapi_price_output_cny_per_1m": 8.4,
+      "official_price": {
+        "input": 2.1,
+        "output": 8.4,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "192k",
+        "max_input": "100k",
+        "max_output": "92k",
+        "source": "98272"
+      },
+      "context_alignment": "documented",
+      "description": "Price: input 2.1 CNY / 1M tokens, output 8.4 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-14b-instruct",
+      "xdapi_model_ratio": 0.35,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 1.0,
+      "xdapi_price_output_cny_per_1m": 3.0,
+      "official_price": {
+        "input": 1,
+        "output": 3,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 1 CNY / 1M tokens, output 3 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-14b-instruct-1m",
+      "xdapi_model_ratio": 0.35,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 1.0,
+      "xdapi_price_output_cny_per_1m": 3.0,
+      "official_price": {
+        "input": 1,
+        "output": 3,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 1 CNY / 1M tokens, output 3 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-32b-instruct",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 6.0,
+      "official_price": {
+        "input": 2,
+        "output": 6,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 6 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-72b-instruct",
+      "xdapi_model_ratio": 1.4,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 4.0,
+      "xdapi_price_output_cny_per_1m": 12.0,
+      "official_price": {
+        "input": 4,
+        "output": 12,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 4 CNY / 1M tokens, output 12 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-72b-instruct-64k",
+      "xdapi_model_ratio": 1.4,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 4.0,
+      "xdapi_price_output_cny_per_1m": 12.0,
+      "official_price": {
+        "input": 4,
+        "output": 12,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 4 CNY / 1M tokens, output 12 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-7b-instruct",
+      "xdapi_model_ratio": 0.175,
+      "xdapi_completion_ratio": 2,
+      "xdapi_price_input_cny_per_1m": 0.5,
+      "xdapi_price_output_cny_per_1m": 1.0,
+      "official_price": {
+        "input": 0.5,
+        "output": 1,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 0.5 CNY / 1M tokens, output 1 CNY / 1M tokens.",
+      "groups": [
+        "3x",
+        "5x",
+        "1x"
+      ]
+    },
+    {
+      "model": "qwen2.5-vl-32b-instruct",
+      "xdapi_model_ratio": 2.8,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 8.0,
+      "xdapi_price_output_cny_per_1m": 24.0,
+      "official_price": {
+        "input": 8,
+        "output": 24,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "64k",
+        "max_input": "32K; single image max 5120 tokens",
+        "max_output": "32K",
+        "source": "93315"
+      },
+      "context_alignment": "documented",
+      "description": "Price: input 8 CNY / 1M tokens, output 24 CNY / 1M tokens. Supports image and video understanding on the chat completions endpoint.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-vl-72b-instruct",
+      "xdapi_model_ratio": 5.6,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 16.0,
+      "xdapi_price_output_cny_per_1m": 48.0,
+      "official_price": {
+        "input": 16,
+        "output": 48,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": {
+        "context": "64k",
+        "max_input": "32K; single image max 5120 tokens",
+        "max_output": "32K",
+        "source": "93315"
+      },
+      "context_alignment": "documented",
+      "description": "Price: input 16 CNY / 1M tokens, output 48 CNY / 1M tokens. Supports image and video understanding on the chat completions endpoint.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen2.5-vl-7b-instruct",
+      "xdapi_model_ratio": 1,
+      "xdapi_completion_ratio": 2.5,
+      "xdapi_price_input_cny_per_1m": 2.8571,
+      "xdapi_price_output_cny_per_1m": 7.1427,
+      "official_price": {
+        "input": 2,
+        "output": 5,
+        "source": "91592"
+      },
+      "price_alignment": "mismatch",
+      "context_from_official_doc": {
+        "context": "64k",
+        "max_input": "32K; single image max 5120 tokens",
+        "max_output": "32K",
+        "source": "93315"
+      },
+      "context_alignment": "documented",
+      "description": "Price: input 2 CNY / 1M tokens, output 5 CNY / 1M tokens. Supports image and video understanding on the chat completions endpoint.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwen3-32b",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 4,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 8.0,
+      "official_price": {
+        "input": 2,
+        "output": 8,
+        "thinking_output": 20,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 8 CNY / 1M tokens in non-thinking mode, 20 CNY / 1M tokens in thinking mode. Platform default here uses non-thinking output ratio.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    },
+    {
+      "model": "qwq-32b",
+      "xdapi_model_ratio": 0.7,
+      "xdapi_completion_ratio": 3,
+      "xdapi_price_input_cny_per_1m": 2.0,
+      "xdapi_price_output_cny_per_1m": 6.0,
+      "official_price": {
+        "input": 2,
+        "output": 6,
+        "source": "91592"
+      },
+      "price_alignment": "aligned",
+      "context_from_official_doc": null,
+      "context_alignment": "not_found_in_collected_official_docs",
+      "description": "Price: input 2 CNY / 1M tokens, output 6 CNY / 1M tokens.",
+      "groups": [
+        "1x",
+        "3x",
+        "5x"
+      ]
+    }
+  ],
+  "summary": {
+    "public_pricing_count": 27,
+    "price_aligned_count": 23,
+    "price_missing_source_count": 1,
+    "context_documented_count": 7,
+    "context_not_found_count": 20
+  },
+  "upstream_fetch_models_channel_1": [
+    "qwen3.6-plus",
+    "qwen3-vl-plus",
+    "qwen-mt-plus",
+    "qwen3-omni-flash",
+    "gui-plus",
+    "qwen-mt-flash",
+    "glm-5.1",
+    "qwen3.5-plus",
+    "qwen3-max",
+    "DeepSeek-V3.2",
+    "MiniMax-M2.5",
+    "DeepSeek-V3-0324",
+    "DeepSeek-V3.1",
+    "Qwen3-32B",
+    "Qwen2.5-72B-Instruct-64K",
+    "Qwen2.5-7B-Instruct",
+    "Qwen2.5-VL-72B-Instruct",
+    "Qwen2.5-VL-32B-Instruct",
+    "DeepSeek-R1-0528",
+    "bge-m3",
+    "QwQ-32B",
+    "DeepSeek-V2-Lite-Chat",
+    "DeepSeek-R1-Distill-Llama-70B",
+    "DeepSeek-V3",
+    "DeepSeek-R1-Distill-Llama-8B",
+    "DeepSeek-R1",
+    "DeepSeek-R1-Distill-Qwen-14B",
+    "Qwen2.5-72B-Instruct",
+    "Qwen2.5-32B-Instruct",
+    "Qwen2.5-14B-Instruct"
+  ],
+  "requested_new_models": {
+    "qwen3.6-plus": {
+      "visible_in_fetch_models": true,
+      "runtime_tests": [
+        {
+          "model": "qwen3.6-plus",
+          "status": 200,
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 88.98,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.409+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"90235e84-2417178\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "model": "qwen3.6-plus",
+          "http_status": 404,
+          "ok": false,
+          "elapsed_ms": 150.95,
+          "sample": "",
+          "usage": null,
+          "error": {
+            "message": "Not Found",
+            "type": "bad_response_status_code",
+            "param": "",
+            "code": "bad_response_status_code"
+          }
+        },
+        {
+          "tried_model": "Qwen3.6-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.15,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.828+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"345f1195-2409121\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "qwen3.6-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 76.47,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.068+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"29af3b3a-2409137\"}",
+          "error_code": "bad_response_status_code"
+        }
+      ]
+    },
+    "qwen3-max": {
+      "visible_in_fetch_models": true,
+      "runtime_tests": [
+        {
+          "model": "qwen3-max",
+          "status": 200,
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 83.23,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.496+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4c2bc32b-2417181\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "model": "qwen3-max",
+          "http_status": 404,
+          "ok": false,
+          "elapsed_ms": 137.14,
+          "sample": "",
+          "usage": null,
+          "error": {
+            "message": "Not Found",
+            "type": "bad_response_status_code",
+            "param": "",
+            "code": "bad_response_status_code"
+          }
+        },
+        {
+          "tried_model": "Qwen3.6-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.15,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.828+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"345f1195-2409121\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "Qwen3-Max",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.42,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.909+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"10d2a265-2417520\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "Qwen3.5-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.54,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.990+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"dc54635e-2417521\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "qwen3.6-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 76.47,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.068+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"29af3b3a-2409137\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "qwen3-Max",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.67,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.146+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"7b4c4c03-2416692\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "qwen3.5-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 82.47,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.228+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4e7e3393-2409141\"}",
+          "error_code": "bad_response_status_code"
+        }
+      ]
+    },
+    "qwen3.5-plus": {
+      "visible_in_fetch_models": true,
+      "runtime_tests": [
+        {
+          "model": "qwen3.5-plus",
+          "status": 200,
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 77.93,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.574+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"bd13b6e4-2408211\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "model": "qwen3.5-plus",
+          "http_status": 404,
+          "ok": false,
+          "elapsed_ms": 144.48,
+          "sample": "",
+          "usage": null,
+          "error": {
+            "message": "Not Found",
+            "type": "bad_response_status_code",
+            "param": "",
+            "code": "bad_response_status_code"
+          }
+        },
+        {
+          "tried_model": "Qwen3.5-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 80.54,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.990+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"dc54635e-2417521\"}",
+          "error_code": "bad_response_status_code"
+        },
+        {
+          "tried_model": "qwen3.5-Plus",
+          "success": false,
+          "time": 0,
+          "elapsed_ms": 82.47,
+          "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.228+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4e7e3393-2409141\"}",
+          "error_code": "bad_response_status_code"
+        }
+      ]
+    }
+  },
+  "conclusion": "Existing 27 public XDAPI models remain published. The three screenshot models are visible in upstream fetch_models but /v1/chat/completions runtime returned 404 for lowercase and common case variants, so they were not left published. Price is aligned for 26/27 collected official-token-priced models; deepseek-v4-flash lacks a collected China Mobile original price row. Context/max-output original-doc evidence is present only for Qwen2.5-VL, bge embedding/rerank, and MiniMax-M2.5 in the collected official API docs; most text chat models do not expose context/max-output in the collected official docs."
+}

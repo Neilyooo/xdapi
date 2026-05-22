@@ -102,6 +102,16 @@
     </section>
 
     <section class="section">
+      <h2>源站信息对齐审计</h2>
+      <ul>
+        <li>2026-05-22 10:50 CST 核对新增 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code>：上游列表可见，但当前 <code>/v1/chat/completions</code> 运行时返回 404，未公开到 XDAPI 前台。</li>
+        <li>27 个公开模型中，26 个已有本轮采集到的移动云 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
+        <li>上下文/最大输出原文证据目前覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型仍需上游详情页补证。</li>
+        <li>详细报告见 <a href="./docs/model-source-audit.html">模型源站信息对齐审计</a>，脱敏数据见 <a href="./evidence/xdw_model_source_audit_20260522.json">审计证据 JSON</a>。</li>
+      </ul>
+    </section>
+
+    <section class="section">
       <h2>本轮实际可用性测试结论</h2>
       <ul>
         <li>26 个已部署模型全部有成功证据，失败数为 0。</li>

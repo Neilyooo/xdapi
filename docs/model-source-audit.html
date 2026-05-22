@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XD API 模型源站信息对齐审计</title>
+  <style>
+    :root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}
+    *{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
+    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}
+    .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
+    h2{margin:0 0 12px;font-size:21px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
+    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.ok{color:var(--ok);font-weight:700}.warn{color:var(--warn);font-weight:700}.bad{color:var(--bad);font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="topbar">
+      <a href="../index.html">首页</a>
+      <a href="./business-framework.html">业务框架</a>
+      <a href="./work-log.html">工作记录</a>
+      <a href="./group-permissions.html">倍率分组</a>
+    </nav>
+    <section class="hero">
+      <h1>XD API 模型源站信息对齐审计</h1>
+      <p>更新时间：2026-05-22 10:50 CST。本页记录新增 Qwen 模型准入测试，以及现有模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</p>
+    </section>
+    <section class="section">
+      <h2>本轮结论</h2>
+      <ul>
+        <li>上游 <code>fetch_models</code> 已能看到 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code>。</li>
+        <li>这 3 个模型通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 运行时测试均返回 <span class="bad">404</span>；常见大小写变体同样返回 404。</li>
+        <li>因运行时不可调用，已回滚临时价格和渠道配置，没有把这 3 个模型留在 XDAPI 前台。</li>
+        <li>XDAPI 公开价格目录仍为 <code>27</code> 个模型，新增 3 个模型均未公开。</li>
+      </ul>
+    </section>
+    <section class="section">
+      <h2>官方原文来源</h2>
+      <table><thead><tr><th>来源</th><th>用途</th></tr></thead><tbody>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/91592">预置模型服务-token按量计费</a></td><td>token 价格来源</td></tr>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93315">Qwen模型图片理解API调用</a></td><td>Qwen2.5-VL 图片理解模型上下文/最大输入/最大输出</td></tr>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93726">embedding模型API调用</a></td><td>bge embedding 上下文</td></tr>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/93740">bge系列模型API调用</a></td><td>bge rerank 上下文</td></tr>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/97885">Qwen模型视频理解API调用</a></td><td>Qwen-VL 视频理解调用方式</td></tr>
+        <tr><td><a href="https://ecloud.10086.cn/op-help-center/doc/article/98272">MiniMax模型API调用</a></td><td>MiniMax-M2.5 上下文/最大输入/最大回复</td></tr>
+      </tbody></table>
+    </section>
+    <section class="section">
+      <h2>对齐状态</h2>
+      <table><tbody>
+        <tr><th>公开模型数</th><td>27</td></tr>
+        <tr><th>新增截图模型公开状态</th><td><span class="warn">未公开，因运行时 404</span></td></tr>
+        <tr><th>价格原文覆盖</th><td>26/27 个公开模型在已采集官方 token 价格文章中有对应价格行</td></tr>
+        <tr><th>价格原文缺口</th><td><code>deepseek-v4-flash</code> 未在本轮采集到的官方价格表中找到对应行</td></tr>
+        <tr><th>上下文/最大输出原文覆盖</th><td>7/27 个公开模型有官方 API 文档表格证据</td></tr>
+        <tr><th>上下文/最大输出原文缺口</th><td>多数纯文本聊天模型在本轮采集到的官方文档中没有上下文/最大输出表格</td></tr>
+      </tbody></table>
+    </section>
+    <section class="section">
+      <h2>新增模型准入结果</h2>
+      <table><thead><tr><th>模型</th><th>上游模型列表</th><th>/v1/chat/completions</th><th>结论</th></tr></thead><tbody>
+        <tr><td><code>qwen3.6-plus</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
+        <tr><td><code>qwen3-max</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
+        <tr><td><code>qwen3.5-plus</code></td><td class="ok">可见</td><td class="bad">404</td><td>暂不公开</td></tr>
+      </tbody></table>
+    </section>
+    <section class="section">
+      <h2>注意事项</h2>
+      <ul>
+        <li>“模型广场可见”不等于当前 API key 在当前运行时 endpoint 可调用。</li>
+        <li>新模型必须同时满足：上游模型列表可见、运行时 API 成功、价格有可核对原文、上下文/最大输出有可核对原文或明确标注缺口。</li>
+        <li>本轮曾为探测短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚，公开 <code>/api/pricing</code> 未暴露这 3 个模型。</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>

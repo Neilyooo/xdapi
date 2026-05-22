@@ -1,0 +1,112 @@
+{
+  "checked_at": "20260522_104442",
+  "backup_path": "/private/tmp/xdw_backup_before_add_qwen_plus_20260522_104442.json",
+  "new_models": [
+    "qwen3.6-plus",
+    "qwen3-max",
+    "qwen3.5-plus"
+  ],
+  "provisional_pricing": {
+    "qwen3.6-plus": {
+      "input_cny": 16,
+      "output_cny": 64,
+      "model_ratio": 5.6,
+      "completion_ratio": 4,
+      "description": "Provisional high-side fallback price pending China Mobile MaaS original price confirmation: input 16 CNY / 1M tokens, output 64 CNY / 1M tokens."
+    },
+    "qwen3-max": {
+      "input_cny": 16,
+      "output_cny": 64,
+      "model_ratio": 5.6,
+      "completion_ratio": 4,
+      "description": "Provisional high-side fallback price pending China Mobile MaaS original price confirmation: input 16 CNY / 1M tokens, output 64 CNY / 1M tokens."
+    },
+    "qwen3.5-plus": {
+      "input_cny": 16,
+      "output_cny": 64,
+      "model_ratio": 5.6,
+      "completion_ratio": 4,
+      "description": "Provisional high-side fallback price pending China Mobile MaaS original price confirmation: input 16 CNY / 1M tokens, output 64 CNY / 1M tokens."
+    }
+  },
+  "channel_tests": [
+    {
+      "model": "qwen3.6-plus",
+      "status": 200,
+      "success": false,
+      "time": 0,
+      "elapsed_ms": 88.98,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.409+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"90235e84-2417178\"}",
+      "error_code": "bad_response_status_code"
+    },
+    {
+      "model": "qwen3-max",
+      "status": 200,
+      "success": false,
+      "time": 0,
+      "elapsed_ms": 83.23,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.496+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4c2bc32b-2417181\"}",
+      "error_code": "bad_response_status_code"
+    },
+    {
+      "model": "qwen3.5-plus",
+      "status": 200,
+      "success": false,
+      "time": 0,
+      "elapsed_ms": 77.93,
+      "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:44:43.574+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"bd13b6e4-2408211\"}",
+      "error_code": "bad_response_status_code"
+    }
+  ],
+  "relay_tests": [
+    {
+      "model": "qwen3.6-plus",
+      "http_status": 404,
+      "ok": false,
+      "elapsed_ms": 150.95,
+      "sample": "",
+      "usage": null,
+      "error": {
+        "message": "Not Found",
+        "type": "bad_response_status_code",
+        "param": "",
+        "code": "bad_response_status_code"
+      }
+    },
+    {
+      "model": "qwen3-max",
+      "http_status": 404,
+      "ok": false,
+      "elapsed_ms": 137.14,
+      "sample": "",
+      "usage": null,
+      "error": {
+        "message": "Not Found",
+        "type": "bad_response_status_code",
+        "param": "",
+        "code": "bad_response_status_code"
+      }
+    },
+    {
+      "model": "qwen3.5-plus",
+      "http_status": 404,
+      "ok": false,
+      "elapsed_ms": 144.48,
+      "sample": "",
+      "usage": null,
+      "error": {
+        "message": "Not Found",
+        "type": "bad_response_status_code",
+        "param": "",
+        "code": "bad_response_status_code"
+      }
+    }
+  ],
+  "public_pricing_count": 27,
+  "new_models_in_pricing": {
+    "qwen3.6-plus": false,
+    "qwen3-max": false,
+    "qwen3.5-plus": false
+  },
+  "caveat": "Pricing for the three newly added Qwen models is provisional high-side fallback. China Mobile MaaS original price/context/max-output text was not found in public help-center search and must be confirmed from the MaaS model detail page before marking strict alignment."
+}

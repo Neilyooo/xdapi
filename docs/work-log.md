@@ -1,5 +1,29 @@
 # XD API 工作记录
 
+## 2026-05-22 10:50 CST
+
+### 新增 Qwen 模型准入测试与源站信息审计
+
+变更内容：
+
+- 检查上游 `fetch_models`，确认 `qwen3.6-plus`、`qwen3-max`、`qwen3.5-plus` 已在模型列表中可见。
+- 为验证运行时可用性，短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚。
+- 新增 `docs/model-source-audit.html` 和 Markdown 版本，记录模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。
+- 新增脱敏证据文件 `evidence/xdw_model_source_audit_20260522.json`、`evidence/xdw_add_qwen_plus_models_20260522.json`、`evidence/xdw_qwen_plus_case_probe_20260522.json`。
+
+验证方式：
+
+- 当前 `/api/channel/fetch_models/1` 能看到 3 个新增 Qwen 模型。
+- 通过当前华北-呼和浩特 `/v1/chat/completions` 测试 3 个新增模型及常见大小写变体，均返回 404。
+- 回滚后复核公开 `/api/pricing` 仍为 27 个模型，新增 3 个模型未公开。
+- 采集移动云帮助中心官方文章：token 价格、Qwen-VL 图片/视频、embedding、rerank、MiniMax API 文档。
+
+结论：
+
+- 这 3 个新增模型暂不加入 XDAPI 前台，原因是模型广场/上游列表可见但当前运行时 endpoint 不可调用。
+- 27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；`deepseek-v4-flash` 暂缺本轮采集到的官方价格行。
+- 上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。
+
 ## 2026-05-19 10:47 CST
 
 ### 清理残留非倍率用户分组

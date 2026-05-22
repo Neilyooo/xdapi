@@ -49,6 +49,7 @@
         <li><span class="badge">已公开</span> 前台 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均返回 27 个模型。</li>
         <li><code>default</code>、<code>vip</code>、<code>agent</code>、<code>auto</code> 不再作为公开业务分组或渠道路由组。</li>
         <li>高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用身份分组限制访问。</li>
+        <li>2026-05-22 核对新增 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code>：上游列表可见但运行时 404，暂不公开到 XDAPI。</li>
         <li>当前 3x/5x 体现更高计费倍率和更高 group-level 请求额度；若要承诺真实更快响应，还需要接入独立更快上游资源或优先级队列。</li>
       </ul>
     </section>

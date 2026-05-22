@@ -35,6 +35,30 @@
       <p>这里记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。每条记录保留时间、变更内容、验证方式和剩余注意事项。</p>
     </section>
     <article class="entry">
+      <div class="time">2026-05-22 10:50 CST</div>
+      <h2>新增 Qwen 模型准入测试与源站信息审计</h2>
+      <h3>变更内容</h3>
+      <ul>
+        <li>检查上游 <code>fetch_models</code>，确认 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3.5-plus</code> 已在模型列表中可见。</li>
+        <li>为验证运行时可用性，短暂写入临时高价兜底价格和 premium 渠道模型列表；测试失败后已回滚。</li>
+        <li>新增 <code>docs/model-source-audit.html</code> 和 Markdown 版本，记录模型价格、上下文、最大输出与移动云 MaaS 官方原文的对齐情况。</li>
+        <li>新增脱敏证据文件 <code>evidence/xdw_model_source_audit_20260522.json</code>、<code>evidence/xdw_add_qwen_plus_models_20260522.json</code>、<code>evidence/xdw_qwen_plus_case_probe_20260522.json</code>。</li>
+      </ul>
+      <h3>验证方式</h3>
+      <ul>
+        <li>当前 <code>/api/channel/fetch_models/1</code> 能看到 3 个新增 Qwen 模型。</li>
+        <li>通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 测试 3 个新增模型及常见大小写变体，均返回 404。</li>
+        <li>回滚后复核公开 <code>/api/pricing</code> 仍为 27 个模型，新增 3 个模型未公开。</li>
+        <li>采集移动云帮助中心官方文章：token 价格、Qwen-VL 图片/视频、embedding、rerank、MiniMax API 文档。</li>
+      </ul>
+      <h3>结论</h3>
+      <ul>
+        <li>这 3 个新增模型暂不加入 XDAPI 前台，原因是模型广场/上游列表可见但当前运行时 endpoint 不可调用。</li>
+        <li>27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
+        <li>上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。</li>
+      </ul>
+    </article>
+    <article class="entry">
       <div class="time">2026-05-19 10:47 CST</div>
       <h2>清理残留非倍率用户分组</h2>
       <h3>变更内容</h3>

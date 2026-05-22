@@ -1,0 +1,50 @@
+[
+  {
+    "tried_model": "Qwen3.6-Plus",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 80.15,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.828+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"345f1195-2409121\"}",
+    "error_code": "bad_response_status_code"
+  },
+  {
+    "tried_model": "Qwen3-Max",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 80.42,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.909+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"10d2a265-2417520\"}",
+    "error_code": "bad_response_status_code"
+  },
+  {
+    "tried_model": "Qwen3.5-Plus",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 80.54,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:15.990+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"dc54635e-2417521\"}",
+    "error_code": "bad_response_status_code"
+  },
+  {
+    "tried_model": "qwen3.6-Plus",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 76.47,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.068+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"29af3b3a-2409137\"}",
+    "error_code": "bad_response_status_code"
+  },
+  {
+    "tried_model": "qwen3-Max",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 80.67,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.146+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"7b4c4c03-2416692\"}",
+    "error_code": "bad_response_status_code"
+  },
+  {
+    "tried_model": "qwen3.5-Plus",
+    "success": false,
+    "time": 0,
+    "elapsed_ms": 82.47,
+    "message": "bad response status code 404, message: Not Found, body: {\"timestamp\":\"2026-05-22T02:45:16.228+00:00\",\"path\":\"/v1/chat/completions\",\"status\":404,\"error\":\"Not Found\",\"requestId\":\"4e7e3393-2409141\"}",
+    "error_code": "bad_response_status_code"
+  }
+]
