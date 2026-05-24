@@ -17,7 +17,7 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 业务框架与分组策略</h1><p>当前 1x/3x/5x 倍率分组、渠道策略、模型公开目录和新增模型准入规则。</p></section>
-  <p>更新时间：2026-05-24 16:50 CST</p>
+  <p>更新时间：2026-05-24 16:59 CST</p>
 <section class="section"><h2>当前结论</h2>
 <ul>
 <li>所有已部署 CMCC token 计费模型，<code>1x/3x/5x</code> 三个倍率组都可以通过 API 调用。</li>
@@ -26,6 +26,7 @@
 <li>高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用身份分组限制访问。</li>
 <li>2026-05-22 核对 9 个新增候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。上游列表可见但当前运行时均未通过，暂不公开到 XDAPI。</li>
 <li>2026-05-24 16:50 CST 对 <code>qwen3.6-plus</code> 做了临时 channel + 计费补齐验证：在 XDAPI 侧补齐公开目录和 <code>tiered_expr</code> 后，请求从 <code>model_price_error</code> 继续落到上游 <code>404</code>，说明 XDAPI 可以修复公共路由 / 计费缺口，但不能单独解决上游 runtime 不可用的问题；测试后已回滚，不纳入公开目录。</li>
+<li>2026-05-24 16:59 CST 继续用管理员态 <code>channel/test/1</code> 复核剩余 8 个新候选，<code>openai</code> 与 <code>openai-response</code> 两条端点都稳定返回上游 <code>404</code>，进一步证明失败点在上游 runtime，而不是某个单独的 endpoint 或本地计费配置。</li>
 <li>未来如果接入更快上游线路，可以新增速度档位，例如 <code>fast_1_5x</code>、<code>priority_2x</code>，但必须由实际响应速度或资源池差异支撑。</li>
 </ul>
 </section>

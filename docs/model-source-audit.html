@@ -17,7 +17,7 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
-  <p>更新时间：2026-05-24 16:50 CST</p>
+  <p>更新时间：2026-05-24 16:59 CST</p>
 <section class="section"><h2>本轮结论</h2>
 <ul>
 <li>上游 <code>fetch_models</code> 已能看到 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
@@ -28,6 +28,8 @@
 <li>这不是现阶段能证明的“模型名冲突”问题，而是公共路由配置/渠道映射缺席问题。</li>
 <li>2026-05-24 16:50 CST 对 <code>qwen3.6-plus</code> 做了一次仅用于验证的临时补价：先出现 <code>400 model_price_error</code>，说明 XDAPI 侧需要先补齐模型计费配置；补齐 <code>tiered_expr</code> 后，调用继续落到上游 <code>404</code>，证明 XDAPI 可以修复公开目录/计费缺口，但不能把上游 runtime 的 <code>404</code> 直接变成成功。</li>
 <li>临时补价测试结束后，<code>qwen3.6-plus</code> 已从公开渠道和计费设置回滚，公共 <code>/api/pricing</code> 仍维持 27 个模型。</li>
+<li>2026-05-24 16:59 CST 继续用管理员态 channel test 复核剩余 8 个候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。这 8 个模型在 <code>openai</code> 和 <code>openai-response</code> 两种端点类型下都返回上游 <code>404</code>，没有出现本地计费错误或模型映射错误。</li>
+<li>这进一步说明：这批新模型的失败点不在单个 endpoint 选择，也不在 <code>qwen3.6-plus</code> 特例，而是在上游 runtime 本身尚未打通。</li>
 <li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
 </ul>
 </section>
@@ -37,6 +39,14 @@
 <li>在计费未配置时，XDAPI 返回 <code>400 model_price_error</code>；在计费配置完成后，请求继续落到上游，返回 <code>404</code>。</li>
 <li>这条链路证明：XDAPI 能补的是“公开目录 / 计费配置 / distributor”这一层，不是上游 runtime 本身。</li>
 <li>验证结束后已删除一次性测试令牌，并把 <code>qwen3.6-plus</code> 从公开 channel 和计费映射里回滚。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-24 剩余候选 channel test 复核</h2>
+<ul>
+<li>这 8 个模型在管理员态 <code>channel/test/1</code> 中都表现为一致的上游 <code>404</code>：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>两条端点类型都测过：<code>openai</code> 与 <code>openai-response</code>。</li>
+<li>结果统一是 <code>bad_response_status_code</code>，说明不是本地计费错误，也不是某一个端点路径单独错位。</li>
+<li>临时计费映射已回滚，公开目录未扩容。</li>
 </ul>
 </section>
 <section class="section"><h2>官方原文来源</h2>

@@ -1,6 +1,6 @@
 # XD API 模型源站信息对齐审计
 
-更新时间：2026-05-24 16:50 CST
+更新时间：2026-05-24 16:59 CST
 
 ## 本轮结论
 
@@ -12,6 +12,8 @@
 - 这不是现阶段能证明的“模型名冲突”问题，而是公共路由配置/渠道映射缺席问题。
 - 2026-05-24 16:50 CST 对 `qwen3.6-plus` 做了一次仅用于验证的临时补价：先出现 `400 model_price_error`，说明 XDAPI 侧需要先补齐模型计费配置；补齐 `tiered_expr` 后，调用继续落到上游 `404`，证明 XDAPI 可以修复公开目录/计费缺口，但不能把上游 runtime 的 `404` 直接变成成功。
 - 临时补价测试结束后，`qwen3.6-plus` 已从公开渠道和计费设置回滚，公共 `/api/pricing` 仍维持 27 个模型。
+- 2026-05-24 16:59 CST 继续用管理员态 channel test 复核剩余 8 个候选：`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。这 8 个模型在 `openai` 和 `openai-response` 两种端点类型下都返回上游 `404`，没有出现本地计费错误或模型映射错误。
+- 这进一步说明：这批新模型的失败点不在单个 endpoint 选择，也不在 qwen3.6-plus 特例，而是在上游 runtime 本身尚未打通。
 - 上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。
 
 ## 官方原文来源
@@ -90,6 +92,21 @@
 - 在计费未配置时，XDAPI 返回 `400 model_price_error`；在计费配置完成后，请求继续落到上游，返回 `404`。
 - 这条链路证明：XDAPI 能补的是“公开目录 / 计费配置 / distributor”这一层，不是上游 runtime 本身。
 - 验证结束后已删除一次性测试令牌，并把 `qwen3.6-plus` 从公开 channel 和计费映射里回滚。
+
+## 2026-05-24 剩余候选 channel test 复核
+
+- 这 8 个模型在管理员态 `channel/test/1` 中都表现为一致的上游 `404`：
+  - `qwen3-vl-plus`
+  - `qwen-mt-plus`
+  - `qwen3-omni-flash`
+  - `gui-plus`
+  - `qwen-mt-flash`
+  - `glm-5.1`
+  - `qwen3.5-plus`
+  - `qwen3-max`
+- 两条端点类型都测过：`openai` 与 `openai-response`。
+- 结果统一是 `bad_response_status_code`，说明不是本地计费错误，也不是某一个端点路径单独错位。
+- 临时计费映射已回滚，公开目录未扩容。
 
 ## 2026-05-24 公共 1x 令牌复测
 

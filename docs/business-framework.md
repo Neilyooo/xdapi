@@ -10,6 +10,7 @@
 - 高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用身份分组限制访问。
 - 2026-05-22 核对 9 个新增候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。上游列表可见但当前运行时均未通过，暂不公开到 XDAPI。
 - 2026-05-24 16:50 CST 对 `qwen3.6-plus` 做了临时 channel + 计费补齐验证：在 XDAPI 侧补齐公开目录和 `tiered_expr` 后，请求从 `model_price_error` 继续落到上游 `404`，说明 XDAPI 可以修复公共路由 / 计费缺口，但不能单独解决上游 runtime 不可用的问题；测试后已回滚，不纳入公开目录。
+- 2026-05-24 16:59 CST 继续用管理员态 `channel/test/1` 复核剩余 8 个新候选，`openai` 与 `openai-response` 两条端点都稳定返回上游 `404`，进一步证明失败点在上游 runtime，而不是某个单独的 endpoint 或本地计费配置。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 分组语义

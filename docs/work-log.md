@@ -1,5 +1,26 @@
 # XD API 工作记录
 
+## 2026-05-24 16:59 CST
+
+### 管理员态 channel test 复核剩余 8 个新候选模型
+
+变更内容：
+
+- 继续用管理员态的 `channel/test/1` 复核其余 8 个新候选：`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
+- 先临时补入 `billing_setting.billing_mode` 和 `billing_setting.billing_expr`，避免本地先卡在价格配置错误。
+- 每个模型都分别打了 `openai` 和 `openai-response` 两种端点类型，排除单一路径误判。
+
+验证方式：
+
+- 这 8 个模型在 `openai` 和 `openai-response` 两条测试路径下都返回上游 `404 Not Found`。
+- 返回体统一是 `bad_response_status_code`，不是本地计费错误，也不是模型映射错误。
+- 这说明问题不在某一个模型名或某一种 endpoint 选择上，而是在上游 runtime 对这批新模型仍未打通。
+- 测试完成后，临时计费映射已回滚，未把这批模型留在公开目录。
+
+注意事项：
+
+- 这轮测试把“渠道路由 / 计费缺口”与“上游 runtime 不可用”再次拆开了：前者 XDAPI 可补，后者仍是上游问题。
+
 ## 2026-05-24 16:50 CST
 
 ### 临时启用 `qwen3.6-plus` 验证 XDAPI 能否独立修复公开缺口
