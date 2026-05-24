@@ -29,7 +29,8 @@
 <p>验证方式：</p>
 <ul>
 <li>9 个候选在当前公开 <code>1x</code> 路由下都没有返回 <code>404</code>，而是直接返回 <code>503 model_not_found</code>，错误信息为“分组 1x 下模型 ... 无可用渠道（distributor）”。</li>
-<li>这说明当前公共路径仍然没有把这批候选公开给普通调用方，测试请求在路由层就被拦住，尚未进入可对外证明的上游 runtime 404 阶段。</li>
+<li>公开 <code>/api/pricing</code> 的当前模型列表里，这 9 个候选全部不存在；也就是说，当前公共路径没有给它们配置可用渠道。</li>
+<li>结合 <code>middleware/distributor.go</code> 和 <code>service/channel_select.go</code> 的实现，这个 503 发生在路由层的渠道挑选阶段，说明问题是“公共配置缺席 / 无可用 distributor”，不是“同名冲突后误路由到别的模型”。</li>
 <li>2026-05-22 的临时暴露测试仍然保留为历史证据：在临时价格/渠道暴露后，这批候选曾在上游 runtime 上返回 404；但那不是当前公共路由的实时结果。</li>
 </ul>
 <p>注意事项：</p>

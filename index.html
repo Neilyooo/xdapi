@@ -104,7 +104,7 @@
     <section class="section">
       <h2>源站信息对齐审计</h2>
       <ul>
-        <li>2026-05-24 16:09 CST 用当前公开 <code>1x</code> 令牌复测 9 个候选：<code>openai</code> 和 <code>openai-response</code> 两路都返回 <code>503 model_not_found</code>，提示“分组 1x 下模型 ... 无可用渠道（distributor）”；当前公共路由仍未把它们公开给普通调用方。</li>
+        <li>2026-05-24 16:09 CST 用当前公开 <code>1x</code> 令牌复测 9 个候选：<code>openai</code> 和 <code>openai-response</code> 两路都返回 <code>503 model_not_found</code>，提示“分组 1x 下模型 ... 无可用渠道（distributor）”；公开 <code>/api/pricing</code> 里这 9 个名字也都不存在，所以这是公共配置/渠道映射缺席，不是现阶段能证明的模型名冲突。</li>
         <li>2026-05-22 16:05 CST 扩展核对 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。上游列表可见，但当前 <code>/v1/chat/completions</code> 运行时均未通过，未公开到 XDAPI 前台。</li>
         <li>27 个公开模型中，26 个已有本轮采集到的移动云 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
         <li>上下文/最大输出原文证据目前覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型仍需上游详情页补证。未采到可逐模型核对来源时，不写入上下文/最大输出数值。</li>
