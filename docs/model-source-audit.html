@@ -17,13 +17,14 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
-  <p>更新时间：2026-05-22 16:05 CST</p>
+  <p>更新时间：2026-05-24 16:09 CST</p>
 <section class="section"><h2>本轮结论</h2>
 <ul>
 <li>上游 <code>fetch_models</code> 已能看到 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
 <li>这 9 个模型通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 运行时测试均返回 404；常见大小写变体同样未通过。</li>
 <li>因运行时不可调用，已回滚临时价格和渠道配置，没有把这 9 个候选模型留在 XDAPI 前台。</li>
 <li>XDAPI 公开价格目录仍为 27 个模型，新增候选均未公开。</li>
+<li>2026-05-24 16:09 CST 使用当前公开 <code>1x</code> 令牌复测时，这 9 个候选在 <code>openai</code> 和 <code>openai-response</code> 两条公共路径下都返回 <code>503 model_not_found</code>，错误信息是“分组 1x 下模型 ... 无可用渠道（distributor）”；这说明当前公共路由仍未把它们公开给普通调用方。</li>
 <li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
 </ul>
 </section>
@@ -46,6 +47,14 @@
 <tr><td>上下文/最大输出原文覆盖</td><td>7/27 个公开模型有官方 API 文档表格证据</td></tr>
 <tr><td>上下文/最大输出原文缺口</td><td>多数纯文本聊天模型在本轮采集到的官方帮助中心 API 文档中没有上下文/最大输出表格；这不是断言上游没有数据，只表示本轮没有采到可逐模型核对的原文证据</td></tr>
 </tbody></table>
+</section>
+<section class="section"><h2>2026-05-24 公共 1x 令牌复测</h2>
+<ul>
+<li>使用当前公开 <code>1x</code> 令牌重新复测这 9 个候选，<code>openai</code> 和 <code>openai-response</code> 两路都没有返回 <code>404</code>，而是返回 <code>503 model_not_found</code>。</li>
+<li>这次的 503 来自 XDAPI 路由层的 distributor 检查，不是上游 runtime 的 404。</li>
+<li>因为当前公共路由没有给这批候选分配可用渠道，所以这轮复测不能当作“已接通上游”的证据。</li>
+<li>2026-05-22 的临时价格/渠道暴露测试仍保留为历史证据：那一轮在候选被临时放入可调用渠道后，曾拿到上游 404。</li>
+</ul>
 </section>
 <section class="section"><h2>模型详情页截图证据</h2>
 <table><thead><tr><th>模型</th><th>来源</th><th>上下文长度</th><th>最大输出长度</th><th>其他页面信息</th><th>证据口径</th></tr></thead><tbody>
@@ -94,9 +103,9 @@
 </section>
 <section class="section"><h2>追加路由复核</h2>
 <ul>
-<li><code>openai-response</code> 端点也返回上游 <code>404</code>，所以这批候选不是单纯的 OpenAI chat 路径填错。</li>
+<li>在 2026-05-22 的临时价格/渠道暴露测试中，<code>openai-response</code> 端点也返回上游 <code>404</code>，所以这批候选不是单纯的 OpenAI chat 路径填错。</li>
 <li><code>openai-response-compact</code> 在本地会先命中 <code>-openai-compact</code> 的价格别名校验，不能拿来证明上游 runtime 已接通。</li>
-<li>结论保持不变：它们当前更像是“授权/目录可见，但 runtime 尚未打通”的候选。</li>
+<li>结论保持不变：它们当前更像是“授权/目录可见，但 runtime 尚未打通”的候选；2026-05-24 的公共 1x 令牌复测又进一步证明，当前公共路由甚至还没有给它们分配可用 distributor。</li>
 </ul>
 </section>
 <section class="section"><h2>注意事项</h2>

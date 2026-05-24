@@ -18,6 +18,26 @@
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 工作记录</h1><p>记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。</p></section>
   
+<section class="section"><h2>2026-05-24 16:09 CST</h2>
+<h3>公共 1x 令牌复测 9 个新候选模型</h3>
+<p>变更内容：</p>
+<ul>
+<li>用当前公开 <code>1x</code> 令牌重新复测上游仍可见的 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>复测路径覆盖 <code>openai</code>（<code>/v1/chat/completions</code>）和 <code>openai-response</code>（<code>/v1/responses</code>）。</li>
+<li>这轮没有再写临时兜底价格或临时渠道，直接看当前公开路由的真实结果。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>9 个候选在当前公开 <code>1x</code> 路由下都没有返回 <code>404</code>，而是直接返回 <code>503 model_not_found</code>，错误信息为“分组 1x 下模型 ... 无可用渠道（distributor）”。</li>
+<li>这说明当前公共路径仍然没有把这批候选公开给普通调用方，测试请求在路由层就被拦住，尚未进入可对外证明的上游 runtime 404 阶段。</li>
+<li>2026-05-22 的临时暴露测试仍然保留为历史证据：在临时价格/渠道暴露后，这批候选曾在上游 runtime 上返回 404；但那不是当前公共路由的实时结果。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>当前复测结果不能写成“仍然是 404”，因为这次公共路径实际返回的是 503。</li>
+<li>如果后续要继续验证上游 runtime 是否接通，需要先把候选模型重新放入可用渠道，再重复同一组请求。</li>
+</ul>
+  
 <section class="section"><h2>2026-05-22 16:05 CST</h2>
 <h3>扩展新增 Qwen/通义候选模型准入测试</h3>
 <p>变更内容：</p>
