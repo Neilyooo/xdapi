@@ -391,3 +391,34 @@
 - 变更前备份保存在本地：`/private/tmp/xdw_backup_before_group_unify_1778911778.json`。
 - 14:26 CST 已完成前台目录复核：公开 `/api/pricing` 与登录态 `/api/user/models` 均显示 27 个模型。
 - 后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。
+
+## 2026-05-26 17:53 CST
+
+### 直接验证上游 `moma.cmecloud.cn` 的 API key POST
+
+变更内容：
+
+- 继续按 RAM 子账号链路排查新模型不可用原因，重点核对是否存在可直接用于上游 MaaS 的真实 API key。
+- 重新测试 `moma.cmecloud.cn` 的直连 POST 链路，确认当前浏览器会话里的候选 token / cookie 不是有效 MaaS API key。
+- 补充“登录态可见但未拿到可用 API key”这一常见故障说明，避免后续把 404 / 401 / 未登录混为一类。
+
+验证方式：
+
+- 读取当前浏览器保存的 ecloud 会话 cookie。
+- 逐个尝试 `no_auth`、`cookie_only`、`bearer_cmcloudtoken`、`bearer_x_login_ticket`、`cookie_cmcloudtoken_on_moma`、`x_api_key_cmcloudtoken` 这几种候选鉴权。
+- 对每种候选同时测试 `GET /v1/models` 与 `POST /v1/chat/completions`。
+- 额外检查 RAM 登录页是否有自动填充的用户名或密码，确认本机没有可直接复用的 saved credential。
+
+结果：
+
+- `POST /v1/chat/completions` 在无鉴权和 cookie-only 情况下返回 `401`，报文为 `Request denied by Apikey Extract check. No Bearer Authentication information found.`。
+- 使用当前可见的 `CMECLOUDTOKEN` 或 `X-LOGIN-TICKET` 作为 Bearer 时，`POST /v1/chat/completions` 返回 `401`，报文为 `Request denied by Apikey Auth check. Invalid apikey.`。
+- 直接把当前 ecloud cookie 手工塞到 `moma.cmecloud.cn` 的 Cookie 头里，依然返回 `401`。
+- `GET /v1/models` 在这几种候选下均超时，没有拿到可确认的有效模型列表响应。
+- RAM 登录页输入框没有自动填充，当前环境里没有现成可复用的保存凭据。
+
+结论与 caveat：
+
+- 这轮验证证明当前环境里拿到的是 ecloud 会话痕迹，不是可用于 `moma.cmecloud.cn` 的真实 MaaS API key。
+- 因为没有拿到可用 API key，本轮无法完成“真实基于 API key 的 POST 成功验证”。
+- 后续要继续做真正的上游 POST 成功验证，需要一把已经在 RAM 子账号里创建好的 MaaS API key，或者一个能够直接进入该子账号控制台的有效登录会话。

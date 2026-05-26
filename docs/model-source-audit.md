@@ -156,3 +156,12 @@
 - `evidence/xdw_live_snapshot_20260522.json`
 - `evidence/xdw_new_qwen_family_probe_20260522.json`
 - `evidence/xdw_new_qwen_family_variant_probe_20260522.json`
+
+## 2026-05-26 上游直连 API key 复核
+
+- 重新对 `https://moma.cmecloud.cn/v1/chat/completions` 做 POST 级验证，检查当前环境里是否能拿到真实 MaaS API key。
+- 使用当前浏览器会话里的 `CMECLOUDTOKEN`、`X-LOGIN-TICKET`、以及 cookie-only 方式分别测试，返回都不是有效鉴权。
+- 其中 `POST /v1/chat/completions` 在无 Bearer 的情况下返回 `401`，提示 `No Bearer Authentication information found`。
+- 将当前 `CMECLOUDTOKEN` 或 `X-LOGIN-TICKET` 作为 Bearer 时，返回 `401 Invalid apikey`。
+- RAM 登录页没有自动填充可用账号密码，说明本机并没有现成的可复用登录凭据。
+- 结论：当前环境无法完成真实的 API-key-based POST 成功验证，问题不在于临时测试脚本，而在于没有拿到可用的上游 MaaS API key。

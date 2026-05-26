@@ -294,4 +294,34 @@
 <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
 </ul>
 </section>
+<section class="section"><h2>2026-05-26 17:53 CST</h2>
+<h3>直接验证上游 <code>moma.cmecloud.cn</code> 的 API key POST</h3>
+<p>变更内容：</p>
+<ul>
+<li>继续按 RAM 子账号链路排查新模型不可用原因，重点核对是否存在可直接用于上游 MaaS 的真实 API key。</li>
+<li>重新测试 <code>moma.cmecloud.cn</code> 的直连 POST 链路，确认当前浏览器会话里的候选 token / cookie 不是有效 MaaS API key。</li>
+<li>补充“登录态可见但未拿到可用 API key”这一常见故障说明，避免后续把 404 / 401 / 未登录混为一类。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>读取当前浏览器保存的 ecloud 会话 cookie。</li>
+<li>逐个尝试 <code>no_auth</code>、<code>cookie_only</code>、<code>bearer_cmcloudtoken</code>、<code>bearer_x_login_ticket</code>、<code>cookie_cmcloudtoken_on_moma</code>、<code>x_api_key_cmcloudtoken</code> 这几种候选鉴权。</li>
+<li>对每种候选同时测试 <code>GET /v1/models</code> 与 <code>POST /v1/chat/completions</code>。</li>
+<li>额外检查 RAM 登录页是否有自动填充的用户名或密码，确认本机没有可直接复用的 saved credential。</li>
+</ul>
+<p>结果：</p>
+<ul>
+<li><code>POST /v1/chat/completions</code> 在无鉴权和 cookie-only 情况下返回 <code>401</code>，报文为 <code>Request denied by Apikey Extract check. No Bearer Authentication information found.</code>。</li>
+<li>使用当前可见的 <code>CMECLOUDTOKEN</code> 或 <code>X-LOGIN-TICKET</code> 作为 Bearer 时，<code>POST /v1/chat/completions</code> 返回 <code>401</code>，报文为 <code>Request denied by Apikey Auth check. Invalid apikey.</code>。</li>
+<li>直接把当前 ecloud cookie 手工塞到 <code>moma.cmecloud.cn</code> 的 Cookie 头里，依然返回 <code>401</code>。</li>
+<li><code>GET /v1/models</code> 在这几种候选下均超时，没有拿到可确认的有效模型列表响应。</li>
+<li>RAM 登录页输入框没有自动填充，当前环境里没有现成可复用的保存凭据。</li>
+</ul>
+<p>结论与 caveat：</p>
+<ul>
+<li>这轮验证证明当前环境里拿到的是 ecloud 会话痕迹，不是可用于 <code>moma.cmecloud.cn</code> 的真实 MaaS API key。</li>
+<li>因为没有拿到可用 API key，本轮无法完成“真实基于 API key 的 POST 成功验证”。</li>
+<li>后续要继续做真正的上游 POST 成功验证，需要一把已经在 RAM 子账号里创建好的 MaaS API key，或者一个能够直接进入该子账号控制台的有效登录会话。</li>
+</ul>
+</section>
 </div></body></html>
