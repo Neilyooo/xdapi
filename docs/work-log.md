@@ -1,5 +1,28 @@
 # XD API 工作记录
 
+## 2026-05-27 00:26 CST
+
+### 将 7 个已验证的 Moma 候选并入 XDAPI 公共 relay，并修复公开目录计数到 34
+
+变更内容：
+
+- 使用现网管理员态更新 XDAPI live 配置，把 `China Mobile MaaS - Moma` 作为独立逻辑渠道接入，模型映射统一按 `qwen/...` 前缀名落到上游 `moma.cmecloud.cn`。
+- 将 7 个已验证通过的 Moma 候选正式写入公开模型目录：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max`。
+- 发现并修复了一个历史遗漏：`deepseek-v4-flash` 的状态在前台目录里被错误地压掉，已恢复到可见状态，公开模型总数回到 34。
+- `gui-plus` 和 `glm-5.1` 未通过上游矩阵，保持不接入。
+
+验证方式：
+
+- 新增的 `moma` 渠道对 `qwen3.6-plus`、`qwen3-max`、`qwen3-vl-plus` 做 `channel/test`，都返回 `200`。
+- 7 个新模型在公网 relay 上做 `chat/completions` 直连调用，均返回 `200`。
+- 公开 `/api/pricing` 回到 `34` 个模型，首页已部署模型数同步更新为 `34`。
+- 新模型目前按临时 `1x` 展示；后续如果补齐更细的官方价格原文，再单独修订价格字段。
+
+注意事项：
+
+- `gui-plus` 与 `glm-5.1` 仍然不接入，避免把未通过的候选混入前台。
+- 这次只补公共目录、渠道映射和前台展示，不改上游 MaaS 资源。
+
 ## 2026-05-26 21:40 CST
 
 ### 补强新模型测试流程并用矩阵脚本复测 9 个候选

@@ -1,11 +1,11 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-26 21:40 CST
+更新时间：2026-05-27 00:26 CST
 
 ## 当前结论
 
 - 所有已部署 CMCC token 计费模型，`1x/3x/5x` 三个倍率组都可以通过 API 调用。
-- 前台 `/api/pricing` 与登录态 `/api/user/models` 均返回 27 个模型。
+- 前台 `/api/pricing` 与登录态 `/api/user/models` 均返回 34 个模型。
 - `default`、`vip`、`agent`、`auto` 不再作为公开业务分组或渠道路由组。
 - 高价模型仍保留在独立“高成本模型渠道”中，便于后续观测和路由维护，但不再用身份分组限制访问。
 - 2026-05-22 核对 9 个新增候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。上游列表可见但当前运行时均未通过，暂不公开到 XDAPI。
@@ -14,7 +14,7 @@
 - 2026-05-26 16:14 CST 再次复核这 9 个候选时，未补倍率前先统一命中 `model_price_error`；临时为这 9 个模型补入 `ModelRatio = 1` 后重新测试，结果又统一落到上游 `404`。这证明 XDAPI 可以临时补齐价格门，但不能把这批新模型单独“修到可用”。
 - 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 临时改成上游原文样式 `qwen/qwen3.6-plus` 再测，先命中本地 `model_price_error`，补入 `ModelRatio = 1` 后仍然是上游 `404`。所以这不是单纯的裸名/前缀名转换问题。
 - 2026-05-26 16:53 CST 直接探测 `https://moma.cmecloud.cn/v1/chat/completions`、`https://moma.cmecloud.cn` 和 `https://moma.cmecloud.cn/v1/models`，匿名与现有 ecloud 会话 cookie 复测都返回 `404`；这条结果只能说明直连入口在现有鉴权态下不可直接用，不能替代有效 MaaS API key 的 POST 级验证。
-- 2026-05-26 21:40 CST 新矩阵脚本 `scripts/model_probe_matrix.py` 复测后确认：`moma.cmecloud.cn` 上已有 7 个候选（`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max`）可通过 `qwen/...` 前缀名的 `chat/completions` 流式/非流式双验证；`gui-plus` 和 `glm-5.1` 仍失败；`zhenze-huhehaote.cmecloud.cn` 对这批候选仍然以 `404` 为主。
+- 2026-05-27 00:26 CST 已把 7 个通过 `moma.cmecloud.cn` 双态验证的新模型正式接入 XDAPI 公共 relay；`gui-plus` 和 `glm-5.1` 仍失败并保持不公开。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程
@@ -34,7 +34,7 @@
 | `3x` | 3.00x | 加速倍率组 | 否，模型范围与 1x 一致 |
 | `5x` | 5.00x | 优先倍率组 | 否，模型范围与 1x 一致 |
 
-详细分组权限、限流配置和 27 个模型列表见 `docs/group-permissions.md`。
+详细分组权限、限流配置和 34 个模型列表见 `docs/group-permissions.md`。
 
 ## 渠道策略
 
@@ -42,13 +42,14 @@
 | --- | --- | --- | --- |
 | `China Mobile MaaS - Huhehaote` | 20 个标准/常用模型 | `1x,3x,5x` | 常规文本、视觉、向量、排序模型 |
 | `China Mobile MaaS - Huhehaote Premium` | 7 个高成本推理/72B/VL 模型 | `1x,3x,5x` | 高成本模型独立维护和观测，不再作为访问限制 |
+| `China Mobile MaaS - Moma` | 7 个已验证 Qwen 新模型 | `1x,3x,5x` | 新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订 |
 
 ## 前台公开目录
 
 | 接口 | 验证时间 | 结果 | 结论 |
 | --- | --- | ---: | --- |
-| `/api/pricing` | 2026-05-16 14:26 CST | 27 个模型 | 匿名价格页可见完整 CMCC token 模型目录 |
-| `/api/user/models` | 2026-05-16 14:26 CST | 27 个模型 | 登录用户模型选择器可见完整 CMCC token 模型目录 |
+| `/api/pricing` | 2026-05-27 00:26 CST | 34 个模型 | 匿名价格页可见完整 CMCC token 模型目录 |
+| `/api/user/models` | 2026-05-27 00:26 CST | 34 个模型 | 登录用户模型选择器可见完整 CMCC token 模型目录 |
 | `/api/user/groups` | 2026-05-18 11:11 CST | `1x`、`3x`、`5x` | 前台只展示倍率分组 |
 
 ## 验证结果

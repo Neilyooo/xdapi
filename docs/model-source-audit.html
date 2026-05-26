@@ -17,23 +17,23 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
-  <p>更新时间：2026-05-26 21:40 CST</p>
+  <p>更新时间：2026-05-27 00:26 CST</p>
+  <section class="section"><h2>2026-05-27 00:26 CST 现网部署更新</h2><ul><li><code>China Mobile MaaS - Moma</code> 已作为独立 relay 渠道接入 XDAPI 公共配置，7 个已验证 Qwen 新模型正式进入公开目录。</li><li>当前公开模型数已回到 <code>34</code>，<code>/api/pricing</code> 与首页部署数同步更新。</li><li><code>gui-plus</code> 与 <code>glm-5.1</code> 仍未通过上游矩阵，保持不接入公开前台。</li><li>7 个 Moma relay 新模型当前按临时 <code>1x</code> 展示，后续如果补齐更细的官方价格原文，再单独修订价格字段。</li></ul></section>
   <section class="section"><h2>2026-05-26 21:40 CST 矩阵复核提示</h2><ul><li>新增的矩阵脚本 <code>scripts/model_probe_matrix.py</code> 已把测试顺序固定为 <code>moma.cmecloud.cn</code> -&gt; <code>zhenze-huhehaote.cmecloud.cn</code>，并且把 <code>chat/completions</code>、模型名变体、<code>stream</code> 双态和 <code>responses</code> 兜底都纳入同一套流程。</li><li>这轮复测修正了旧结论：<code>moma.cmecloud.cn</code> 上 <code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 这 7 个候选都可以通过 <code>qwen/...</code> 前缀名的 <code>chat/completions</code> 双态验证。</li><li><code>gui-plus</code> 仍然不可用，<code>qwen/gui-plus</code> 在 <code>moma.cmecloud.cn</code> 上返回 <code>401 Invalid model</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上返回 <code>404</code>；<code>glm-5.1</code> 两个上游都还是 <code>404</code>。</li><li>这说明“上游列表可见”仍然不等于“所有候选都可直连”，但也不能再把这 9 个候选笼统记成全部 404。</li><li>XDAPI relay / channel 接入阶段仍待管理员态权限补齐，当前只更新了直连验证结论和测试流程。</li></ul></section>
   <section class="section"><h2>2026-05-26 21:12 CST 复核提示</h2><ul><li>按用户给出的 Python 示例复测 <code>qwen3.6-plus</code>，<code>stream=True</code> 与 <code>stream=False</code> 都已在 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 上返回 <code>200</code>。</li><li>这说明前面对 <code>qwen3.6-plus</code> 的 <code>404/401</code> 结论只适用于旧测试形态，不应再当成最终可用性结论。</li><li>目前可以把 <code>qwen3.6-plus</code> 视为“上游直连已可用，但 XDAPI 侧仍未正式接入前台”的候选。</li></ul></section>
 <section class="section"><h2>本轮结论</h2>
 <ul>
-<li>上游 <code>fetch_models</code> 已能看到 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
-<li>这 9 个模型通过当前华北-呼和浩特 <code>/v1/chat/completions</code> 运行时测试均返回 404；常见大小写变体同样未通过。</li>
-<li>因运行时不可调用，已回滚临时价格和渠道配置，没有把这 9 个候选模型留在 XDAPI 前台。</li>
-<li>XDAPI 公开价格目录仍为 27 个模型，新增候选均未公开。</li>
+<li>上游 <code>fetch_models</code> 已能看到 9 个候选；其中 7 个已正式接入 XDAPI 公共 relay，剩余 2 个仍未通过。</li>
+<li><code>gui-plus</code> 与 <code>glm-5.1</code> 仍然不可用，因此保持不公开。</li>
+<li>XDAPI 公开价格目录已提升到 34 个模型，新增 7 个 Moma relay 模型按临时 <code>1x</code> 展示，待补齐更细官方价格原文后再修订。</li>
 <li>2026-05-26 16:53 CST 按用户要求直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>，匿名请求与本机 ecloud 登录态 cookie 复测都返回 <code>404</code>；没有拿到一个可用于证明 runtime 已开通的有效鉴权样本。</li>
 <li>2026-05-26 16:43 CST 进一步把 <code>qwen3.6-plus</code> 的 XDAPI 渠道映射临时改成 <code>qwen/qwen3.6-plus</code> 并补入 <code>ModelRatio = 1</code> 后复测，仍然返回上游 <code>404 Not Found</code>，说明这不是单纯的裸名/前缀名不一致问题。</li>
-<li>2026-05-24 16:09 CST 使用当前公开 <code>1x</code> 令牌复测时，这 9 个候选在 <code>openai</code> 和 <code>openai-response</code> 两条公共路径下都返回 <code>503 model_not_found</code>，错误信息是“分组 1x 下模型 ... 无可用渠道（distributor）”；公开 <code>/api/pricing</code> 里这 9 个名字也都不存在，说明当前公共路由没有给它们配置可用渠道。</li>
-<li>这不是现阶段能证明的“模型名冲突”问题，而是公共路由配置/渠道映射缺席问题。</li>
+<li>2026-05-24 16:09 CST 使用当前公开 <code>1x</code> 令牌复测时，这 9 个候选在 <code>openai</code> 和 <code>openai-response</code> 两条公共路径下都返回 <code>503 model_not_found</code>，错误信息是“分组 1x 下模型 ... 无可用渠道（distributor）”；公开 <code>/api/pricing</code> 里这 9 个名字也都不存在，说明当时公共路由没有给它们配置可用渠道。</li>
+<li>这不是现阶段能证明的“模型名冲突”问题，而是公共路由配置/渠道映射缺席问题；后续已通过新增 Moma relay 接入修正其中 7 个模型。</li>
 <li>2026-05-24 16:50 CST 对 <code>qwen3.6-plus</code> 做了一次仅用于验证的临时补价：先出现 <code>400 model_price_error</code>，说明 XDAPI 侧需要先补齐模型计费配置；补齐 <code>tiered_expr</code> 后，调用继续落到上游 <code>404</code>，证明 XDAPI 可以修复公开目录/计费缺口，但不能把上游 runtime 的 <code>404</code> 直接变成成功。</li>
-<li>临时补价测试结束后，<code>qwen3.6-plus</code> 已从公开渠道和计费设置回滚，公共 <code>/api/pricing</code> 仍维持 27 个模型。</li>
+<li>临时补价测试结束后，<code>qwen3.6-plus</code> 已从公开渠道和计费设置回滚；现在它已经作为 Moma relay 模型正式重新进入前台目录。</li>
 <li>2026-05-24 16:59 CST 继续用管理员态 channel test 复核剩余 8 个候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。这 8 个模型在 <code>openai</code> 和 <code>openai-response</code> 两种端点类型下都返回上游 <code>404</code>，没有出现本地计费错误或模型映射错误。</li>
-<li>这进一步说明：这批新模型的失败点不在单个 endpoint 选择，也不在 <code>qwen3.6-plus</code> 特例，而是在上游 runtime 本身尚未打通。</li>
+<li>这进一步说明：剩余 2 个新模型的失败点不在单个 endpoint 选择，也不在 <code>qwen3.6-plus</code> 特例，而是在上游 runtime 本身尚未打通。</li>
 <li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
 </ul>
 </section>
@@ -84,12 +84,12 @@
 </section>
 <section class="section"><h2>对齐状态</h2>
 <table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody>
-<tr><td>公开模型数</td><td>27</td></tr>
-<tr><td>新增候选模型公开状态</td><td>未公开，因运行时 404</td></tr>
-<tr><td>价格原文覆盖</td><td>26/27 个公开模型在已采集官方 token 价格文章中有对应价格行</td></tr>
-<tr><td>价格原文缺口</td><td><code>deepseek-v4-flash</code> 未在本轮采集到的官方价格表中找到对应行</td></tr>
-<tr><td>上下文/最大输出原文覆盖</td><td>7/27 个公开模型有官方 API 文档表格证据</td></tr>
-<tr><td>上下文/最大输出原文缺口</td><td>多数纯文本聊天模型在本轮采集到的官方帮助中心 API 文档中没有上下文/最大输出表格；这不是断言上游没有数据，只表示本轮没有采到可逐模型核对的原文证据</td></tr>
+<tr><td>公开模型数</td><td>34</td></tr>
+<tr><td>新增候选模型公开状态</td><td>7 个已公开，2 个未通过</td></tr>
+<tr><td>价格原文覆盖</td><td>26/34 个公开模型在已采集官方 token 价格文章中有对应价格行</td></tr>
+<tr><td>价格原文缺口</td><td><code>deepseek-v4-flash</code> 与 7 个 Moma relay 新模型暂按临时 1x 展示，未在本轮采集到更细的官方价格表行</td></tr>
+<tr><td>上下文/最大输出原文覆盖</td><td>7/34 个公开模型有官方 API 文档表格证据</td></tr>
+<tr><td>上下文/最大输出原文缺口</td><td>多数纯文本聊天模型及 Moma relay 新模型在本轮采集到的官方帮助中心 API 文档中没有逐模型上下文/最大输出表格；这不是断言上游没有数据，只表示本轮没有采到可逐模型核对的原文证据</td></tr>
 </tbody></table>
 </section>
 <section class="section"><h2>2026-05-24 公共 1x 令牌复测</h2>

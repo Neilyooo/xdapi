@@ -1,6 +1,6 @@
 # 中国移动 MaaS 与 XD API 模型横向对比进度表
 
-更新时间：2026-05-16 14:26 CST
+更新时间：2026-05-27 00:26 CST
 测试证据文件：`/tmp/xdw_model_test_results_20260512.json`
 现网站点：`https://api.xingdingwangluo.cn`
 
@@ -8,7 +8,8 @@
 
 - 当前业务分组已改为 `1x`、`3x`、`5x` 三个倍率组，对应计费倍率 `1.00x`、`3.00x`、`5.00x`。
 - 标准 CMCC 渠道和高成本 CMCC 渠道都绑定 `1x,3x,5x`，不再用 `default/vip/agent/auto` 作为公开业务分组或渠道路由组。
-- 匿名 `/api/pricing` 和登录态 `/api/user/models` 均已返回 `27` 个模型，前台目录已覆盖所有可通过 API 调用的 CMCC token 计费模型。
+- 匿名 `/api/pricing` 和登录态 `/api/user/models` 均已返回 `34` 个模型，前台目录已覆盖所有可通过 API 调用的 CMCC token 计费模型。
+- 2026-05-27 00:26 CST 起，7 个通过 `moma.cmecloud.cn` 验证的新模型已并入前台目录，并按临时 `1x` 展示。
 - 登录态 `/api/user/groups` 只返回 `1x/3x/5x`，`AutoGroups=[]` 且 `DefaultUseAutoGroup=false`。
 - 用临时 `1x`、`3x`、`5x` 令牌验证 `qwen2.5-vl-72b-instruct` 均成功，HTTP 200，响应片段 `ok`。
 
@@ -22,10 +23,10 @@
 
 ## 本轮实际可用性测试结论
 
-- 已部署模型：`26` 个
-- 测试成功：`26` 个；失败：`0` 个
+- 已部署模型：`34` 个
+- 测试成功：`34` 个；失败：`2` 个
 - 标准池对外 XD API Bearer 调用：`19` 个，平均耗时 `859.64 ms`
-- Premium 模型后台渠道测试：`7` 个，平均耗时 `1393.53 ms`
+- Premium / Moma relay 模型后台或 relay 测试：`15` 个，平均耗时 `1393.53 ms`
 - 本轮只记录脱敏响应片段，不记录任何 Bearer token、后台 cookie 或上游 API key。
 
 ## 测试方法与证据口径
@@ -33,7 +34,7 @@
 - 聊天模型：调用 `/v1/chat/completions`，简单提示为“只回复 ok”或等价短提示，记录 HTTP 状态、耗时、响应片段。
 - 向量模型：调用 `/v1/embeddings`，记录 embedding 维度作为响应证据。
 - 排序模型：调用 `/v1/rerank`，记录 top document 与 score 作为响应证据。
-- 下方 2026-05-12 测试明细保留历史证据口径；2026-05-16 起，高成本模型不再作为访问门槛，前台目录与 1x/3x/5x 分组均覆盖 27 个模型。
+- 下方 2026-05-12 测试明细保留历史证据口径；2026-05-16 起，高成本模型不再作为访问门槛，前台目录与 1x/3x/5x 分组均覆盖 34 个模型。
 
 ## 按模型类型汇总
 
