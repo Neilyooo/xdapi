@@ -44,6 +44,7 @@
       <a href="./docs/cli-ide-setup-tutorial.html">小白接入教程</a>
       <a href="./docs/business-framework.html">业务框架</a>
       <a href="./docs/group-permissions.html">分组权限报告</a>
+      <a href="./docs/model-test-workflow.html">新模型测试流程</a>
       <a href="./docs/work-log.html">工作记录</a>
       <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>
       <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
@@ -59,6 +60,18 @@
         <span class="chip">站点：api.xingdingwangluo.cn</span>
         <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
       </div>
+    </section>
+
+    <section class="section">
+      <h2>新模型测试流程</h2>
+      <ul>
+        <li>默认先测 <code>moma.cmecloud.cn</code>，再测 <code>zhenze-huhehaote.cmecloud.cn</code>。</li>
+        <li>先测 <code>/v1/chat/completions</code>，对每个候选先试裸名，再试 vendor 前缀名，最后再看 <code>/v1/responses</code>。</li>
+        <li>只有当同一组合的 <code>stream=false</code> 与 <code>stream=true</code> 都成功后，才把这个路径记为可用。</li>
+        <li>最新矩阵复测显示：<code>moma</code> 上已有 7 个候选能通过 <code>qwen/...</code> 前缀名双流式验证；<code>gui-plus</code> 和 <code>glm-5.1</code> 仍失败，<code>huhehaote</code> 仍不通。</li>
+        <li>上游直连成功后，才进入 XDAPI relay、渠道和价格接入。</li>
+        <li>详细流程见 <a href="./docs/model-test-workflow.html">新模型测试流程</a>。</li>
+      </ul>
     </section>
 
     <section class="grid">

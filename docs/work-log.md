@@ -1,5 +1,28 @@
 # XD API 工作记录
 
+## 2026-05-26 21:40 CST
+
+### 补强新模型测试流程并用矩阵脚本复测 9 个候选
+
+变更内容：
+
+- 新增本地探测脚本 `scripts/model_probe_matrix.py`，把新模型验证固化为矩阵流程：先测 `moma.cmecloud.cn`，再测 `zhenze-huhehaote.cmecloud.cn`，每个上游先测 `chat/completions`，再按裸名和 vendor 前缀名做变体，最后才扩展到 `responses`。
+- 每个候选都强制检查 `stream=false` 和 `stream=true`，只有两种都成功才记为可用；脚本输出 `status`、`request_id`、`content-type` 和首段响应片段。
+- 这轮复测的目标是把“哪条上游、哪种模型名、哪种流式形态可用”一次性分清，避免再靠单点 probe 回溯。
+
+验证方式：
+
+- `qwen3.6-plus` 在 `moma.cmecloud.cn` 上，`model=qwen/qwen3.6-plus` 的 `chat/completions` `stream=false` 与 `stream=true` 都返回 `200`；裸名 `qwen3.6-plus` 仍然是 `404`。
+- `qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max` 在 `moma.cmecloud.cn` 上也都通过了 `qwen/...` 前缀名的 `chat/completions` 流式/非流式双验证。
+- `gui-plus` 在 `moma.cmecloud.cn` 上，`qwen/gui-plus` 返回 `401 Invalid model`，在 `zhenze-huhehaote.cmecloud.cn` 上则继续返回 `404`；这说明它不是这一把 key 下可直接启用的模型。
+- `glm-5.1` 在 `moma.cmecloud.cn` 上仍然 `404`，在 `zhenze-huhehaote.cmecloud.cn` 上也仍然 `404`。
+- `responses` 只作为兜底探测：当前对这批模型没有比 `chat/completions` 更优的成功路径。
+
+注意事项：
+
+- 这轮结果推翻了旧的“9 个候选都不通”的笼统结论：至少 `moma.cmecloud.cn` 上已经有 7 个候选可用，但它们依赖的是 `qwen/...` 前缀名。
+- XDAPI relay / channel / pricing 接入这一步还没做，因为当前没有拿到可直接写 admin 配置的有效管理员态 token；脚本和测试流程已经准备好，等管理员态可用后再把 `moma.cmecloud.cn` 渠道接入 XDAPI。
+
 ## 2026-05-26 21:12 CST
 
 ### 复测 `qwen3.6-plus` 示例代码并确认流式/非流式都可用
