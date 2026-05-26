@@ -1,5 +1,28 @@
 # XD API 工作记录
 
+## 2026-05-26 16:14 CST
+
+### 管理员态临时补 ModelRatio 后复核 9 个新候选模型
+
+变更内容：
+
+- 先用管理员态 `channel/test/1` 直测 9 个候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
+- 这 9 个模型在未补倍率时统一返回 `model_price_error`，说明当前 `ModelRatio` 里还没有给它们配置倍率。
+- 为了把测试推进到上游 runtime，临时给这 9 个模型补入 `ModelRatio = 1`，只用于测试，不改变公开目录。
+- 随后重新跑同一组 `openai` 请求，9 个模型全部继续落到上游 `/v1/chat/completions` 的 `404 Not Found`。
+- 测试完成后，临时补入的 9 个倍率已全部移除，`ModelRatio` 恢复原始状态。
+
+验证方式：
+
+- 补倍率前，9 个模型都被本地价格门拦截，错误统一是 `model_price_error`。
+- 补倍率后，9 个模型都能进入上游请求链路，错误统一变为 `bad_response_status_code`，底层是上游 `404`。
+- 这说明当前的阻塞点仍然在上游 runtime，不在 XDAPI 的价格门本身。
+- 公开 `/api/pricing` 没有扩容，这轮只是临时补倍率验证，未留下公开配置。
+
+注意事项：
+
+- 这轮不能写成“已公开可用”；它只是把“价格缺失”和“runtime 404”两层问题拆开了。
+
 ## 2026-05-24 16:59 CST
 
 ### 管理员态 channel test 复核剩余 8 个新候选模型

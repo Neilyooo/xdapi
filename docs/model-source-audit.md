@@ -1,6 +1,6 @@
 # XD API 模型源站信息对齐审计
 
-更新时间：2026-05-24 16:59 CST
+更新时间：2026-05-26 16:14 CST
 
 ## 本轮结论
 
@@ -15,6 +15,15 @@
 - 2026-05-24 16:59 CST 继续用管理员态 channel test 复核剩余 8 个候选：`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。这 8 个模型在 `openai` 和 `openai-response` 两种端点类型下都返回上游 `404`，没有出现本地计费错误或模型映射错误。
 - 这进一步说明：这批新模型的失败点不在单个 endpoint 选择，也不在 qwen3.6-plus 特例，而是在上游 runtime 本身尚未打通。
 - 上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。
+
+## 2026-05-26 临时倍率补齐复核
+
+- 管理员态 `channel/test/1` 先直测 9 个候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
+- 未补倍率时，这 9 个模型全部返回 `model_price_error`，说明当前 `ModelRatio` 仍未为它们配置倍率。
+- 为验证 runtime，再临时把这 9 个模型的 `ModelRatio` 设为 `1`，重新跑同一组 `openai` 请求。
+- 补倍率后，这 9 个模型全部返回上游 `404 Not Found`，具体响应体统一是 `bad_response_status_code`，错误路径仍是 `/v1/chat/completions`。
+- 测试完成后，临时 `ModelRatio` 已全部删除并恢复原始设置。
+- 这轮说明 XDAPI 侧的价格门可以被临时补齐，但补齐后仍然会落到上游 `404`，所以真正的阻塞点还是上游 runtime。
 
 ## 官方原文来源
 

@@ -17,7 +17,7 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
-  <p>更新时间：2026-05-24 16:59 CST</p>
+  <p>更新时间：2026-05-26 16:14 CST</p>
 <section class="section"><h2>本轮结论</h2>
 <ul>
 <li>上游 <code>fetch_models</code> 已能看到 9 个未公开候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
@@ -31,6 +31,16 @@
 <li>2026-05-24 16:59 CST 继续用管理员态 channel test 复核剩余 8 个候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。这 8 个模型在 <code>openai</code> 和 <code>openai-response</code> 两种端点类型下都返回上游 <code>404</code>，没有出现本地计费错误或模型映射错误。</li>
 <li>这进一步说明：这批新模型的失败点不在单个 endpoint 选择，也不在 <code>qwen3.6-plus</code> 特例，而是在上游 runtime 本身尚未打通。</li>
 <li>上下文/最大输出字段只在有可定位来源时记录数值；没有模型名和来源可核对的截图片段，不写入模型事实字段。</li>
+</ul>
+</section>
+<section class="section"><h2>2026-05-26 临时倍率补齐复核</h2>
+<ul>
+<li>管理员态 <code>channel/test/1</code> 先直测 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>未补倍率时，这 9 个模型全部返回 <code>model_price_error</code>，说明当前 <code>ModelRatio</code> 仍未为它们配置倍率。</li>
+<li>为验证 runtime，再临时把这 9 个模型的 <code>ModelRatio</code> 设为 <code>1</code>，重新跑同一组 <code>openai</code> 请求。</li>
+<li>补倍率后，这 9 个模型全部返回上游 <code>404 Not Found</code>，具体响应体统一是 <code>bad_response_status_code</code>，错误路径仍是 <code>/v1/chat/completions</code>。</li>
+<li>测试完成后，临时 <code>ModelRatio</code> 已全部删除并恢复原始设置。</li>
+<li>这轮说明 XDAPI 侧的价格门可以被临时补齐，但补齐后仍然会落到上游 <code>404</code>，所以真正的阻塞点还是上游 runtime。</li>
 </ul>
 </section>
 <section class="section"><h2>2026-05-24 临时补价复核</h2>
