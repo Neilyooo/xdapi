@@ -122,7 +122,8 @@ curl https://api.xingdingwangluo.cn/v1/chat/completions \
 | --- | --- |
 | 401 / token invalid | 重新复制或新建令牌 |
 | 403 / 无权访问分组 | 新建默认分组令牌，或重新登录后再试 |
-| 404 | Base URL 大概率填错；多数工具填 `https://api.xingdingwangluo.cn/v1` |
+| Invalid URL (GET /v1) | 工具把 `/v1` 当成了可访问接口，或 Base URL 末尾又被重复拼了一次 `/v1`；Base URL 只填 `https://api.xingdingwangluo.cn/v1`，不要再拼到 `/v1/chat/completions` |
+| 404 | Base URL 大概率填错，或者工具实际在请求不存在的完整路径；多数工具只填 `https://api.xingdingwangluo.cn/v1` |
 | 模型不存在 | 先用 `deepseek-v3` 测试 |
 
 ## 参考来源
