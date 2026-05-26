@@ -2,6 +2,12 @@
 
 更新时间：2026-05-26 16:53 CST
 
+## 2026-05-26 21:12 CST 复核提示
+
+- 按用户给出的 Python 示例复测 `qwen3.6-plus`，`stream=True` 与 `stream=False` 都已在 `https://moma.cmecloud.cn/v1/chat/completions` 上返回 `200`。
+- 这说明前面对 `qwen3.6-plus` 的 `404/401` 结论只适用于旧测试形态，不应再当成最终可用性结论。
+- 目前可以把 `qwen3.6-plus` 视为“上游直连已可用，但 XDAPI 侧仍未正式接入前台”的候选。
+
 ## 本轮结论
 
 - 上游 `fetch_models` 已能看到 9 个未公开候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
