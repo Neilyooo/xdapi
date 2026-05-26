@@ -1,5 +1,27 @@
 # XD API 工作记录
 
+## 2026-05-26 20:31 CST
+
+### 验证 RAM 子账号凭据不能直接作为 MaaS bearer API Key
+
+变更内容：
+
+- 使用用户新建的 RAM 子账号凭据直接对 `https://moma.cmecloud.cn/v1/chat/completions` 做最小 POST 验证。
+- 以 `qwen/qwen3.6-plus` 为测试模型，分别尝试 `Authorization: Bearer`、`X-API-Key`、`api-key` 三种常见传递方式。
+- 这次只验证鉴权形态，不把结果误当成新模型 runtime 可用性结论。
+
+验证方式：
+
+- `AccessKey Id` 作为 Bearer -> `401 Invalid apikey`。
+- `AccessKey Secret` 作为 Bearer -> `401 Invalid apikey`。
+- `X-API-Key` / `api-key` -> `401`，提示缺少 Bearer 鉴权信息。
+- 结论：这组 RAM 凭据不能直接当作 MaaS 开发者 bearer API key 使用。
+
+注意事项：
+
+- 后续要继续测试 `qwen3.6-plus` 等新候选，仍需要先在 MaaS 控制台里生成真正的开发者 API key。
+- 本次验证仅排除“RAM AccessKey 直接可直连”的假设，不代表新模型 runtime 已可用。
+
 ## 2026-05-26 16:53 CST
 
 ### 直接探测 `moma.cmecloud.cn/v1/chat/completions` 的上游直连入口
