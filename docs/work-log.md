@@ -1,5 +1,30 @@
 # XD API 工作记录
 
+## 2026-05-26 21:00 CST
+
+### 使用 RAM 子账号创建的 MaaS API key 直接复核新候选模型
+
+变更内容：
+
+- 使用用户新建的 MaaS API key 直接对 `https://moma.cmecloud.cn/v1/chat/completions` 做真实 POST 复核。
+- 同时补测了 `/v1/responses` 和 `/v1/models`，只为确认 `qwen3.6-plus` 的失败点到底是路径、模型名还是可见性。
+- 测试范围覆盖：`qwen/qwen3.6-plus`、`qwen/qwen3-vl-plus`、`qwen/qwen-mt-plus`、`qwen/qwen3-omni-flash`、`qwen/gui-plus`、`qwen/qwen-mt-flash`、`qwen/glm-5.1`、`qwen/qwen3.5-plus`、`qwen/qwen3-max`。
+
+验证方式：
+
+- `qwen/qwen3.6-plus` 在 `chat/completions` 下返回 `401 Invalid apikey`。
+- `qwen3.6-plus` 裸名在 `chat/completions` 下返回 `404`。
+- `qwen/qwen3.6-plus` 与裸名在 `responses` 下都返回 `404`。
+- `qwen/qwen3-omni-flash` 与 `qwen/qwen3-max` 在 `chat/completions` 下返回 `200`，说明这把 API key 可真实调用上游。
+- `qwen/qwen3-vl-plus`、`qwen/qwen-mt-plus`、`qwen/gui-plus`、`qwen/qwen-mt-flash`、`qwen/qwen3.5-plus` 返回 `401 Invalid apikey`。
+- `qwen/glm-5.1` 返回 `404`。
+- `GET /v1/models` 返回 `404`。
+
+注意事项：
+
+- 这次结果说明“API key 已可用”与“某个具体模型已可用”是两件事。
+- `qwen3.6-plus` 目前仍未通过真实上游 POST 直连验证；同批模型中真正跑通的是 `qwen3-omni-flash` 和 `qwen3-max`。
+
 ## 2026-05-26 20:31 CST
 
 ### 验证 RAM 子账号凭据不能直接作为 MaaS bearer API Key
