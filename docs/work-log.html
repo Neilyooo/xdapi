@@ -17,6 +17,26 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 工作记录</h1><p>记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。</p></section>
+  <section class="section"><h2>2026-05-26 20:31 CST</h2>
+<h3>验证 RAM 子账号凭据不能直接作为 MaaS bearer API Key</h3>
+<p>变更内容：</p>
+<ul>
+<li>使用用户新建的 RAM 子账号凭据直接对 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 做最小 POST 验证。</li>
+<li>以 <code>qwen/qwen3.6-plus</code> 为测试模型，分别尝试 <code>Authorization: Bearer</code>、<code>X-API-Key</code>、<code>api-key</code> 三种常见传递方式。</li>
+<li>这次只验证鉴权形态，不把结果误当成新模型 runtime 可用性结论。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li><code>AccessKey Id</code> 作为 Bearer -&gt; <code>401 Invalid apikey</code>。</li>
+<li><code>AccessKey Secret</code> 作为 Bearer -&gt; <code>401 Invalid apikey</code>。</li>
+<li><code>X-API-Key</code> / <code>api-key</code> -&gt; <code>401</code>，提示缺少 Bearer 鉴权信息。</li>
+<li>结论：这组 RAM 凭据不能直接当作 MaaS 开发者 bearer API key 使用。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>后续要继续测试 <code>qwen3.6-plus</code> 等新候选，仍需要先在 MaaS 控制台里生成真正的开发者 API key。</li>
+<li>本次验证仅排除“RAM AccessKey 直接可直连”的假设，不代表新模型 runtime 已可用。</li>
+</ul>
   <section class="section"><h2>2026-05-26 16:53 CST</h2><h3>直接探测 <code>moma.cmecloud.cn/v1/chat/completions</code> 的上游直连入口</h3><p>变更内容：</p><ul><li>按用户要求直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>，而不是之前验证过的 <code>zhenze-huhehaote.cmecloud.cn</code> 运行时网关。</li><li>同时补测了 <code>https://moma.cmecloud.cn</code> 和 <code>https://moma.cmecloud.cn/v1/models</code>，用于确认这是哪一层在返回错误。</li></ul><p>验证方式：</p><ul><li>匿名 <code>GET</code> 三个入口都返回 <code>404</code>，响应头显示 <code>server: istio-envoy</code>。</li><li>复用当前已登录的 ecloud 浏览器会话 cookie 再测一轮，结果仍然是 <code>404</code>。</li><li>这次没有拿到可用于 <code>POST /v1/chat/completions</code> 的有效 MaaS API key，因此还不能把“鉴权后直连成功与否”写成已验证结论。</li></ul><p>注意事项：</p><ul><li>这次探测证明的是 <code>moma.cmecloud.cn</code> 这条直连地址本身在匿名与现有浏览器会话态下都不直接返回可用 API 响应。</li><li>这不等于证明上游 runtime 已经不可用；真正的 chat-completions 直连结论仍需要一个有效的 MaaS API key 做 POST 级别验证。</li></ul></section>
   <section class="section"><h2>2026-05-26 16:43 CST</h2><h3>复核 <code>qwen3.6-plus</code> 的上游前缀命名与 runtime 可用性</h3><p>变更内容：</p><ul><li>先临时把 <code>qwen3.6-plus</code> 的 XDAPI 渠道映射改成上游原文样式 <code>qwen/qwen3.6-plus</code>，只验证命名层是否影响调用链路。</li><li>这一步先命中本地 <code>model_price_error</code>，说明单独改模型映射后仍然会被价格门拦住。</li><li>随后临时补入 <code>ModelRatio = 1</code>，把请求推进到上游 runtime。</li><li>请求最终仍然返回上游 <code>404 Not Found</code>，错误体为 <code>bad_response_status_code</code>，路径仍是 <code>/v1/chat/completions</code>。</li><li>测试结束后，<code>model_mapping</code> 和 <code>ModelRatio</code> 都恢复原始状态。</li></ul><p>验证方式：</p><ul><li>裸名 <code>qwen3.6-plus</code> 只能证明本地价格门和公共路由状态。</li><li>映射成 <code>qwen/qwen3.6-plus</code> 后仍然 404，说明问题不只是 XDAPI 的裸名/前缀名转换。</li><li>这次验证把“模型命名”“价格门”“上游 runtime”三层都拆开了，结论仍然是上游 runtime 对该模型未真正开放。</li></ul><p>注意事项：</p><ul><li>这轮不能写成“改了前缀就能用”；正确结论是“前缀映射能进入上游链路，但上游还是 404”。</li></ul></section>
   <section class="section"><h2>2026-05-26 16:14 CST</h2><h3>管理员态临时补 ModelRatio 后复核 9 个新候选模型</h3><p>变更内容：</p><ul><li>先用管理员态 <code>channel/test/1</code> 直测 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li><li>这 9 个模型在未补倍率时统一返回 <code>model_price_error</code>，说明当前 <code>ModelRatio</code> 里还没有给它们配置倍率。</li><li>为把测试推进到上游 runtime，临时给这 9 个模型补入 <code>ModelRatio = 1</code>，只用于测试，不改变公开目录。</li><li>随后重新跑同一组 <code>openai</code> 请求，9 个模型全部继续落到上游 <code>/v1/chat/completions</code> 的 <code>404 Not Found</code>。</li><li>测试完成后，临时补入的 9 个倍率已全部移除，<code>ModelRatio</code> 恢复原始状态。</li></ul><p>验证方式：</p><ul><li>补倍率前，9 个模型都被本地价格门拦截，错误统一是 <code>model_price_error</code>。</li><li>补倍率后，9 个模型都能进入上游请求链路，错误统一变为 <code>bad_response_status_code</code>，底层是上游 <code>404</code>。</li><li>这说明当前的阻塞点仍然在上游 runtime，不在 XDAPI 的价格门本身。</li><li>公开 <code>/api/pricing</code> 没有扩容，这轮只是临时补倍率验证，未留下公开配置。</li></ul><p>注意事项：</p><ul><li>这轮不能写成“已公开可用”；它只是把“价格缺失”和“runtime 404”两层问题拆开了。</li></ul></section>
