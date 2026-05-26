@@ -8,6 +8,7 @@
 - 这 9 个模型通过当前华北-呼和浩特 `/v1/chat/completions` 运行时测试均返回 404；常见大小写变体同样未通过。
 - 因运行时不可调用，已回滚临时价格和渠道配置，没有把这 9 个候选模型留在 XDAPI 前台。
 - XDAPI 公开价格目录仍为 27 个模型，新增候选均未公开。
+- 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 的 XDAPI 渠道映射临时改成 `qwen/qwen3.6-plus` 并补入 `ModelRatio = 1` 后复测，仍然返回上游 `404 Not Found`，说明这不是单纯的裸名/前缀名不一致问题。
 - 2026-05-24 16:09 CST 使用当前公开 `1x` 令牌复测时，这 9 个候选在 `openai` 和 `openai-response` 两条公共路径下都返回 `503 model_not_found`，错误信息是“分组 1x 下模型 ... 无可用渠道（distributor）”；公开 `/api/pricing` 里这 9 个名字也都不存在，说明当前公共路由没有给它们配置可用渠道。
 - 这不是现阶段能证明的“模型名冲突”问题，而是公共路由配置/渠道映射缺席问题。
 - 2026-05-24 16:50 CST 对 `qwen3.6-plus` 做了一次仅用于验证的临时补价：先出现 `400 model_price_error`，说明 XDAPI 侧需要先补齐模型计费配置；补齐 `tiered_expr` 后，调用继续落到上游 `404`，证明 XDAPI 可以修复公开目录/计费缺口，但不能把上游 runtime 的 `404` 直接变成成功。
@@ -24,6 +25,14 @@
 - 补倍率后，这 9 个模型全部返回上游 `404 Not Found`，具体响应体统一是 `bad_response_status_code`，错误路径仍是 `/v1/chat/completions`。
 - 测试完成后，临时 `ModelRatio` 已全部删除并恢复原始设置。
 - 这轮说明 XDAPI 侧的价格门可以被临时补齐，但补齐后仍然会落到上游 `404`，所以真正的阻塞点还是上游 runtime。
+
+## 2026-05-26 前缀映射复核
+
+- 将 `qwen3.6-plus` 的 XDAPI 渠道映射临时改成上游示例里的 `qwen/qwen3.6-plus`，用来验证是否只是裸名与前缀名不一致。
+- 映射补上后，测试先命中本地 `model_price_error`，说明价格门仍然有效。
+- 临时补入 `ModelRatio = 1` 后再次复测，结果仍然是上游 `404 Not Found`，响应体为 `bad_response_status_code`。
+- 测试结束后，`model_mapping` 和 `ModelRatio` 都已恢复原始值。
+- 结论：前缀映射不是最终阻塞点，`qwen3.6-plus` 在当前账号和当前 runtime 下仍不可用。
 
 ## 官方原文来源
 

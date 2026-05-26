@@ -1,5 +1,27 @@
 # XD API 工作记录
 
+## 2026-05-26 16:43 CST
+
+### 复核 `qwen3.6-plus` 的上游前缀命名与 runtime 可用性
+
+变更内容：
+
+- 先临时把 `qwen3.6-plus` 的 XDAPI 渠道映射改成上游原文样式 `qwen/qwen3.6-plus`，只验证命名层是否影响调用链路。
+- 这一步先命中本地 `model_price_error`，说明单独改模型映射后仍然会被价格门拦住。
+- 随后临时补入 `ModelRatio = 1`，把请求推进到上游 runtime。
+- 请求最终仍然返回上游 `404 Not Found`，错误体为 `bad_response_status_code`，路径仍是 `/v1/chat/completions`。
+- 测试结束后，`model_mapping` 和 `ModelRatio` 都恢复原始状态。
+
+验证方式：
+
+- 裸名 `qwen3.6-plus` 只能证明本地价格门和公共路由状态。
+- 映射成 `qwen/qwen3.6-plus` 后仍然 404，说明问题不只是 XDAPI 的裸名/前缀名转换。
+- 这次验证把“模型命名”“价格门”“上游 runtime”三层都拆开了，结论仍然是上游 runtime 对该模型未真正开放。
+
+注意事项：
+
+- 这轮不能写成“改了前缀就能用”；正确结论是“前缀映射能进入上游链路，但上游还是 404”。
+
 ## 2026-05-26 16:14 CST
 
 ### 管理员态临时补 ModelRatio 后复核 9 个新候选模型

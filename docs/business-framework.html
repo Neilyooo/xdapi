@@ -17,7 +17,7 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 业务框架与分组策略</h1><p>当前 1x/3x/5x 倍率分组、渠道策略、模型公开目录和新增模型准入规则。</p></section>
-  <p>更新时间：2026-05-26 16:14 CST</p>
+  <p>更新时间：2026-05-26 16:43 CST</p>
 <section class="section"><h2>当前结论</h2>
 <ul>
 <li>所有已部署 CMCC token 计费模型，<code>1x/3x/5x</code> 三个倍率组都可以通过 API 调用。</li>
@@ -28,6 +28,7 @@
 <li>2026-05-24 16:50 CST 对 <code>qwen3.6-plus</code> 做了临时 channel + 计费补齐验证：在 XDAPI 侧补齐公开目录和 <code>tiered_expr</code> 后，请求从 <code>model_price_error</code> 继续落到上游 <code>404</code>，说明 XDAPI 可以修复公共路由 / 计费缺口，但不能单独解决上游 runtime 不可用的问题；测试后已回滚，不纳入公开目录。</li>
 <li>2026-05-24 16:59 CST 继续用管理员态 <code>channel/test/1</code> 复核剩余 8 个新候选，<code>openai</code> 与 <code>openai-response</code> 两条端点都稳定返回上游 <code>404</code>，进一步证明失败点在上游 runtime，而不是某个单独的 endpoint 或本地计费配置。</li>
 <li>2026-05-26 16:14 CST 再次复核这 9 个候选时，未补倍率前先统一命中 <code>model_price_error</code>；临时为这 9 个模型补入 <code>ModelRatio = 1</code> 后重新测试，结果又统一落到上游 <code>404</code>。这证明 XDAPI 可以临时补齐价格门，但不能把这批新模型单独“修到可用”。</li>
+<li>2026-05-26 16:43 CST 进一步把 <code>qwen3.6-plus</code> 临时改成上游原文样式 <code>qwen/qwen3.6-plus</code> 再测，先命中本地 <code>model_price_error</code>，补入 <code>ModelRatio = 1</code> 后仍然是上游 <code>404</code>。所以这不是单纯的裸名/前缀名转换问题。</li>
 <li>未来如果接入更快上游线路，可以新增速度档位，例如 <code>fast_1_5x</code>、<code>priority_2x</code>，但必须由实际响应速度或资源池差异支撑。</li>
 </ul>
 </section>
