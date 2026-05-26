@@ -1,5 +1,26 @@
 # XD API 工作记录
 
+## 2026-05-26 21:12 CST
+
+### 复测 `qwen3.6-plus` 示例代码并确认流式/非流式都可用
+
+变更内容：
+
+- 按用户给出的 Python 示例，使用同一 MaaS API key 直接调用 `https://moma.cmecloud.cn/v1/chat/completions`。
+- 请求模型使用 `qwen/qwen3.6-plus`，消息体保持示例结构，分别测试 `stream=True` 和 `stream=False`。
+- 这是对“前面 qwen3.6-plus 为什么还会 404 / 401”的一次最终复核。
+
+验证方式：
+
+- `stream=True` 返回 `200`，`content-type: text/event-stream;charset=utf-8`，首批 chunk 已正常产出 `reasoning_content` 与 `chat.completion.chunk`。
+- `stream=False` 返回 `200`，`content-type: application/json`，完整响应正常返回 `choices`、`usage`、`model=qwen3.6-plus`。
+- 同一 key 下，`qwen3-omni-flash` 和 `qwen3-max` 之前已经验证可用，本次 `qwen3.6-plus` 也通过了同样的上游直连路径。
+
+注意事项：
+
+- 这次结果说明 `qwen3.6-plus` 的真实可用状态比前面那轮临时测法更好；前面出现的 404/401 主要与请求形态和测试路径有关，不应当再当成最终结论。
+- 后续如果要写入 XDAPI 公共目录，仍需单独补 `ModelRatio`、价格和中转渠道映射，然后再做 XDAPI 侧通路验证。
+
 ## 2026-05-26 21:00 CST
 
 ### 使用 RAM 子账号创建的 MaaS API key 直接复核新候选模型
