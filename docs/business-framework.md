@@ -1,6 +1,6 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-26 16:14 CST
+更新时间：2026-05-26 16:53 CST
 
 ## 当前结论
 
@@ -13,6 +13,7 @@
 - 2026-05-24 16:59 CST 继续用管理员态 `channel/test/1` 复核剩余 8 个新候选，`openai` 与 `openai-response` 两条端点都稳定返回上游 `404`，进一步证明失败点在上游 runtime，而不是某个单独的 endpoint 或本地计费配置。
 - 2026-05-26 16:14 CST 再次复核这 9 个候选时，未补倍率前先统一命中 `model_price_error`；临时为这 9 个模型补入 `ModelRatio = 1` 后重新测试，结果又统一落到上游 `404`。这证明 XDAPI 可以临时补齐价格门，但不能把这批新模型单独“修到可用”。
 - 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 临时改成上游原文样式 `qwen/qwen3.6-plus` 再测，先命中本地 `model_price_error`，补入 `ModelRatio = 1` 后仍然是上游 `404`。所以这不是单纯的裸名/前缀名转换问题。
+- 2026-05-26 16:53 CST 直接探测 `https://moma.cmecloud.cn/v1/chat/completions`、`https://moma.cmecloud.cn` 和 `https://moma.cmecloud.cn/v1/models`，匿名与现有 ecloud 会话 cookie 复测都返回 `404`；这条结果只能说明直连入口在现有鉴权态下不可直接用，不能替代有效 MaaS API key 的 POST 级验证。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 分组语义

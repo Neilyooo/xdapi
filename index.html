@@ -104,6 +104,7 @@
     <section class="section">
       <h2>源站信息对齐审计</h2>
       <ul>
+        <li>2026-05-26 16:53 CST 直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>、<code>https://moma.cmecloud.cn</code> 和 <code>https://moma.cmecloud.cn/v1/models</code>，匿名与现有 ecloud 会话 cookie 复测都返回 <code>404</code>；当前还没有拿到可用于证明 runtime 已开通的有效 MaaS API key。</li>
         <li>2026-05-26 16:14 CST 管理员态补倍率复核 9 个候选：未补倍率前统一返回 <code>model_price_error</code>，临时将这 9 个模型的 <code>ModelRatio</code> 设为 <code>1</code> 后重新测试，结果统一落到上游 <code>404 Not Found</code>；测试后已恢复原始倍率设置。</li>
         <li>2026-05-24 16:59 CST 继续用管理员态 <code>channel/test/1</code> 复核剩余 8 个候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>；两种端点类型都统一返回上游 <code>404</code>，说明问题不在单个 endpoint 或本地计费配置，而在上游 runtime 本身。</li>
         <li>2026-05-26 16:43 CST 进一步把 <code>qwen3.6-plus</code> 临时改成上游原文样式 <code>qwen/qwen3.6-plus</code> 再测，先命中本地 <code>model_price_error</code>，补入 <code>ModelRatio = 1</code> 后仍然是上游 <code>404</code>；说明这不是单纯的裸名/前缀名转换问题。</li>

@@ -1,5 +1,25 @@
 # XD API 工作记录
 
+## 2026-05-26 16:53 CST
+
+### 直接探测 `moma.cmecloud.cn/v1/chat/completions` 的上游直连入口
+
+变更内容：
+
+- 按用户要求直接探测 `https://moma.cmecloud.cn/v1/chat/completions`，而不是之前验证过的 `zhenze-huhehaote.cmecloud.cn` 运行时网关。
+- 同时补测了 `https://moma.cmecloud.cn` 和 `https://moma.cmecloud.cn/v1/models`，用于确认这是哪一层在返回错误。
+
+验证方式：
+
+- 匿名 `GET` 三个入口都返回 `404`，响应头显示 `server: istio-envoy`。
+- 复用当前已登录的 ecloud 浏览器会话 cookie 再测一轮，结果仍然是 `404`。
+- 这次没有拿到可用于 `POST /v1/chat/completions` 的有效 MaaS API key，因此还不能把“鉴权后直连成功与否”写成已验证结论。
+
+注意事项：
+
+- 这次探测证明的是 `moma.cmecloud.cn` 这条直连地址本身在匿名与现有浏览器会话态下都不直接返回可用 API 响应。
+- 这不等于证明上游 runtime 已经不可用；真正的 chat-completions 直连结论仍需要一个有效的 MaaS API key 做 POST 级别验证。
+
 ## 2026-05-26 16:43 CST
 
 ### 复核 `qwen3.6-plus` 的上游前缀命名与 runtime 可用性
