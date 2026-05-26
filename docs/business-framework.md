@@ -1,6 +1,6 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-26 16:53 CST
+更新时间：2026-05-26 21:40 CST
 
 ## 当前结论
 
@@ -14,7 +14,17 @@
 - 2026-05-26 16:14 CST 再次复核这 9 个候选时，未补倍率前先统一命中 `model_price_error`；临时为这 9 个模型补入 `ModelRatio = 1` 后重新测试，结果又统一落到上游 `404`。这证明 XDAPI 可以临时补齐价格门，但不能把这批新模型单独“修到可用”。
 - 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 临时改成上游原文样式 `qwen/qwen3.6-plus` 再测，先命中本地 `model_price_error`，补入 `ModelRatio = 1` 后仍然是上游 `404`。所以这不是单纯的裸名/前缀名转换问题。
 - 2026-05-26 16:53 CST 直接探测 `https://moma.cmecloud.cn/v1/chat/completions`、`https://moma.cmecloud.cn` 和 `https://moma.cmecloud.cn/v1/models`，匿名与现有 ecloud 会话 cookie 复测都返回 `404`；这条结果只能说明直连入口在现有鉴权态下不可直接用，不能替代有效 MaaS API key 的 POST 级验证。
+- 2026-05-26 21:40 CST 新矩阵脚本 `scripts/model_probe_matrix.py` 复测后确认：`moma.cmecloud.cn` 上已有 7 个候选（`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max`）可通过 `qwen/...` 前缀名的 `chat/completions` 流式/非流式双验证；`gui-plus` 和 `glm-5.1` 仍失败；`zhenze-huhehaote.cmecloud.cn` 对这批候选仍然以 `404` 为主。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
+
+## 新模型接入流程
+
+- 新模型验证默认走矩阵：先 `moma.cmecloud.cn`，再 `zhenze-huhehaote.cmecloud.cn`。
+- 每个上游先测 `POST /v1/chat/completions`，对每个模型先试裸名，再试 vendor 前缀名。
+- 对同一组合同时确认 `stream=false` 和 `stream=true`，两种都成功才算可用。
+- 只有在 `chat/completions` 的所有变体都失败后，才扩展到 `POST /v1/responses`。
+- 上游直连成功后，再进入 XDAPI relay / channel / pricing 接入。
+- 本地脚本：`scripts/model_probe_matrix.py`。
 
 ## 分组语义
 

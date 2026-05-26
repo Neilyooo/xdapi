@@ -17,7 +17,8 @@
 <body><div class="wrap">
   <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
   <section class="hero"><h1>XD API 模型源站信息对齐审计</h1><p>记录新增模型准入测试，以及公开模型价格、上下文、最大输出与移动云 MaaS 原文证据的对齐情况。</p></section>
-  <p>更新时间：2026-05-26 16:53 CST</p>
+  <p>更新时间：2026-05-26 21:40 CST</p>
+  <section class="section"><h2>2026-05-26 21:40 CST 矩阵复核提示</h2><ul><li>新增的矩阵脚本 <code>scripts/model_probe_matrix.py</code> 已把测试顺序固定为 <code>moma.cmecloud.cn</code> -&gt; <code>zhenze-huhehaote.cmecloud.cn</code>，并且把 <code>chat/completions</code>、模型名变体、<code>stream</code> 双态和 <code>responses</code> 兜底都纳入同一套流程。</li><li>这轮复测修正了旧结论：<code>moma.cmecloud.cn</code> 上 <code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 这 7 个候选都可以通过 <code>qwen/...</code> 前缀名的 <code>chat/completions</code> 双态验证。</li><li><code>gui-plus</code> 仍然不可用，<code>qwen/gui-plus</code> 在 <code>moma.cmecloud.cn</code> 上返回 <code>401 Invalid model</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上返回 <code>404</code>；<code>glm-5.1</code> 两个上游都还是 <code>404</code>。</li><li>这说明“上游列表可见”仍然不等于“所有候选都可直连”，但也不能再把这 9 个候选笼统记成全部 404。</li><li>XDAPI relay / channel 接入阶段仍待管理员态权限补齐，当前只更新了直连验证结论和测试流程。</li></ul></section>
   <section class="section"><h2>2026-05-26 21:12 CST 复核提示</h2><ul><li>按用户给出的 Python 示例复测 <code>qwen3.6-plus</code>，<code>stream=True</code> 与 <code>stream=False</code> 都已在 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 上返回 <code>200</code>。</li><li>这说明前面对 <code>qwen3.6-plus</code> 的 <code>404/401</code> 结论只适用于旧测试形态，不应再当成最终可用性结论。</li><li>目前可以把 <code>qwen3.6-plus</code> 视为“上游直连已可用，但 XDAPI 侧仍未正式接入前台”的候选。</li></ul></section>
 <section class="section"><h2>本轮结论</h2>
 <ul>

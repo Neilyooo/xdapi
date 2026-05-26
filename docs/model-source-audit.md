@@ -1,6 +1,14 @@
 # XD API 模型源站信息对齐审计
 
-更新时间：2026-05-26 16:53 CST
+更新时间：2026-05-26 21:40 CST
+
+## 2026-05-26 21:40 CST 矩阵复核提示
+
+- 新增的矩阵脚本 `scripts/model_probe_matrix.py` 已把测试顺序固定为 `moma.cmecloud.cn` -> `zhenze-huhehaote.cmecloud.cn`，并且把 `chat/completions`、模型名变体、`stream` 双态和 `responses` 兜底都纳入同一套流程。
+- 这轮复测修正了旧结论：`moma.cmecloud.cn` 上 `qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max` 这 7 个候选都可以通过 `qwen/...` 前缀名的 `chat/completions` 双态验证。
+- `gui-plus` 仍然不可用，`qwen/gui-plus` 在 `moma.cmecloud.cn` 上返回 `401 Invalid model`，在 `zhenze-huhehaote.cmecloud.cn` 上返回 `404`；`glm-5.1` 两个上游都还是 `404`。
+- 这说明“上游列表可见”仍然不等于“所有候选都可直连”，但也不能再把这 9 个候选笼统记成全部 404。
+- XDAPI relay / channel 接入阶段仍待管理员态权限补齐，当前只更新了直连验证结论和测试流程。
 
 ## 2026-05-26 21:12 CST 复核提示
 
@@ -11,8 +19,9 @@
 ## 本轮结论
 
 - 上游 `fetch_models` 已能看到 9 个未公开候选：`qwen3.6-plus`、`qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`gui-plus`、`qwen-mt-flash`、`glm-5.1`、`qwen3.5-plus`、`qwen3-max`。
-- 这 9 个模型通过当前华北-呼和浩特 `/v1/chat/completions` 运行时测试均返回 404；常见大小写变体同样未通过。
-- 因运行时不可调用，已回滚临时价格和渠道配置，没有把这 9 个候选模型留在 XDAPI 前台。
+- 新的矩阵复核表明，这 9 个候选不是统一行为：`moma.cmecloud.cn` 上已有 7 个模型可通过 `qwen/...` 前缀名的 `chat/completions` 流式/非流式双验证；`gui-plus` 和 `glm-5.1` 仍失败。
+- `zhenze-huhehaote.cmecloud.cn` 这条当前运行时对这 9 个候选依然没有打通，仍以 `404` 为主。
+- 因运行时并非统一可用，XDAPI 前台当前仍没有把这 9 个候选公开出来；后续只有在管理员态可写入渠道和计费映射后，才适合把已确认可用的 `moma` 候选引入 relay。
 - XDAPI 公开价格目录仍为 27 个模型，新增候选均未公开。
 - 2026-05-26 16:53 CST 按用户要求直接探测 `https://moma.cmecloud.cn/v1/chat/completions`，匿名请求与本机 ecloud 登录态 cookie 复测都返回 `404`；没有拿到一个可用于证明 runtime 已开通的有效鉴权样本。
 - 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 的 XDAPI 渠道映射临时改成 `qwen/qwen3.6-plus` 并补入 `ModelRatio = 1` 后复测，仍然返回上游 `404 Not Found`，说明这不是单纯的裸名/前缀名不一致问题。
