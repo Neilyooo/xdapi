@@ -1,5 +1,35 @@
 # XD API 工作记录
 
+## 2026-05-27 11:13 CST
+
+### 修复 Moma 新模型在 XDAPI 操练场的 SSE / openai_error
+
+变更内容：
+
+- 只通过线上 admin API 检查和修改现网 XDAPI；本地代码不作为线上行为依据。
+- 定位到 `China Mobile MaaS - Moma` 渠道 3 的 `base_url` 仍指向临时隧道 `https://30d3e5d7afe03e.lhr.life`。
+- 将渠道 3 的 `base_url` 修正为 `https://moma.cmecloud.cn`，保留原有 `1x,3x,5x` 分组、7 个模型列表和 `qwen/...` 上游模型映射。
+
+验证方式：
+
+- 修复前，`/api/channel/test/3?model=qwen3.5-plus&endpoint_type=openai` 返回 `bad response status code 503`，底层 body 为 `<h1>no tunnel here :(</h1>`，说明请求落到了失效隧道。
+- 修复后，渠道测试返回 `200`：`qwen3.5-plus` 6.407s、`qwen3-max` 0.715s、`qwen3.6-plus` 5.348s、`qwen3-omni-flash` 0.467s。
+- 修复后，操练场同路径 `/pg/chat/completions`、`group=1x`、`stream=false` 对 7 个 Moma 新模型全部返回 `200`：
+  - `qwen3.6-plus` 4.51s
+  - `qwen3-vl-plus` 1.71s
+  - `qwen-mt-plus` 0.48s
+  - `qwen3-omni-flash` 0.56s
+  - `qwen-mt-flash` 0.50s
+  - `qwen3.5-plus` 6.86s
+  - `qwen3-max` 1.34s
+- `qwen3.5-plus` 的 `stream=true` smoke test 返回 `200`、`content-type: text/event-stream`，首段为标准 `data: {"choices":[{"delta":...` chunk，不再是错误 JSON。
+
+注意事项：
+
+- 这次操练场错误不是用户页面 URL 设置问题；操练场走的是后端 `/pg/chat/completions`。
+- 直接原因也不是 `group=auto`。`auto` 如果被传入会返回无权访问分组，但本次 Moma 模型在 `group=1x` 下也曾报错，根因是线上渠道 3 上游地址错误。
+- `qwen3.5-plus` 和 `qwen3.6-plus` 会输出较长 reasoning 内容，耗时比 `qwen3-max`、`qwen-mt-flash` 更高；这属于模型输出行为，不是本次 503/SSE 错误。
+
 ## 2026-05-27 00:26 CST
 
 ### 将 7 个已验证的 Moma 候选并入 XDAPI 公共 relay，并修复公开目录计数到 34
