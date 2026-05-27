@@ -82,6 +82,30 @@
     </section>
 
     <section class="section">
+      <h2>新模型验证分层</h2>
+      <p class="small">这 7 个新模型的验证顺序是先上游直连，通过后再接入 XDAPI relay；因此它们既属于“直连验证过”，也属于“经过 XDAPI 中转调用过”。两层名单一致，方便后续排查时区分“上游可用性”和“XDAPI 接入状态”。</p>
+      <table>
+        <thead>
+          <tr>
+            <th>模型</th>
+            <th>上游直连验证</th>
+            <th>XDAPI 中转验证</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>qwen3.6-plus</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen3.6-plus</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen3-vl-plus</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen3-vl-plus</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen-mt-plus</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen-mt-plus</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen3-omni-flash</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen3-omni-flash</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen-mt-flash</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen-mt-flash</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen3.5-plus</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen3.5-plus</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+          <tr><td><code>qwen3-max</code></td><td><span class="badge ok">已通过</span> <code>moma.cmecloud.cn</code> / <code>qwen/qwen3-max</code></td><td><span class="badge ok">已通过</span> <code>China Mobile MaaS - Moma</code></td></tr>
+        </tbody>
+      </table>
+      <p class="small">未通过的 <code>gui-plus</code> 与 <code>glm-5.1</code> 只保留在候选区，不进入上述两列“已通过”名单。</p>
+    </section>
+
+    <section class="section">
       <h2>当前业务框架更新</h2>
       <ul>
         <li>当前业务分组为 <code>1x</code>、<code>3x</code>、<code>5x</code>，对应计费倍率 <code>1.00x</code>、<code>3.00x</code>、<code>5.00x</code>。</li>
