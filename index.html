@@ -53,10 +53,10 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。2026-05-27 11:13 CST 已修复 Moma 操练场 SSE 错误。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-05-27 00:26 CST</span>
-        <span class="chip">上游复测：2026-05-27 00:26 CST</span>
+        <span class="chip">更新时间：2026-05-27 11:13 CST</span>
+        <span class="chip">操练场复测：2026-05-27 11:13 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
         <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
       </div>
@@ -70,7 +70,19 @@
         <li>只有当同一组合的 <code>stream=false</code> 与 <code>stream=true</code> 都成功后，才把这个路径记为可用。</li>
         <li>最新矩阵复测显示：<code>moma</code> 上已有 7 个候选能通过 <code>qwen/...</code> 前缀名双流式验证；<code>gui-plus</code> 和 <code>glm-5.1</code> 仍失败，<code>huhehaote</code> 仍不通。</li>
         <li>上游直连成功后，才进入 XDAPI relay、渠道和价格接入。</li>
+        <li>接入 XDAPI 后必须继续跑管理员态 <code>channel/test</code> 和操练场同路径 <code>/pg/chat/completions</code>；不能只用上游直连结果代表前台可用。</li>
         <li>详细流程见 <a href="./docs/model-test-workflow.html">新模型测试流程</a>。</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>操练场 Moma 错误修复</h2>
+      <ul>
+        <li>问题现象：<code>qwen3.5-plus</code> 等 Moma 新模型在操练场触发 <code>SSE Error: openai_error</code>。</li>
+        <li>线上证据：修复前 <code>/api/channel/test/3?model=qwen3.5-plus&amp;endpoint_type=openai</code> 返回 <code>503</code>，底层 body 为 <code>&lt;h1&gt;no tunnel here :(&lt;/h1&gt;</code>。</li>
+        <li>根因：<code>China Mobile MaaS - Moma</code> 渠道 3 的 <code>base_url</code> 仍指向临时隧道 <code>https://30d3e5d7afe03e.lhr.life</code>，不是正式上游 <code>https://moma.cmecloud.cn</code>。</li>
+        <li>处理：已在线将渠道 3 <code>base_url</code> 修正为 <code>https://moma.cmecloud.cn</code>，保留 <code>1x,3x,5x</code> 分组和 7 个模型映射。</li>
+        <li>复测：7 个 Moma 新模型在操练场 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 全部返回 <code>200</code>；<code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回标准 <code>text/event-stream</code>。</li>
       </ul>
     </section>
 
@@ -113,6 +125,7 @@
         <li>2026-05-19 10:40 CST 复核公开接口：<code>/api/user/groups</code> 仅返回 <code>1x/3x/5x</code>，<code>/api/pricing</code> 返回 34 个模型。</li>
         <li>匿名 <code>/api/pricing</code> 和登录态 <code>/api/user/models</code> 均已返回 34 个模型，前台目录不再停留在 20 个标准池模型。</li>
         <li>2026-05-27 00:26 CST 新增 7 个 Moma relay 模型正式进入前台目录：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+        <li>2026-05-27 11:13 CST 修复 Moma 渠道上游地址，操练场对上述 7 个模型的同路径测试已全部返回 <code>200</code>。</li>
         <li>上述 7 个模型在 XDAPI 中转站已与标准倍率组对齐，当前按 <code>1x</code> 临时倍数计价展示，后续若补到更细官方价格行再单独修订。</li>
         <li>用临时 <code>1x</code>、<code>3x</code>、<code>5x</code> 令牌验证 <code>qwen2.5-vl-72b-instruct</code> 均成功，HTTP 200，响应片段 <code>ok</code>。</li>
         <li>详细说明见 <a href="./docs/business-framework.html">业务框架</a> 和 <a href="./docs/work-log.html">工作记录</a>。</li>

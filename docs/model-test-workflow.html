@@ -55,6 +55,16 @@
   </section>
 
   <section class="section">
+    <h2>XDAPI 接入后验证</h2>
+    <ul>
+      <li>复核 live channel 的 <code>base_url</code>、<code>models</code>、<code>group</code>、<code>model_mapping</code>，不能以本地代码或旧记录代替线上配置。</li>
+      <li>先跑管理员态 <code>channel/test/{channel_id}</code>，确认请求能到正确上游。</li>
+      <li>再跑操练场同路径 <code>POST /pg/chat/completions</code>，分别测 <code>stream=false</code> 和至少一个 <code>stream=true</code> smoke test。</li>
+      <li>如果操练场报 <code>SSE Error: openai_error</code>，先检查返回体是否为错误 JSON、渠道 <code>base_url</code> 是否指向临时隧道或旧上游，以及 <code>group</code> 是否仍在用 <code>auto</code>。</li>
+    </ul>
+  </section>
+
+  <section class="section">
     <h2>早停规则</h2>
     <ul>
       <li>找到第一个双流式成功组合后立即停止。</li>
@@ -68,6 +78,7 @@
     <ul>
       <li><code>qwen3.6-plus</code> 在 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 上，使用 <code>model=qwen/qwen3.6-plus</code> 时，stream 与 non-stream 都返回 200。</li>
       <li><code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 也已通过同一路径验证。</li>
+      <li>2026-05-27 11:13 CST 线上 XDAPI 已修复 Moma 渠道 <code>base_url</code>，7 个 Moma 新模型通过操练场 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 验证；<code>qwen3.5-plus</code> 额外通过 <code>stream=true</code> smoke test。</li>
     </ul>
   </section>
 

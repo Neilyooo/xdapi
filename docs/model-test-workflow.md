@@ -1,6 +1,6 @@
 # 新模型测试流程
 
-更新时间：2026-05-26 21:40 CST
+更新时间：2026-05-27 11:13 CST
 
 ## 目标
 
@@ -47,6 +47,20 @@
 - 响应头 `content-type`
 - 首段响应片段
 
+## XDAPI 接入后验证
+
+上游直连成功不等于操练场可用。接入 XDAPI 后还要固定做三步：
+
+1. 复核 live channel 的 `base_url`、`models`、`group`、`model_mapping`，不能以本地代码或旧记录代替线上配置。
+2. 先跑管理员态 `channel/test/{channel_id}`，确认请求能到正确上游。
+3. 再跑操练场同路径 `POST /pg/chat/completions`，分别测 `stream=false` 和至少一个 `stream=true` smoke test。
+
+如果操练场报 `SSE Error: openai_error`，先检查：
+
+- 是否返回了错误 JSON 而不是标准 `text/event-stream` chunk。
+- 对应渠道 `base_url` 是否指向临时隧道、代理或旧上游。
+- `group` 是否为公开倍率组 `1x/3x/5x`，不要再使用 `auto`。
+
 ## 早停规则
 
 1. 找到第一个 `host + endpoint + model variant` 的双流式成功组合后立刻停止。
@@ -58,6 +72,7 @@
 
 - `qwen3.6-plus` 在 `https://moma.cmecloud.cn/v1/chat/completions` 上，使用 `model=qwen/qwen3.6-plus` 时，`stream=true` 和 `stream=false` 都返回 `200`。
 - `qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max` 也都已经通过同一上游直连路径。
+- 2026-05-27 11:13 CST 线上 XDAPI 已修复 Moma 渠道 `base_url`，7 个 Moma 新模型通过操练场 `/pg/chat/completions`、`group=1x`、`stream=false` 验证；`qwen3.5-plus` 额外通过 `stream=true` smoke test。
 
 ## 本地脚本
 
