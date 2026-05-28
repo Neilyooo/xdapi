@@ -1,5 +1,36 @@
 # XD API 工作记录
 
+## 2026-05-28 14:31 CST
+
+### 复修 Moma 新模型操练场失败：渠道 key 失效
+
+变更内容：
+
+- 只检查和修改线上 XDAPI 渠道配置；本地代码不作为线上行为依据。
+- 复核 `China Mobile MaaS - Moma` 渠道 3：`base_url=https://moma.cmecloud.cn`，`models`、`group=1x,3x,5x`、`model_mapping` 均未漂移。
+- 发现 7 个 Moma 新模型的 `channel/test/3` 全部返回上游 `401 Invalid apikey`，操练场 `/pg/chat/completions` 同步表现为 `openai_error`。
+- 使用当前有效 MaaS API key 直连 `https://moma.cmecloud.cn/v1/chat/completions` 复核，`qwen/qwen3-max`、`qwen/qwen3.6-plus`、`qwen/qwen3.5-plus` 均返回 `200`，说明上游、模型名和 endpoint 正常。
+- 仅替换线上渠道 3 的 key，不改 `base_url`、模型列表、分组或价格。
+
+验证方式：
+
+- 替换 key 后，`channel/test/3` 关键样本恢复 `200`：`qwen3-max` 0.828s、`qwen3.6-plus` 6.203s、`qwen3.5-plus` 5.290s。
+- 替换 key 后，操练场同路径 `/pg/chat/completions`、`group=1x`、`stream=false` 对 7 个 Moma 新模型全部返回 `200`：
+  - `qwen3.6-plus` 4.39s
+  - `qwen3-vl-plus` 0.79s
+  - `qwen-mt-plus` 0.42s
+  - `qwen3-omni-flash` 0.50s
+  - `qwen-mt-flash` 0.41s
+  - `qwen3.5-plus` 6.25s
+  - `qwen3-max` 0.81s
+- `qwen3-max` 与 `qwen3.5-plus` 的 `stream=true` smoke test 均返回 `200` 和 `content-type: text/event-stream`。
+
+注意事项：
+
+- 这次复发不是 2026-05-27 的临时隧道问题；渠道地址仍是正式 `moma.cmecloud.cn`。
+- 直接原因是渠道 3 保存的 MaaS API key 已失效或被替换，导致上游统一返回 `401 Invalid apikey`。
+- 后续若再次出现同类错误，优先按顺序检查：`base_url`、`channel/test` 的上游状态码、MaaS key 直连有效性，再看操练场页面层。
+
 ## 2026-05-27 11:13 CST
 
 ### 修复 Moma 新模型在 XDAPI 操练场的 SSE / openai_error
