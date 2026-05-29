@@ -1,29 +1,176 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XD API 工作记录</title>
-  <style>
-    :root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}
-    *{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-    .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
-    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}
-    .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
-    h2{margin:0 0 12px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
-    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
-  </style>
-</head>
-<body><div class="wrap">
-  <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
-  <section class="hero"><h1>XD API 工作记录</h1><p>记录影响业务框架、渠道策略、分组策略、价格策略和用户接入方式的变更。</p></section>
-  <section class="section"><h2>2026-05-28 14:31 CST</h2><h3>复修 Moma 新模型操练场失败：渠道 key 失效</h3><p>变更内容：</p><ul><li>只检查和修改线上 XDAPI 渠道配置；本地代码不作为线上行为依据。</li><li>复核 <code>China Mobile MaaS - Moma</code> 渠道 3：<code>base_url=https://moma.cmecloud.cn</code>，<code>models</code>、<code>group=1x,3x,5x</code>、<code>model_mapping</code> 均未漂移。</li><li>发现 7 个 Moma 新模型的 <code>channel/test/3</code> 全部返回上游 <code>401 Invalid apikey</code>，操练场 <code>/pg/chat/completions</code> 同步表现为 <code>openai_error</code>。</li><li>使用当前有效 MaaS API key 直连 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 复核，<code>qwen/qwen3-max</code>、<code>qwen/qwen3.6-plus</code>、<code>qwen/qwen3.5-plus</code> 均返回 <code>200</code>，说明上游、模型名和 endpoint 正常。</li><li>仅替换线上渠道 3 的 key，不改 <code>base_url</code>、模型列表、分组或价格。</li></ul><p>验证方式：</p><ul><li>替换 key 后，<code>channel/test/3</code> 关键样本恢复 <code>200</code>：<code>qwen3-max</code> 0.828s、<code>qwen3.6-plus</code> 6.203s、<code>qwen3.5-plus</code> 5.290s。</li><li>替换 key 后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：<code>qwen3.6-plus</code> 4.39s、<code>qwen3-vl-plus</code> 0.79s、<code>qwen-mt-plus</code> 0.42s、<code>qwen3-omni-flash</code> 0.50s、<code>qwen-mt-flash</code> 0.41s、<code>qwen3.5-plus</code> 6.25s、<code>qwen3-max</code> 0.81s。</li><li><code>qwen3-max</code> 与 <code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 均返回 <code>200</code> 和 <code>content-type: text/event-stream</code>。</li></ul><p>注意事项：</p><ul><li>这次复发不是 2026-05-27 的临时隧道问题；渠道地址仍是正式 <code>moma.cmecloud.cn</code>。</li><li>直接原因是渠道 3 保存的 MaaS API key 已失效或被替换，导致上游统一返回 <code>401 Invalid apikey</code>。</li><li>后续若再次出现同类错误，优先按顺序检查：<code>base_url</code>、<code>channel/test</code> 的上游状态码、MaaS key 直连有效性，再看操练场页面层。</li></ul></section>
-  <section class="section"><h2>2026-05-27 11:13 CST</h2><h3>修复 Moma 新模型在 XDAPI 操练场的 SSE / openai_error</h3><p>变更内容：</p><ul><li>只通过线上 admin API 检查和修改现网 XDAPI；本地代码不作为线上行为依据。</li><li>定位到 <code>China Mobile MaaS - Moma</code> 渠道 3 的 <code>base_url</code> 仍指向临时隧道 <code>https://30d3e5d7afe03e.lhr.life</code>。</li><li>将渠道 3 的 <code>base_url</code> 修正为 <code>https://moma.cmecloud.cn</code>，保留原有 <code>1x,3x,5x</code> 分组、7 个模型列表和 <code>qwen/...</code> 上游模型映射。</li></ul><p>验证方式：</p><ul><li>修复前，<code>/api/channel/test/3?model=qwen3.5-plus&amp;endpoint_type=openai</code> 返回 <code>bad response status code 503</code>，底层 body 为 <code>&lt;h1&gt;no tunnel here :(&lt;/h1&gt;</code>，说明请求落到了失效隧道。</li><li>修复后，渠道测试返回 <code>200</code>：<code>qwen3.5-plus</code> 6.407s、<code>qwen3-max</code> 0.715s、<code>qwen3.6-plus</code> 5.348s、<code>qwen3-omni-flash</code> 0.467s。</li><li>修复后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：<code>qwen3.6-plus</code> 4.51s、<code>qwen3-vl-plus</code> 1.71s、<code>qwen-mt-plus</code> 0.48s、<code>qwen3-omni-flash</code> 0.56s、<code>qwen-mt-flash</code> 0.50s、<code>qwen3.5-plus</code> 6.86s、<code>qwen3-max</code> 1.34s。</li><li><code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回 <code>200</code>、<code>content-type: text/event-stream</code>，首段为标准 <code>data: {&quot;choices&quot;:[{&quot;delta&quot;:...</code> chunk，不再是错误 JSON。</li></ul><p>注意事项：</p><ul><li>这次操练场错误不是用户页面 URL 设置问题；操练场走的是后端 <code>/pg/chat/completions</code>。</li><li>直接原因也不是 <code>group=auto</code>。<code>auto</code> 如果被传入会返回无权访问分组，但本次 Moma 模型在 <code>group=1x</code> 下也曾报错，根因是线上渠道 3 上游地址错误。</li><li><code>qwen3.5-plus</code> 和 <code>qwen3.6-plus</code> 会输出较长 reasoning 内容，耗时比 <code>qwen3-max</code>、<code>qwen-mt-flash</code> 更高；这属于模型输出行为，不是本次 503/SSE 错误。</li></ul></section>
-  <section class="section"><h2>2026-05-27 00:26 CST</h2><h3>将 7 个已验证的 Moma 候选并入 XDAPI 公共 relay，并修复公开目录计数到 34</h3><p>变更内容：</p><ul><li>使用现网管理员态更新 XDAPI live 配置，把 <code>China Mobile MaaS - Moma</code> 作为独立逻辑渠道接入，模型映射统一按 <code>qwen/...</code> 前缀名落到上游 <code>moma.cmecloud.cn</code>。</li><li>将 7 个已验证通过的 Moma 候选正式写入公开模型目录：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li><li>发现并修复了一个历史遗漏：<code>deepseek-v4-flash</code> 的状态在前台目录里被错误地压掉，已恢复到可见状态，公开模型总数回到 34。</li><li><code>gui-plus</code> 和 <code>glm-5.1</code> 未通过上游矩阵，保持不接入。</li></ul><p>验证方式：</p><ul><li>新增的 <code>moma</code> 渠道对 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3-vl-plus</code> 做 <code>channel/test</code>，都返回 <code>200</code>。</li><li>7 个新模型在公网 relay 上做 <code>chat/completions</code> 直连调用，均返回 <code>200</code>。</li><li>这 7 个新模型的验证层次是“先上游直连通过，再进 XDAPI relay 通过”，因此它们同时属于直连已验证和中转已验证两类名单。</li><li>公开 <code>/api/pricing</code> 回到 <code>34</code> 个模型，首页已部署模型数同步更新为 <code>34</code>。</li><li>新模型目前按临时 <code>1x</code> 展示；后续如果补齐更细的官方价格原文，再单独修订价格字段。</li></ul><p>注意事项：</p><ul><li><code>gui-plus</code> 与 <code>glm-5.1</code> 仍然不接入，避免把未通过的候选混入前台。</li><li>这次只补公共目录、渠道映射和前台展示，不改上游 MaaS 资源。</li></ul></section>
-  <section class="section"><h2>2026-05-26 21:40 CST</h2><h3>补强新模型测试流程并用矩阵脚本复测 9 个候选</h3><p>变更内容：</p><ul><li>新增本地探测脚本 <code>scripts/model_probe_matrix.py</code>，把新模型验证固化为矩阵流程：先测 <code>moma.cmecloud.cn</code>，再测 <code>zhenze-huhehaote.cmecloud.cn</code>，每个上游先测 <code>chat/completions</code>，再按裸名和 vendor 前缀名做变体，最后才扩展到 <code>responses</code>。</li><li>每个候选都强制检查 <code>stream=false</code> 和 <code>stream=true</code>，只有两种都成功才记为可用；脚本输出 <code>status</code>、<code>request_id</code>、<code>content-type</code> 和首段响应片段。</li><li>这轮复测的目标是把“哪条上游、哪种模型名、哪种流式形态可用”一次性分清，避免再靠单点 probe 回溯。</li></ul><p>验证方式：</p><ul><li><code>qwen3.6-plus</code> 在 <code>moma.cmecloud.cn</code> 上，<code>model=qwen/qwen3.6-plus</code> 的 <code>chat/completions</code> <code>stream=false</code> 与 <code>stream=true</code> 都返回 <code>200</code>；裸名 <code>qwen3.6-plus</code> 仍然是 <code>404</code>。</li><li><code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 在 <code>moma.cmecloud.cn</code> 上也都通过了 <code>qwen/...</code> 前缀名的 <code>chat/completions</code> 流式/非流式双验证。</li><li><code>gui-plus</code> 在 <code>moma.cmecloud.cn</code> 上，<code>qwen/gui-plus</code> 返回 <code>401 Invalid model</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上则继续返回 <code>404</code>；这说明它不是这一把 key 下可直接启用的模型。</li><li><code>glm-5.1</code> 在 <code>moma.cmecloud.cn</code> 上仍然 <code>404</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上也仍然 <code>404</code>。</li><li><code>responses</code> 只作为兜底探测：当前对这批模型没有比 <code>chat/completions</code> 更优的成功路径。</li></ul><p>注意事项：</p><ul><li>这轮结果推翻了旧的“9 个候选都不通”的笼统结论：至少 <code>moma.cmecloud.cn</code> 上已经有 7 个候选可用，但它们依赖的是 <code>qwen/...</code> 前缀名。</li><li>XDAPI relay / channel / pricing 接入这一步还没做，因为当前没有拿到可直接写 admin 配置的有效管理员态 token；脚本和测试流程已经准备好，等管理员态可用后再把 <code>moma.cmecloud.cn</code> 渠道接入 XDAPI。</li></ul></section>
-  <section class="section"><h2>2026-05-26 21:12 CST</h2><h3>复测 <code>qwen3.6-plus</code> 示例代码并确认流式/非流式都可用</h3><p>变更内容：</p><ul><li>按用户给出的 Python 示例，使用同一 MaaS API key 直接调用 <code>https://moma.cmecloud.cn/v1/chat/completions</code>。</li><li>请求模型使用 <code>qwen/qwen3.6-plus</code>，消息体保持示例结构，分别测试 <code>stream=True</code> 和 <code>stream=False</code>。</li><li>这是对“前面 qwen3.6-plus 为什么还会 404 / 401”的一次最终复核。</li></ul><p>验证方式：</p><ul><li><code>stream=True</code> 返回 <code>200</code>，<code>content-type: text/event-stream;charset=utf-8</code>，首批 chunk 已正常产出 <code>reasoning_content</code> 与 <code>chat.completion.chunk</code>。</li><li><code>stream=False</code> 返回 <code>200</code>，<code>content-type: application/json</code>，完整响应正常返回 <code>choices</code>、<code>usage</code>、<code>model=qwen3.6-plus</code>。</li><li>同一 key 下，<code>qwen3-omni-flash</code> 和 <code>qwen3-max</code> 之前已经验证可用，本次 <code>qwen3.6-plus</code> 也通过了同样的上游直连路径。</li></ul><p>注意事项：</p><ul><li>这次结果说明 <code>qwen3.6-plus</code> 的真实可用状态比前面那轮临时测法更好；前面出现的 404/401 主要与请求形态和测试路径有关，不应当再当成最终结论。</li><li>后续如果要写入 XDAPI 公共目录，仍需单独补 <code>ModelRatio</code>、价格和中转渠道映射，然后再做 XDAPI 侧通路验证。</li></ul></section>
-  <section class="section"><h2>2026-05-26 21:00 CST</h2><h3>使用 RAM 子账号创建的 MaaS API key 直接复核新候选模型</h3><p>变更内容：</p><ul><li>使用用户新建的 MaaS API key 直接对 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 做真实 POST 复核。</li><li>同时补测了 <code>/v1/responses</code> 和 <code>/v1/models</code>，只为确认 <code>qwen3.6-plus</code> 的失败点到底是路径、模型名还是可见性。</li><li>测试范围覆盖：<code>qwen/qwen3.6-plus</code>、<code>qwen/qwen3-vl-plus</code>、<code>qwen/qwen-mt-plus</code>、<code>qwen/qwen3-omni-flash</code>、<code>qwen/gui-plus</code>、<code>qwen/qwen-mt-flash</code>、<code>qwen/glm-5.1</code>、<code>qwen/qwen3.5-plus</code>、<code>qwen/qwen3-max</code>。</li></ul><p>验证方式：</p><ul><li><code>qwen/qwen3.6-plus</code> 在 <code>chat/completions</code> 下返回 <code>401 Invalid apikey</code>。</li><li><code>qwen3.6-plus</code> 裸名在 <code>chat/completions</code> 下返回 <code>404</code>。</li><li><code>qwen/qwen3.6-plus</code> 与裸名在 <code>responses</code> 下都返回 <code>404</code>。</li><li><code>qwen/qwen3-omni-flash</code> 与 <code>qwen/qwen3-max</code> 在 <code>chat/completions</code> 下返回 <code>200</code>，说明这把 API key 可真实调用上游。</li><li><code>qwen/qwen3-vl-plus</code>、<code>qwen/qwen-mt-plus</code>、<code>qwen/gui-plus</code>、<code>qwen/qwen-mt-flash</code>、<code>qwen/qwen3.5-plus</code> 返回 <code>401 Invalid apikey</code>。</li><li><code>qwen/glm-5.1</code> 返回 <code>404</code>。</li><li><code>GET /v1/models</code> 返回 <code>404</code>。</li></ul><p>注意事项：</p><ul><li>这次结果说明“API key 已可用”与“某个具体模型已可用”是两件事。</li><li><code>qwen3.6-plus</code> 目前仍未通过真实上游 POST 直连验证；同批模型中真正跑通的是 <code>qwen3-omni-flash</code> 和 <code>qwen3-max</code>。</li></ul></section>
-  <section class="section"><h2>2026-05-26 20:31 CST</h2>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>
+:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}.section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
+</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./ctyun-model-audit.html">天翼云模型审计</a><a href="./mobile-ctyun-comparison.html">移动/天翼对比</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section>
+<section class="section"><h2>2026-05-29 18:33 CST</h2>
+<h3>新增天翼云 MaaS 渠道审计、移动/天翼横向对比与企业接入策略</h3>
+<p>变更内容：</p>
+<ul>
+<li>新增天翼云息壤 Token 服务作为潜在上游渠道的审计记录，控制台模型广场当前展示 <code>56</code> 款模型。</li>
+<li>从模型详情页提取模型名称、API model 参数、类型、系列、上下文、最大输出、限流和 API 文档入口。</li>
+<li>结合天翼云官方计费说明页 <code>https://www.ctyun.cn/document/11061839/11062267</code> 提取 token 计费表，当前 <code>37/56</code> 个模型有可核对价格行。</li>
+<li>新增移动 MaaS / XDAPI 与天翼云模型横向对比，记录 XDAPI 实时 <code>/api/pricing</code> 当前返回 <code>33</code> 个模型，与旧文档 <code>34</code> 存在 1 个差异，需后续单独复核。</li>
+<li>新增企业客户接入策略：企业报价、私有分组、专属渠道、额度、审计和 SLA 均建议放在 XDAPI/New API 侧实现，上游 MaaS 只作为成本和资源供应层。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>使用天翼云控制台账号登录 <code>https://ctxirang.ctyun.cn/maas/home</code>，模型广场接口返回 <code>56</code> 款模型。</li>
+<li>逐个打开 56 个模型详情页，详情页正文均可读取；API 文档入口均可提取。</li>
+<li>读取天翼云官方计费说明页，解析到 3 张价格表、113 条价格记录。</li>
+<li>读取 XDAPI 公共 <code>https://api.xingdingwangluo.cn/api/pricing</code>，本轮返回 <code>33</code> 个公开模型。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>本轮没有创建天翼云开发者 API Key，也没有做真实 <code>POST /v1/chat/completions</code>；因此天翼云模型状态只写为“API 文档入口可见”，不是“运行时已验证成功”。</li>
+<li>天翼云登录密码和任何上游 key 不写入 GitHub Pages；公开文档只保留账号身份、门户和脱敏证据。</li>
+<li>后续若正式接入天翼云到 XDAPI，需要先创建/取得天翼云 API Key，完成真实 POST 验证，再新增 XDAPI 渠道和价格配置。</li>
+</ul>
+<section class="section"><h2>2026-05-28 14:31 CST</h2>
+<h3>复修 Moma 新模型操练场失败：渠道 key 失效</h3>
+<p>变更内容：</p>
+<ul>
+<li>只检查和修改线上 XDAPI 渠道配置；本地代码不作为线上行为依据。</li>
+<li>复核 <code>China Mobile MaaS - Moma</code> 渠道 3：<code>base_url=https://moma.cmecloud.cn</code>，<code>models</code>、<code>group=1x,3x,5x</code>、<code>model_mapping</code> 均未漂移。</li>
+<li>发现 7 个 Moma 新模型的 <code>channel/test/3</code> 全部返回上游 <code>401 Invalid apikey</code>，操练场 <code>/pg/chat/completions</code> 同步表现为 <code>openai_error</code>。</li>
+<li>使用当前有效 MaaS API key 直连 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 复核，<code>qwen/qwen3-max</code>、<code>qwen/qwen3.6-plus</code>、<code>qwen/qwen3.5-plus</code> 均返回 <code>200</code>，说明上游、模型名和 endpoint 正常。</li>
+<li>仅替换线上渠道 3 的 key，不改 <code>base_url</code>、模型列表、分组或价格。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>替换 key 后，<code>channel/test/3</code> 关键样本恢复 <code>200</code>：<code>qwen3-max</code> 0.828s、<code>qwen3.6-plus</code> 6.203s、<code>qwen3.5-plus</code> 5.290s。</li>
+<li>替换 key 后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：</li>
+</ul>
+<p>  - <code>qwen3.6-plus</code> 4.39s</p>
+<p>  - <code>qwen3-vl-plus</code> 0.79s</p>
+<p>  - <code>qwen-mt-plus</code> 0.42s</p>
+<p>  - <code>qwen3-omni-flash</code> 0.50s</p>
+<p>  - <code>qwen-mt-flash</code> 0.41s</p>
+<p>  - <code>qwen3.5-plus</code> 6.25s</p>
+<p>  - <code>qwen3-max</code> 0.81s</p>
+<ul>
+<li><code>qwen3-max</code> 与 <code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 均返回 <code>200</code> 和 <code>content-type: text/event-stream</code>。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这次复发不是 2026-05-27 的临时隧道问题；渠道地址仍是正式 <code>moma.cmecloud.cn</code>。</li>
+<li>直接原因是渠道 3 保存的 MaaS API key 已失效或被替换，导致上游统一返回 <code>401 Invalid apikey</code>。</li>
+<li>后续若再次出现同类错误，优先按顺序检查：<code>base_url</code>、<code>channel/test</code> 的上游状态码、MaaS key 直连有效性，再看操练场页面层。</li>
+</ul>
+<section class="section"><h2>2026-05-27 11:13 CST</h2>
+<h3>修复 Moma 新模型在 XDAPI 操练场的 SSE / openai_error</h3>
+<p>变更内容：</p>
+<ul>
+<li>只通过线上 admin API 检查和修改现网 XDAPI；本地代码不作为线上行为依据。</li>
+<li>定位到 <code>China Mobile MaaS - Moma</code> 渠道 3 的 <code>base_url</code> 仍指向临时隧道 <code>https://30d3e5d7afe03e.lhr.life</code>。</li>
+<li>将渠道 3 的 <code>base_url</code> 修正为 <code>https://moma.cmecloud.cn</code>，保留原有 <code>1x,3x,5x</code> 分组、7 个模型列表和 <code>qwen/...</code> 上游模型映射。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>修复前，<code>/api/channel/test/3?model=qwen3.5-plus&amp;amp;endpoint_type=openai</code> 返回 <code>bad response status code 503</code>，底层 body 为 <code>&amp;lt;h1&amp;gt;no tunnel here :(&amp;lt;/h1&amp;gt;</code>，说明请求落到了失效隧道。</li>
+<li>修复后，渠道测试返回 <code>200</code>：<code>qwen3.5-plus</code> 6.407s、<code>qwen3-max</code> 0.715s、<code>qwen3.6-plus</code> 5.348s、<code>qwen3-omni-flash</code> 0.467s。</li>
+<li>修复后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：</li>
+</ul>
+<p>  - <code>qwen3.6-plus</code> 4.51s</p>
+<p>  - <code>qwen3-vl-plus</code> 1.71s</p>
+<p>  - <code>qwen-mt-plus</code> 0.48s</p>
+<p>  - <code>qwen3-omni-flash</code> 0.56s</p>
+<p>  - <code>qwen-mt-flash</code> 0.50s</p>
+<p>  - <code>qwen3.5-plus</code> 6.86s</p>
+<p>  - <code>qwen3-max</code> 1.34s</p>
+<ul>
+<li><code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回 <code>200</code>、<code>content-type: text/event-stream</code>，首段为标准 <code>data: {&amp;quot;choices&amp;quot;:[{&amp;quot;delta&amp;quot;:...</code> chunk，不再是错误 JSON。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这次操练场错误不是用户页面 URL 设置问题；操练场走的是后端 <code>/pg/chat/completions</code>。</li>
+<li>直接原因也不是 <code>group=auto</code>。<code>auto</code> 如果被传入会返回无权访问分组，但本次 Moma 模型在 <code>group=1x</code> 下也曾报错，根因是线上渠道 3 上游地址错误。</li>
+<li><code>qwen3.5-plus</code> 和 <code>qwen3.6-plus</code> 会输出较长 reasoning 内容，耗时比 <code>qwen3-max</code>、<code>qwen-mt-flash</code> 更高；这属于模型输出行为，不是本次 503/SSE 错误。</li>
+</ul>
+<section class="section"><h2>2026-05-27 00:26 CST</h2>
+<h3>将 7 个已验证的 Moma 候选并入 XDAPI 公共 relay，并修复公开目录计数到 34</h3>
+<p>变更内容：</p>
+<ul>
+<li>使用现网管理员态更新 XDAPI live 配置，把 <code>China Mobile MaaS - Moma</code> 作为独立逻辑渠道接入，模型映射统一按 <code>qwen/...</code> 前缀名落到上游 <code>moma.cmecloud.cn</code>。</li>
+<li>将 7 个已验证通过的 Moma 候选正式写入公开模型目录：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>发现并修复了一个历史遗漏：<code>deepseek-v4-flash</code> 的状态在前台目录里被错误地压掉，已恢复到可见状态，公开模型总数回到 34。</li>
+<li><code>gui-plus</code> 和 <code>glm-5.1</code> 未通过上游矩阵，保持不接入。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>新增的 <code>moma</code> 渠道对 <code>qwen3.6-plus</code>、<code>qwen3-max</code>、<code>qwen3-vl-plus</code> 做 <code>channel/test</code>，都返回 <code>200</code>。</li>
+<li>7 个新模型在公网 relay 上做 <code>chat/completions</code> 直连调用，均返回 <code>200</code>。</li>
+<li>这 7 个新模型的验证层次是“先上游直连通过，再进 XDAPI relay 通过”，因此它们同时属于直连已验证和中转已验证两类名单。</li>
+<li>公开 <code>/api/pricing</code> 回到 <code>34</code> 个模型，首页已部署模型数同步更新为 <code>34</code>。</li>
+<li>新模型目前按临时 <code>1x</code> 展示；后续如果补齐更细的官方价格原文，再单独修订价格字段。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li><code>gui-plus</code> 与 <code>glm-5.1</code> 仍然不接入，避免把未通过的候选混入前台。</li>
+<li>这次只补公共目录、渠道映射和前台展示，不改上游 MaaS 资源。</li>
+</ul>
+<section class="section"><h2>2026-05-26 21:40 CST</h2>
+<h3>补强新模型测试流程并用矩阵脚本复测 9 个候选</h3>
+<p>变更内容：</p>
+<ul>
+<li>新增本地探测脚本 <code>scripts/model_probe_matrix.py</code>，把新模型验证固化为矩阵流程：先测 <code>moma.cmecloud.cn</code>，再测 <code>zhenze-huhehaote.cmecloud.cn</code>，每个上游先测 <code>chat/completions</code>，再按裸名和 vendor 前缀名做变体，最后才扩展到 <code>responses</code>。</li>
+<li>每个候选都强制检查 <code>stream=false</code> 和 <code>stream=true</code>，只有两种都成功才记为可用；脚本输出 <code>status</code>、<code>request_id</code>、<code>content-type</code> 和首段响应片段。</li>
+<li>这轮复测的目标是把“哪条上游、哪种模型名、哪种流式形态可用”一次性分清，避免再靠单点 probe 回溯。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li><code>qwen3.6-plus</code> 在 <code>moma.cmecloud.cn</code> 上，<code>model=qwen/qwen3.6-plus</code> 的 <code>chat/completions</code> <code>stream=false</code> 与 <code>stream=true</code> 都返回 <code>200</code>；裸名 <code>qwen3.6-plus</code> 仍然是 <code>404</code>。</li>
+<li><code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 在 <code>moma.cmecloud.cn</code> 上也都通过了 <code>qwen/...</code> 前缀名的 <code>chat/completions</code> 流式/非流式双验证。</li>
+<li><code>gui-plus</code> 在 <code>moma.cmecloud.cn</code> 上，<code>qwen/gui-plus</code> 返回 <code>401 Invalid model</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上则继续返回 <code>404</code>；这说明它不是这一把 key 下可直接启用的模型。</li>
+<li><code>glm-5.1</code> 在 <code>moma.cmecloud.cn</code> 上仍然 <code>404</code>，在 <code>zhenze-huhehaote.cmecloud.cn</code> 上也仍然 <code>404</code>。</li>
+<li><code>responses</code> 只作为兜底探测：当前对这批模型没有比 <code>chat/completions</code> 更优的成功路径。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这轮结果推翻了旧的“9 个候选都不通”的笼统结论：至少 <code>moma.cmecloud.cn</code> 上已经有 7 个候选可用，但它们依赖的是 <code>qwen/...</code> 前缀名。</li>
+<li>XDAPI relay / channel / pricing 接入这一步还没做，因为当前没有拿到可直接写 admin 配置的有效管理员态 token；脚本和测试流程已经准备好，等管理员态可用后再把 <code>moma.cmecloud.cn</code> 渠道接入 XDAPI。</li>
+</ul>
+<section class="section"><h2>2026-05-26 21:12 CST</h2>
+<h3>复测 `qwen3.6-plus` 示例代码并确认流式/非流式都可用</h3>
+<p>变更内容：</p>
+<ul>
+<li>按用户给出的 Python 示例，使用同一 MaaS API key 直接调用 <code>https://moma.cmecloud.cn/v1/chat/completions</code>。</li>
+<li>请求模型使用 <code>qwen/qwen3.6-plus</code>，消息体保持示例结构，分别测试 <code>stream=True</code> 和 <code>stream=False</code>。</li>
+<li>这是对“前面 qwen3.6-plus 为什么还会 404 / 401”的一次最终复核。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li><code>stream=True</code> 返回 <code>200</code>，<code>content-type: text/event-stream;charset=utf-8</code>，首批 chunk 已正常产出 <code>reasoning_content</code> 与 <code>chat.completion.chunk</code>。</li>
+<li><code>stream=False</code> 返回 <code>200</code>，<code>content-type: application/json</code>，完整响应正常返回 <code>choices</code>、<code>usage</code>、<code>model=qwen3.6-plus</code>。</li>
+<li>同一 key 下，<code>qwen3-omni-flash</code> 和 <code>qwen3-max</code> 之前已经验证可用，本次 <code>qwen3.6-plus</code> 也通过了同样的上游直连路径。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这次结果说明 <code>qwen3.6-plus</code> 的真实可用状态比前面那轮临时测法更好；前面出现的 404/401 主要与请求形态和测试路径有关，不应当再当成最终结论。</li>
+<li>后续如果要写入 XDAPI 公共目录，仍需单独补 <code>ModelRatio</code>、价格和中转渠道映射，然后再做 XDAPI 侧通路验证。</li>
+</ul>
+<section class="section"><h2>2026-05-26 21:00 CST</h2>
+<h3>使用 RAM 子账号创建的 MaaS API key 直接复核新候选模型</h3>
+<p>变更内容：</p>
+<ul>
+<li>使用用户新建的 MaaS API key 直接对 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 做真实 POST 复核。</li>
+<li>同时补测了 <code>/v1/responses</code> 和 <code>/v1/models</code>，只为确认 <code>qwen3.6-plus</code> 的失败点到底是路径、模型名还是可见性。</li>
+<li>测试范围覆盖：<code>qwen/qwen3.6-plus</code>、<code>qwen/qwen3-vl-plus</code>、<code>qwen/qwen-mt-plus</code>、<code>qwen/qwen3-omni-flash</code>、<code>qwen/gui-plus</code>、<code>qwen/qwen-mt-flash</code>、<code>qwen/glm-5.1</code>、<code>qwen/qwen3.5-plus</code>、<code>qwen/qwen3-max</code>。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li><code>qwen/qwen3.6-plus</code> 在 <code>chat/completions</code> 下返回 <code>401 Invalid apikey</code>。</li>
+<li><code>qwen3.6-plus</code> 裸名在 <code>chat/completions</code> 下返回 <code>404</code>。</li>
+<li><code>qwen/qwen3.6-plus</code> 与裸名在 <code>responses</code> 下都返回 <code>404</code>。</li>
+<li><code>qwen/qwen3-omni-flash</code> 与 <code>qwen/qwen3-max</code> 在 <code>chat/completions</code> 下返回 <code>200</code>，说明这把 API key 可真实调用上游。</li>
+<li><code>qwen/qwen3-vl-plus</code>、<code>qwen/qwen-mt-plus</code>、<code>qwen/gui-plus</code>、<code>qwen/qwen-mt-flash</code>、<code>qwen/qwen3.5-plus</code> 返回 <code>401 Invalid apikey</code>。</li>
+<li><code>qwen/glm-5.1</code> 返回 <code>404</code>。</li>
+<li><code>GET /v1/models</code> 返回 <code>404</code>。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这次结果说明“API key 已可用”与“某个具体模型已可用”是两件事。</li>
+<li><code>qwen3.6-plus</code> 目前仍未通过真实上游 POST 直连验证；同批模型中真正跑通的是 <code>qwen3-omni-flash</code> 和 <code>qwen3-max</code>。</li>
+</ul>
+<section class="section"><h2>2026-05-26 20:31 CST</h2>
 <h3>验证 RAM 子账号凭据不能直接作为 MaaS bearer API Key</h3>
 <p>变更内容：</p>
 <ul>
@@ -43,13 +190,104 @@
 <li>后续要继续测试 <code>qwen3.6-plus</code> 等新候选，仍需要先在 MaaS 控制台里生成真正的开发者 API key。</li>
 <li>本次验证仅排除“RAM AccessKey 直接可直连”的假设，不代表新模型 runtime 已可用。</li>
 </ul>
-  <section class="section"><h2>2026-05-26 16:53 CST</h2><h3>直接探测 <code>moma.cmecloud.cn/v1/chat/completions</code> 的上游直连入口</h3><p>变更内容：</p><ul><li>按用户要求直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>，而不是之前验证过的 <code>zhenze-huhehaote.cmecloud.cn</code> 运行时网关。</li><li>同时补测了 <code>https://moma.cmecloud.cn</code> 和 <code>https://moma.cmecloud.cn/v1/models</code>，用于确认这是哪一层在返回错误。</li></ul><p>验证方式：</p><ul><li>匿名 <code>GET</code> 三个入口都返回 <code>404</code>，响应头显示 <code>server: istio-envoy</code>。</li><li>复用当前已登录的 ecloud 浏览器会话 cookie 再测一轮，结果仍然是 <code>404</code>。</li><li>这次没有拿到可用于 <code>POST /v1/chat/completions</code> 的有效 MaaS API key，因此还不能把“鉴权后直连成功与否”写成已验证结论。</li></ul><p>注意事项：</p><ul><li>这次探测证明的是 <code>moma.cmecloud.cn</code> 这条直连地址本身在匿名与现有浏览器会话态下都不直接返回可用 API 响应。</li><li>这不等于证明上游 runtime 已经不可用；真正的 chat-completions 直连结论仍需要一个有效的 MaaS API key 做 POST 级别验证。</li></ul></section>
-  <section class="section"><h2>2026-05-26 16:43 CST</h2><h3>复核 <code>qwen3.6-plus</code> 的上游前缀命名与 runtime 可用性</h3><p>变更内容：</p><ul><li>先临时把 <code>qwen3.6-plus</code> 的 XDAPI 渠道映射改成上游原文样式 <code>qwen/qwen3.6-plus</code>，只验证命名层是否影响调用链路。</li><li>这一步先命中本地 <code>model_price_error</code>，说明单独改模型映射后仍然会被价格门拦住。</li><li>随后临时补入 <code>ModelRatio = 1</code>，把请求推进到上游 runtime。</li><li>请求最终仍然返回上游 <code>404 Not Found</code>，错误体为 <code>bad_response_status_code</code>，路径仍是 <code>/v1/chat/completions</code>。</li><li>测试结束后，<code>model_mapping</code> 和 <code>ModelRatio</code> 都恢复原始状态。</li></ul><p>验证方式：</p><ul><li>裸名 <code>qwen3.6-plus</code> 只能证明本地价格门和公共路由状态。</li><li>映射成 <code>qwen/qwen3.6-plus</code> 后仍然 404，说明问题不只是 XDAPI 的裸名/前缀名转换。</li><li>这次验证把“模型命名”“价格门”“上游 runtime”三层都拆开了，结论仍然是上游 runtime 对该模型未真正开放。</li></ul><p>注意事项：</p><ul><li>这轮不能写成“改了前缀就能用”；正确结论是“前缀映射能进入上游链路，但上游还是 404”。</li></ul></section>
-  <section class="section"><h2>2026-05-26 16:14 CST</h2><h3>管理员态临时补 ModelRatio 后复核 9 个新候选模型</h3><p>变更内容：</p><ul><li>先用管理员态 <code>channel/test/1</code> 直测 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li><li>这 9 个模型在未补倍率时统一返回 <code>model_price_error</code>，说明当前 <code>ModelRatio</code> 里还没有给它们配置倍率。</li><li>为把测试推进到上游 runtime，临时给这 9 个模型补入 <code>ModelRatio = 1</code>，只用于测试，不改变公开目录。</li><li>随后重新跑同一组 <code>openai</code> 请求，9 个模型全部继续落到上游 <code>/v1/chat/completions</code> 的 <code>404 Not Found</code>。</li><li>测试完成后，临时补入的 9 个倍率已全部移除，<code>ModelRatio</code> 恢复原始状态。</li></ul><p>验证方式：</p><ul><li>补倍率前，9 个模型都被本地价格门拦截，错误统一是 <code>model_price_error</code>。</li><li>补倍率后，9 个模型都能进入上游请求链路，错误统一变为 <code>bad_response_status_code</code>，底层是上游 <code>404</code>。</li><li>这说明当前的阻塞点仍然在上游 runtime，不在 XDAPI 的价格门本身。</li><li>公开 <code>/api/pricing</code> 没有扩容，这轮只是临时补倍率验证，未留下公开配置。</li></ul><p>注意事项：</p><ul><li>这轮不能写成“已公开可用”；它只是把“价格缺失”和“runtime 404”两层问题拆开了。</li></ul></section>
-  <section class="section"><h2>2026-05-24 16:59 CST</h2><h3>管理员态 channel test 复核剩余 8 个新候选模型</h3><p>变更内容：</p><ul><li>继续用管理员态的 <code>channel/test/1</code> 复核其余 8 个新候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li><li>先临时补入 <code>billing_setting.billing_mode</code> 和 <code>billing_setting.billing_expr</code>，避免本地先卡在价格配置错误。</li><li>每个模型都分别打了 <code>openai</code> 和 <code>openai-response</code> 两种端点类型，排除单一路径误判。</li></ul><p>验证方式：</p><ul><li>这 8 个模型在 <code>openai</code> 和 <code>openai-response</code> 两条测试路径下都返回上游 <code>404 Not Found</code>。</li><li>返回体统一是 <code>bad_response_status_code</code>，不是本地计费错误，也不是模型映射错误。</li><li>这说明问题不在某一个模型名或某一种 endpoint 选择上，而是在上游 runtime 对这批新模型仍未打通。</li><li>测试完成后，临时计费映射已回滚，未把这批模型留在公开目录。</li></ul><p>注意事项：</p><ul><li>这轮测试把“渠道路由 / 计费缺口”与“上游 runtime 不可用”再次拆开了：前者 XDAPI 可补，后者仍是上游问题。</li></ul></section>
-
-  <section class="section"><h2>2026-05-24 16:50 CST</h2><h3>临时启用 <code>qwen3.6-plus</code> 验证 XDAPI 能否独立修复公开缺口</h3><p>变更内容：</p><ul><li>从上游 <code>fetch_models</code> 里挑 <code>qwen3.6-plus</code>，先临时加入 <code>1x</code> 公共目录，验证 XDAPI 自己能不能把这批新模型从“目录可见”推进到“对外可调用”。</li><li>第一次调用返回 <code>400 model_price_error</code>，说明 XDAPI 侧先卡在“价格 / 计费配置未写入”，不是路由已经打通。</li><li>随后补入临时 <code>tiered_expr</code> 计费，再次调用后，错误从 <code>400</code> 变成上游 <code>404</code>。</li><li>这说明 XDAPI 可以解决公共目录和本地计费缺口，但不能把上游 runtime 的 <code>404</code> 变成成功响应。</li><li>测完后已经回滚临时计费和渠道模型配置，并删除一次性测试令牌。</li></ul><p>验证方式：</p><ul><li>公共 <code>/api/pricing</code> 回到 <code>27</code> 个模型，<code>qwen3.6-plus</code> 没有残留在前台。</li><li><code>qwen3.6-plus</code> 在补价前返回 <code>model_price_error</code>，补价后返回上游 <code>404</code>。</li><li>这轮测试只能证明 XDAPI 侧可以把 <code>503 / model_price_error</code> 这类本地缺口补平，不能证明上游 runtime 已经真正可用。</li></ul><p>注意事项：</p><ul><li>这轮不能写成“已经解决”，正确表述是“XDAPI 侧可修复公共路由和计费缺口，但上游 runtime 仍未打通”。</li></ul></section>
-  
+<section class="section"><h2>2026-05-26 16:53 CST</h2>
+<h3>直接探测 `moma.cmecloud.cn/v1/chat/completions` 的上游直连入口</h3>
+<p>变更内容：</p>
+<ul>
+<li>按用户要求直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>，而不是之前验证过的 <code>zhenze-huhehaote.cmecloud.cn</code> 运行时网关。</li>
+<li>同时补测了 <code>https://moma.cmecloud.cn</code> 和 <code>https://moma.cmecloud.cn/v1/models</code>，用于确认这是哪一层在返回错误。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>匿名 <code>GET</code> 三个入口都返回 <code>404</code>，响应头显示 <code>server: istio-envoy</code>。</li>
+<li>复用当前已登录的 ecloud 浏览器会话 cookie 再测一轮，结果仍然是 <code>404</code>。</li>
+<li>这次没有拿到可用于 <code>POST /v1/chat/completions</code> 的有效 MaaS API key，因此还不能把“鉴权后直连成功与否”写成已验证结论。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这次探测证明的是 <code>moma.cmecloud.cn</code> 这条直连地址本身在匿名与现有浏览器会话态下都不直接返回可用 API 响应。</li>
+<li>这不等于证明上游 runtime 已经不可用；真正的 chat-completions 直连结论仍需要一个有效的 MaaS API key 做 POST 级别验证。</li>
+</ul>
+<section class="section"><h2>2026-05-26 16:43 CST</h2>
+<h3>复核 `qwen3.6-plus` 的上游前缀命名与 runtime 可用性</h3>
+<p>变更内容：</p>
+<ul>
+<li>先临时把 <code>qwen3.6-plus</code> 的 XDAPI 渠道映射改成上游原文样式 <code>qwen/qwen3.6-plus</code>，只验证命名层是否影响调用链路。</li>
+<li>这一步先命中本地 <code>model_price_error</code>，说明单独改模型映射后仍然会被价格门拦住。</li>
+<li>随后临时补入 <code>ModelRatio = 1</code>，把请求推进到上游 runtime。</li>
+<li>请求最终仍然返回上游 <code>404 Not Found</code>，错误体为 <code>bad_response_status_code</code>，路径仍是 <code>/v1/chat/completions</code>。</li>
+<li>测试结束后，<code>model_mapping</code> 和 <code>ModelRatio</code> 都恢复原始状态。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>裸名 <code>qwen3.6-plus</code> 只能证明本地价格门和公共路由状态。</li>
+<li>映射成 <code>qwen/qwen3.6-plus</code> 后仍然 404，说明问题不只是 XDAPI 的裸名/前缀名转换。</li>
+<li>这次验证把“模型命名”“价格门”“上游 runtime”三层都拆开了，结论仍然是上游 runtime 对该模型未真正开放。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这轮不能写成“改了前缀就能用”；正确结论是“前缀映射能进入上游链路，但上游还是 404”。</li>
+</ul>
+<section class="section"><h2>2026-05-26 16:14 CST</h2>
+<h3>管理员态临时补 ModelRatio 后复核 9 个新候选模型</h3>
+<p>变更内容：</p>
+<ul>
+<li>先用管理员态 <code>channel/test/1</code> 直测 9 个候选：<code>qwen3.6-plus</code>、<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>这 9 个模型在未补倍率时统一返回 <code>model_price_error</code>，说明当前 <code>ModelRatio</code> 里还没有给它们配置倍率。</li>
+<li>为了把测试推进到上游 runtime，临时给这 9 个模型补入 <code>ModelRatio = 1</code>，只用于测试，不改变公开目录。</li>
+<li>随后重新跑同一组 <code>openai</code> 请求，9 个模型全部继续落到上游 <code>/v1/chat/completions</code> 的 <code>404 Not Found</code>。</li>
+<li>测试完成后，临时补入的 9 个倍率已全部移除，<code>ModelRatio</code> 恢复原始状态。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>补倍率前，9 个模型都被本地价格门拦截，错误统一是 <code>model_price_error</code>。</li>
+<li>补倍率后，9 个模型都能进入上游请求链路，错误统一变为 <code>bad_response_status_code</code>，底层是上游 <code>404</code>。</li>
+<li>这说明当前的阻塞点仍然在上游 runtime，不在 XDAPI 的价格门本身。</li>
+<li>公开 <code>/api/pricing</code> 没有扩容，这轮只是临时补倍率验证，未留下公开配置。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这轮不能写成“已公开可用”；它只是把“价格缺失”和“runtime 404”两层问题拆开了。</li>
+</ul>
+<section class="section"><h2>2026-05-24 16:59 CST</h2>
+<h3>管理员态 channel test 复核剩余 8 个新候选模型</h3>
+<p>变更内容：</p>
+<ul>
+<li>继续用管理员态的 <code>channel/test/1</code> 复核其余 8 个新候选：<code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>gui-plus</code>、<code>qwen-mt-flash</code>、<code>glm-5.1</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code>。</li>
+<li>先临时补入 <code>billing_setting.billing_mode</code> 和 <code>billing_setting.billing_expr</code>，避免本地先卡在价格配置错误。</li>
+<li>每个模型都分别打了 <code>openai</code> 和 <code>openai-response</code> 两种端点类型，排除单一路径误判。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>这 8 个模型在 <code>openai</code> 和 <code>openai-response</code> 两条测试路径下都返回上游 <code>404 Not Found</code>。</li>
+<li>返回体统一是 <code>bad_response_status_code</code>，不是本地计费错误，也不是模型映射错误。</li>
+<li>这说明问题不在某一个模型名或某一种 endpoint 选择上，而是在上游 runtime 对这批新模型仍未打通。</li>
+<li>测试完成后，临时计费映射已回滚，未把这批模型留在公开目录。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这轮测试把“渠道路由 / 计费缺口”与“上游 runtime 不可用”再次拆开了：前者 XDAPI 可补，后者仍是上游问题。</li>
+</ul>
+<section class="section"><h2>2026-05-24 16:50 CST</h2>
+<h3>临时启用 `qwen3.6-plus` 验证 XDAPI 能否独立修复公开缺口</h3>
+<p>变更内容：</p>
+<ul>
+<li>从上游 <code>fetch_models</code> 里挑 <code>qwen3.6-plus</code>，先临时加入 <code>1x</code> 公共目录，验证 XDAPI 自己能不能把这批新模型从“目录可见”推进到“对外可调用”。</li>
+<li>第一次调用返回 <code>400 model_price_error</code>，说明 XDAPI 侧先卡在“价格 / 计费配置未写入”，不是路由已经打通。</li>
+<li>随后补入临时 <code>tiered_expr</code> 计费，再次调用后，错误从 <code>400</code> 变成上游 <code>404</code>。</li>
+<li>这说明 XDAPI 可以解决公共目录和本地计费缺口，但不能把上游 runtime 的 <code>404</code> 变成成功响应。</li>
+<li>测完后已经回滚临时计费和渠道模型配置，并删除一次性测试令牌。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>公共 <code>/api/pricing</code> 回到 <code>27</code> 个模型，<code>qwen3.6-plus</code> 没有残留在前台。</li>
+<li><code>qwen3.6-plus</code> 在补价前返回 <code>model_price_error</code>，补价后返回上游 <code>404</code>。</li>
+<li>这轮测试只能证明 XDAPI 侧可以把 <code>503 / model_price_error</code> 这类本地缺口补平，不能证明上游 runtime 已经真正可用。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li>这轮不能写成“已经解决”，正确表述是“XDAPI 侧可修复公共路由和计费缺口，但上游 runtime 仍未打通”。</li>
+</ul>
 <section class="section"><h2>2026-05-24 16:09 CST</h2>
 <h3>公共 1x 令牌复测 9 个新候选模型</h3>
 <p>变更内容：</p>
@@ -70,7 +308,6 @@
 <li>当前复测结果不能写成“仍然是 404”，因为这次公共路径实际返回的是 503。</li>
 <li>如果后续要继续验证上游 runtime 是否接通，需要先把候选模型重新放入可用渠道，再重复同一组请求。</li>
 </ul>
-  
 <section class="section"><h2>2026-05-22 16:05 CST</h2>
 <h3>扩展新增 Qwen/通义候选模型准入测试</h3>
 <p>变更内容：</p>
@@ -87,14 +324,13 @@
 <li>这轮测试证据已经写入本页的验证摘要：canonical 小写模型名直打 <code>/v1/chat/completions</code>，9 个候选都出现上游 <code>404</code>；常见大小写变体里，部分在本地价格校验阶段就被拦截，能够走到上游的同样返回 <code>404</code>。</li>
 <li>回滚后的复核结果也写在本页：公开 <code>/api/pricing</code> 仍是 <code>27</code> 个模型，候选模型没有残留在前台价格目录或渠道模型列表里。</li>
 <li>进一步复测了 <code>openai-response</code> 枚举值，结果同样返回上游 <code>404</code>；这说明问题不只是 <code>chat/completions</code> 路径选错，而是上游 runtime 对这些候选的 API 面还没真正打通。</li>
-<li><code>openai-response-compact</code> 这一路在本地会先触发 <code>-openai-compact</code> 价格别名校验，不能把它当成上游可用性的证据。</li>
+<li><code>openai-response-compact</code> 这一路在本地会触发 <code>-openai-compact</code> 价格别名校验，不能把它当成上游可用性的证据。</li>
 </ul>
 <p>注意事项：</p>
 <ul>
 <li>“模型广场/上游列表可见”不等于当前 API key 和当前运行时 endpoint 可调用。</li>
 <li>新模型上线仍需要同时满足运行时 API 成功、官方/截图价格证据可核对、上下文/最大输出证据可核对或明确标注缺口。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-22 11:53 CST</h2>
 <h3>补充 DeepSeek-V4-Flash 移动 MaaS 详情页证据</h3>
 <p>变更内容：</p>
@@ -112,7 +348,6 @@
 <ul>
 <li>截图证据可以用于人工审计和文档记录；如果要让 XDAPI 前台稳定展示，需要把这些字段做成后端 source-backed metadata，而不是前端 mock。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-22 11:22 CST</h2>
 <h3>修正价格详情页事实参数展示口径</h3>
 <p>变更内容：</p>
@@ -131,7 +366,6 @@
 <li>这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。</li>
 <li>本机未安装 <code>bun</code>，且当前目录缺少 <code>tsc</code>，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 <code>bun run typecheck</code> 或等价检查。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-22 11:08 CST</h2>
 <h3>明确上下文/最大输出证据口径</h3>
 <p>变更内容：</p>
@@ -148,7 +382,6 @@
 <ul>
 <li>后续模型信息维护必须保留可核对来源；不能用历史配置、同系列外推或缺少模型名的截图片段补参数。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-22 10:50 CST</h2>
 <h3>新增 Qwen 模型准入测试与源站信息审计</h3>
 <p>变更内容：</p>
@@ -171,7 +404,6 @@
 <li>27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
 <li>上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-19 10:47 CST</h2>
 <h3>清理残留非倍率用户分组</h3>
 <p>变更内容：</p>
@@ -183,15 +415,14 @@
 </ul>
 <p>验证方式：</p>
 <ul>
-<li>迁移后活跃用户分布为 <code>{&#x27;1x&#x27;: 11}</code>。</li>
-<li>迁移后活跃令牌分布为 <code>{&#x27;1x&#x27;: 3}</code>。</li>
+<li>迁移后活跃用户分布为 <code>{&amp;#x27;1x&amp;#x27;: 11}</code>。</li>
+<li>迁移后活跃令牌分布为 <code>{&amp;#x27;1x&amp;#x27;: 3}</code>。</li>
 <li>活跃 <code>auto</code> 用户和活跃 <code>auto</code> 令牌均为空。</li>
 </ul>
 <p>注意事项：</p>
 <ul>
 <li>后台仍可看到 1 个已删除用户保留历史 <code>default</code> 字段；它不属于活跃用户，不参与现网调用路由。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-19 10:40 CST</h2>
 <h3>倍率分组发布收尾与现网复核</h3>
 <p>变更内容：</p>
@@ -209,7 +440,6 @@
 <ul>
 <li><code>/api/user/models</code> 需要登录态，匿名请求返回 401 属于预期行为。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-18 11:11 CST</h2>
 <h3>分组改为 1x / 3x / 5x 倍率体系</h3>
 <p>变更内容：</p>
@@ -231,7 +461,6 @@
 <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。</li>
 <li>当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-18 10:51 CST</h2>
 <h3>新增分组权限与可用模型报告</h3>
 <p>变更内容：</p>
@@ -252,7 +481,6 @@
 <li><code>default</code>、<code>vip</code>、<code>agent</code> 当前倍率均为 <code>1.00x</code>，均可路由到 27 个公开 CMCC token 模型。</li>
 <li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-16 15:34 CST</h2>
 <h3>完成 27 个模型链路延迟诊断</h3>
 <p>变更内容：</p>
@@ -276,7 +504,6 @@
 <li>DeepSeek V3 / R1 / 部分 72B 系列吞吐约 8-12 tokens/s，是 500 token 输出接近 1 分钟的主要原因。</li>
 <li><code>deepseek-v3-0324</code> 短输出和 <code>qwen2.5-72b-instruct</code> 128 token 测试出现 XDAPI 额外开销嫌疑，建议后续重复采样确认。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-16 14:26 CST</h2>
 <h3>公开 27 个 CMCC token 计费模型到前台目录</h3>
 <p>变更内容：</p>
@@ -319,9 +546,8 @@
 <li>14:26 CST 已完成前台目录复核：公开 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均显示 27 个模型。</li>
 <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
 </ul>
-</section>
 <section class="section"><h2>2026-05-26 17:53 CST</h2>
-<h3>直接验证上游 <code>moma.cmecloud.cn</code> 的 API key POST</h3>
+<h3>直接验证上游 `moma.cmecloud.cn` 的 API key POST</h3>
 <p>变更内容：</p>
 <ul>
 <li>继续按 RAM 子账号链路排查新模型不可用原因，重点核对是否存在可直接用于上游 MaaS 的真实 API key。</li>
@@ -349,5 +575,4 @@
 <li>因为没有拿到可用 API key，本轮无法完成“真实基于 API key 的 POST 成功验证”。</li>
 <li>后续要继续做真正的上游 POST 成功验证，需要一把已经在 RAM 子账号里创建好的 MaaS API key，或者一个能够直接进入该子账号控制台的有效登录会话。</li>
 </ul>
-</section>
-</div></body></html>
+</section></div></body></html>

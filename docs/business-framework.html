@@ -1,22 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XD API 业务框架与分组策略</title>
-  <style>
-    :root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}
-    *{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-    .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
-    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}
-    .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
-    h2{margin:0 0 12px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}
-    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
-  </style>
-</head>
-<body><div class="wrap">
-  <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
-<section class="hero"><h1>XD API 业务框架与分组策略</h1><p>当前 1x/3x/5x 倍率分组、渠道策略、模型公开目录和新增模型准入规则。</p></section>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 业务框架与分组策略</title><style>
+:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}.section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
+</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./ctyun-model-audit.html">天翼云模型审计</a><a href="./mobile-ctyun-comparison.html">移动/天翼对比</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 业务框架与分组策略</h1><p>XDAPI / MaaS 运营文档</p></section>
 <p>更新时间：2026-05-27 00:26 CST</p>
 <section class="section"><h2>当前结论</h2>
 <ul>
@@ -31,44 +15,43 @@
 <li>2026-05-26 16:43 CST 进一步把 <code>qwen3.6-plus</code> 临时改成上游原文样式 <code>qwen/qwen3.6-plus</code> 再测，先命中本地 <code>model_price_error</code>，补入 <code>ModelRatio = 1</code> 后仍然是上游 <code>404</code>。所以这不是单纯的裸名/前缀名转换问题。</li>
 <li>2026-05-26 16:53 CST 直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>、<code>https://moma.cmecloud.cn</code> 和 <code>https://moma.cmecloud.cn/v1/models</code>，匿名与现有 ecloud 会话 cookie 复测都返回 <code>404</code>；这条结果只能说明直连入口在现有鉴权态下不可直接用，不能替代有效 MaaS API key 的 POST 级验证。</li>
 <li>2026-05-27 00:26 CST 已把 7 个通过 <code>moma.cmecloud.cn</code> 双态验证的新模型正式接入 XDAPI 公共 relay；<code>gui-plus</code> 和 <code>glm-5.1</code> 仍失败并保持不公开。</li>
+<li>2026-05-29 18:33 CST 新增天翼云 MaaS 渠道审计与企业接入策略：企业价格、私有分组、专属渠道、额度和审计建议放在 XDAPI/New API 侧，上游 MaaS 只作为成本和资源供应层。</li>
 <li>未来如果接入更快上游线路，可以新增速度档位，例如 <code>fast_1_5x</code>、<code>priority_2x</code>，但必须由实际响应速度或资源池差异支撑。</li>
 </ul>
-</section>
 <section class="section"><h2>新模型接入流程</h2>
 <ul>
 <li>新模型验证默认走矩阵：先 <code>moma.cmecloud.cn</code>，再 <code>zhenze-huhehaote.cmecloud.cn</code>。</li>
 <li>每个上游先测 <code>POST /v1/chat/completions</code>，对每个模型先试裸名，再试 vendor 前缀名。</li>
-<li>同一组合要同时确认 <code>stream=false</code> 与 <code>stream=true</code>，两种都成功才算可用。</li>
+<li>对同一组合同时确认 <code>stream=false</code> 和 <code>stream=true</code>，两种都成功才算可用。</li>
 <li>只有在 <code>chat/completions</code> 的所有变体都失败后，才扩展到 <code>POST /v1/responses</code>。</li>
 <li>上游直连成功后，再进入 XDAPI relay / channel / pricing 接入。</li>
 <li>本地脚本：<code>scripts/model_probe_matrix.py</code>。</li>
 </ul>
-</section>
 <section class="section"><h2>分组语义</h2>
 <table><thead><tr><th>内部 key</th><th>当前倍率</th><th>当前语义</th><th>是否控制模型可用性</th></tr></thead><tbody>
+<tr><td>---</td><td>---:</td><td>---</td><td>---</td></tr>
 <tr><td><code>1x</code></td><td>1.00x</td><td>基础倍率组</td><td>否，所有已部署 CMCC token 模型可调用</td></tr>
 <tr><td><code>3x</code></td><td>3.00x</td><td>加速倍率组</td><td>否，模型范围与 1x 一致</td></tr>
 <tr><td><code>5x</code></td><td>5.00x</td><td>优先倍率组</td><td>否，模型范围与 1x 一致</td></tr>
 </tbody></table>
 <p>详细分组权限、限流配置和 34 个模型列表见 <code>docs/group-permissions.md</code>。</p>
-</section>
 <section class="section"><h2>渠道策略</h2>
 <table><thead><tr><th>渠道</th><th>模型范围</th><th>group</th><th>用途</th></tr></thead><tbody>
 <tr><td><code>China Mobile MaaS - Huhehaote</code></td><td>20 个标准/常用模型</td><td><code>1x,3x,5x</code></td><td>常规文本、视觉、向量、排序模型</td></tr>
 <tr><td><code>China Mobile MaaS - Huhehaote Premium</code></td><td>7 个高成本推理/72B/VL 模型</td><td><code>1x,3x,5x</code></td><td>高成本模型独立维护和观测，不再作为访问限制</td></tr>
 <tr><td><code>China Mobile MaaS - Moma</code></td><td>7 个已验证 Qwen 新模型</td><td><code>1x,3x,5x</code></td><td>新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订</td></tr>
 </tbody></table>
-</section>
 <section class="section"><h2>前台公开目录</h2>
 <table><thead><tr><th>接口</th><th>验证时间</th><th>结果</th><th>结论</th></tr></thead><tbody>
+<tr><td>---</td><td>---</td><td>---:</td><td>---</td></tr>
 <tr><td><code>/api/pricing</code></td><td>2026-05-27 00:26 CST</td><td>34 个模型</td><td>匿名价格页可见完整 CMCC token 模型目录</td></tr>
 <tr><td><code>/api/user/models</code></td><td>2026-05-27 00:26 CST</td><td>34 个模型</td><td>登录用户模型选择器可见完整 CMCC token 模型目录</td></tr>
 <tr><td><code>/api/user/groups</code></td><td>2026-05-18 11:11 CST</td><td><code>1x</code>、<code>3x</code>、<code>5x</code></td><td>前台只展示倍率分组</td></tr>
 </tbody></table>
-</section>
 <section class="section"><h2>验证结果</h2>
 <p>2026-05-18 11:11 CST 倍率分组变更后，分别使用临时 <code>1x</code>、<code>3x</code>、<code>5x</code> 令牌调用原高成本渠道模型：</p>
 <table><thead><tr><th>分组</th><th>模型</th><th>接口</th><th>HTTP</th><th>响应片段</th><th>usage</th></tr></thead><tbody>
+<tr><td>---</td><td>---</td><td>---</td><td>---:</td><td>---</td><td>---</td></tr>
 <tr><td><code>1x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
 <tr><td><code>3x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
 <tr><td><code>5x</code></td><td><code>qwen2.5-vl-72b-instruct</code></td><td><code>/v1/chat/completions</code></td><td>200</td><td><code>ok</code></td><td><code>prompt=11, completion=2, total=13</code></td></tr>
@@ -78,5 +61,4 @@
 <p>1. 不要再用 <code>default/vip/agent/auto</code> 做公开业务分组或模型可用性门槛。</p>
 <p>2. 新分组必须表达可解释的价格/速度差异，例如更快上游资源池、更高优先级或更高限流。</p>
 <p>3. 涉及业务框架、渠道、分组、价格的变更，必须同步更新 GitHub Pages 和技能文档。</p>
-</section>
-</div></body></html>
+</section></div></body></html>

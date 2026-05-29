@@ -15,6 +15,7 @@
 - 2026-05-26 16:43 CST 进一步把 `qwen3.6-plus` 临时改成上游原文样式 `qwen/qwen3.6-plus` 再测，先命中本地 `model_price_error`，补入 `ModelRatio = 1` 后仍然是上游 `404`。所以这不是单纯的裸名/前缀名转换问题。
 - 2026-05-26 16:53 CST 直接探测 `https://moma.cmecloud.cn/v1/chat/completions`、`https://moma.cmecloud.cn` 和 `https://moma.cmecloud.cn/v1/models`，匿名与现有 ecloud 会话 cookie 复测都返回 `404`；这条结果只能说明直连入口在现有鉴权态下不可直接用，不能替代有效 MaaS API key 的 POST 级验证。
 - 2026-05-27 00:26 CST 已把 7 个通过 `moma.cmecloud.cn` 双态验证的新模型正式接入 XDAPI 公共 relay；`gui-plus` 和 `glm-5.1` 仍失败并保持不公开。
+- 2026-05-29 18:33 CST 新增天翼云 MaaS 渠道审计与企业接入策略：企业价格、私有分组、专属渠道、额度和审计建议放在 XDAPI/New API 侧，上游 MaaS 只作为成本和资源供应层。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程

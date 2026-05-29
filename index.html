@@ -45,6 +45,9 @@
       <a href="./docs/business-framework.html">业务框架</a>
       <a href="./docs/group-permissions.html">分组权限报告</a>
       <a href="./docs/model-test-workflow.html">新模型测试流程</a>
+      <a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>
+      <a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>
+      <a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>
       <a href="./docs/work-log.html">工作记录</a>
       <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>
       <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
@@ -53,9 +56,9 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。2026-05-28 14:31 CST 已复修 Moma 渠道 key 失效导致的操练场错误。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。2026-05-28 14:31 CST 已复修 Moma 渠道 key 失效导致的操练场错误。2026-05-29 18:33 CST 已新增天翼云 MaaS 56 款模型审计、移动/天翼横向对比和企业客户接入策略。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-05-28 14:31 CST</span>
+        <span class="chip">更新时间：2026-05-29 18:33 CST</span>
         <span class="chip">操练场复测：2026-05-28 14:31 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
         <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
@@ -86,6 +89,18 @@
         <li>根因：<code>China Mobile MaaS - Moma</code> 渠道 3 的 <code>base_url</code> 仍指向临时隧道 <code>https://30d3e5d7afe03e.lhr.life</code>，不是正式上游 <code>https://moma.cmecloud.cn</code>。</li>
         <li>处理：已在线将渠道 3 <code>base_url</code> 修正为 <code>https://moma.cmecloud.cn</code>，保留 <code>1x,3x,5x</code> 分组和 7 个模型映射。</li>
         <li>复测：7 个 Moma 新模型在操练场 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 全部返回 <code>200</code>；<code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回标准 <code>text/event-stream</code>。</li>
+      </ul>
+    </section>
+
+
+    <section class="section">
+      <h2>天翼云 MaaS 渠道审计更新</h2>
+      <ul>
+        <li>2026-05-29 18:33 CST 已登录天翼云息壤 Token 服务控制台，模型广场当前展示 <code>56</code> 款模型。</li>
+        <li>本轮从详情页提取到 <code>56/56</code> 个模型的 API 文档入口，统一指向天翼云 OpenAI 兼容调用路径；未创建 API Key，因此不把它写成运行时 POST 成功。</li>
+        <li>结合天翼云官方计费说明页，当前 <code>37/56</code> 个模型提取到可核对 token 价格行；其余模型标记为未提取到自助价格或可能需客户经理/工单开通。</li>
+        <li>实时读取 XDAPI <code>/api/pricing</code> 当前返回 <code>33</code> 个模型；与旧记录 <code>34</code> 有 1 个差异，已在对比报告中列为后续复核项。</li>
+        <li>报告入口：<a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>、<a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>、<a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>。</li>
       </ul>
     </section>
 
