@@ -1,16 +1,19 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XDAPI 企业客户适配建议</title><style>
-:root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff;--ok:#0d8b5f;--warn:#a15c00;--bad:#b42318}*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;color:rgba(255,255,255,.88)}.section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}
-</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./ctyun-model-audit.html">天翼云模型审计</a><a href="./mobile-ctyun-comparison.html">移动/天翼对比</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XDAPI 企业客户适配建议</h1><p>XDAPI / MaaS 运营文档</p></section>
-<p>更新时间：2026-05-29 18:33 CST</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XDAPI 企业客户适配建议</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XDAPI 企业客户适配建议</h1><p>XDAPI / MaaS 运营文档</p></section>
+<p>更新时间：2026-05-30 11:08 CST</p>
 <section class="section"><h2>结论</h2>
 <p>企业客户的定价和权限建议放在 XDAPI/New API 侧实现，而不是改上游 MaaS。上游移动 MaaS、天翼云 MaaS 是成本与资源供应层；XDAPI 是客户、分组、倍率、限流、渠道路由、账单展示和审计的商业分发层。</p>
+<p>详细图解见：<code>docs/enterprise-routing-groups.md</code> / <code>enterprise-routing-groups.html</code>。</p>
+</section>
 <section class="section"><h2>推荐做法</h2>
-<p>1. 标准客户继续使用公开 <code>1x/3x/5x</code> 倍率组。</p>
-<p>2. B 端客户如果谈了独立价格，创建企业专属分组，例如 <code>corp_acme_2026</code>，不要复用 <code>vip/agent/auto</code>。</p>
-<p>3. 企业分组可以设置独立 <code>GroupRatio</code>、充值/套餐、请求速率、可用渠道和可用模型范围。</p>
-<p>4. 如果企业需要 SLA 或隔离，把“企业专属分组 + 专属渠道 + 专属上游 key/账号”组合使用；只建分组不能解决上游资源竞争。</p>
-<p>5. 如果企业价格低于公开价，必须核算上游成本、优惠时段、批量推理和缓存命中，否则容易倒挂。</p>
-<p>6. 如果企业要求指定供应商，例如只走天翼云或只走移动 MaaS，应在 XDAPI 渠道路由层隔离，避免同名模型跨上游混用。</p>
+<ul>
+<li>标准客户继续使用公开 <code>1x/3x/5x</code> 倍率组。</li>
+<li>B 端客户如果谈了独立价格，创建企业专属分组，例如 <code>corp_acme_2026</code>，不要复用 <code>vip/agent/auto</code>。</li>
+<li>企业分组可以设置独立 <code>GroupRatio</code>、充值/套餐、请求速率、可用渠道和可用模型范围。</li>
+<li>如果企业需要 SLA 或隔离，把“企业专属分组 + 专属渠道 + 专属上游 key/账号”组合使用；只建分组不能解决上游资源竞争。</li>
+<li>如果企业价格低于公开价，必须核算上游成本、优惠时段、批量推理和缓存命中，否则容易倒挂。</li>
+<li>如果企业要求指定供应商，例如只走天翼云或只走移动 MaaS，应在 XDAPI 渠道路由层隔离，避免同名模型跨上游混用。</li>
+</ul>
+</section>
 <section class="section"><h2>典型企业方案</h2>
 <table><thead><tr><th>场景</th><th>XDAPI 配置</th><th>上游配置</th><th>适用性</th></tr></thead><tbody>
 <tr><td>单一企业折扣价</td><td>企业私有 group + 独立倍率</td><td>共用现有上游 key</td><td>适合轻量 ToB 试点</td></tr>
@@ -18,6 +21,7 @@
 <tr><td>企业 SLA / 高并发</td><td>企业 group + 专属渠道 + 专属上游账号/key</td><td>建议独立上游资源池</td><td>适合生产业务</td></tr>
 <tr><td>指定供应商合规</td><td>企业 group 只绑定指定供应商渠道</td><td>上游按合同采购</td><td>适合政企/行业客户</td></tr>
 </tbody></table>
+</section>
 <section class="section"><h2>不建议的做法</h2>
 <ul>
 <li>不建议把企业客户塞进公开 <code>1x/3x/5x</code> 后再手工解释特殊价格。</li>
@@ -25,11 +29,20 @@
 <li>不建议只在上游 MaaS 改价格。XDAPI 用户余额、套餐、模型可见性和账单仍然在 XDAPI 侧，最终客户看到的是 XDAPI 规则。</li>
 <li>不建议在没有真实 POST 验证前把新上游模型公开给企业客户。</li>
 </ul>
+</section>
 <section class="section"><h2>对当前 XDAPI 的落地建议</h2>
 <ul>
 <li>保留公开 <code>1x/3x/5x</code> 作为零售和普通开发者入口。</li>
-<li>新增企业客户时，按客户创建私有分组，例如 <code>ent_&amp;lt;customer&amp;gt;_&amp;lt;year&amp;gt;</code>，并为该分组配置明确倍率、模型范围、限流和结算周期。</li>
+<li>新增企业客户时，按客户创建私有分组，例如 <code>ent_&lt;customer&gt;_&lt;year&gt;</code>，并为该分组配置明确倍率、模型范围、限流和结算周期。</li>
 <li>对大客户优先使用专属 token 和专属渠道标签，便于成本核算和故障定位。</li>
 <li>业务文档必须记录：客户分组、报价口径、上游成本来源、可用模型、限流、是否共用上游 key。</li>
+</ul>
+</section>
+<section class="section"><h2>关键补充：同模型多渠道与企业私有分组</h2>
+<ul>
+<li>XDAPI 路由按 <code>group + model</code> 选择渠道；多渠道满足同一条件时，先按 <code>priority</code>，同优先级按 <code>weight</code>。</li>
+<li>消费日志会记录 <code>channel_id</code>、<code>model_name</code>、<code>group</code>、tokens 和 quota，因此运营侧能区分同模型实际走了哪个渠道。</li>
+<li>默认扣费不按 <code>channel_id</code> 自动变化，而是按模型价/倍率与分组倍率计算；如果同一模型在不同上游成本不同，建议用企业私有 group 或模型别名隔离成本。</li>
+<li>企业私有 group 的落地方式是：企业用户/令牌绑定企业 group，渠道 group 只开放给该企业 group，合同价写入 <code>GroupRatio</code> 或 <code>GroupGroupRatio</code>，再用 token 模型限制和 group-level 限流收口。</li>
 </ul>
 </section></div></body></html>

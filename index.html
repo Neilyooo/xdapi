@@ -48,6 +48,7 @@
       <a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>
       <a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>
       <a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>
+      <a href="./docs/enterprise-routing-groups.html">企业分组详解</a>
       <a href="./docs/work-log.html">工作记录</a>
       <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>
       <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
@@ -56,9 +57,9 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。2026-05-28 14:31 CST 已复修 Moma 渠道 key 失效导致的操练场错误。2026-05-29 18:33 CST 已新增天翼云 MaaS 56 款模型审计、移动/天翼横向对比和企业客户接入策略。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用 34 个公开 CMCC token 模型，其中 7 个新模型来自 Moma relay。2026-05-28 14:31 CST 已复修 Moma 渠道 key 失效导致的操练场错误。2026-05-29 18:33 CST 已新增天翼云 MaaS 56 款模型审计、移动/天翼横向对比和企业客户接入策略。2026-05-30 11:08 CST 已补充企业私有分组与同模型多渠道成本路由图解。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-05-29 18:33 CST</span>
+        <span class="chip">更新时间：2026-05-30 11:08 CST</span>
         <span class="chip">操练场复测：2026-05-28 14:31 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
         <span class="chip">证据文件：/tmp/xdw_model_test_results_20260512.json</span>
@@ -100,7 +101,19 @@
         <li>本轮从详情页提取到 <code>56/56</code> 个模型的 API 文档入口，统一指向天翼云 OpenAI 兼容调用路径；未创建 API Key，因此不把它写成运行时 POST 成功。</li>
         <li>结合天翼云官方计费说明页，当前 <code>37/56</code> 个模型提取到可核对 token 价格行；其余模型标记为未提取到自助价格或可能需客户经理/工单开通。</li>
         <li>实时读取 XDAPI <code>/api/pricing</code> 当前返回 <code>33</code> 个模型；与旧记录 <code>34</code> 有 1 个差异，已在对比报告中列为后续复核项。</li>
-        <li>报告入口：<a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>、<a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>、<a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>。</li>
+        <li>报告入口：<a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>、<a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>、<a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>、<a href="./docs/enterprise-routing-groups.html">企业分组详解</a>。</li>
+      </ul>
+    </section>
+
+
+    <section class="section">
+      <h2>企业分组与多渠道成本路由更新</h2>
+      <ul>
+        <li>2026-05-30 11:08 CST 补充 New API / XDAPI 企业私有分组实施说明。</li>
+        <li>同模型多渠道时，XDAPI 会按 <code>group + model</code> 找渠道；多渠道满足条件时先按 <code>priority</code>，同优先级按 <code>weight</code>。</li>
+        <li>请求最终会记录具体 <code>channel_id</code>，因此可以做渠道审计和成本归因；但默认扣费不是按渠道成本自动变化，而是按模型价格和分组倍率计算。</li>
+        <li>企业合同价建议使用私有 group、<code>GroupRatio</code> / <code>GroupGroupRatio</code>、专属 token、模型限制和可选专属渠道实现。</li>
+        <li>详细图解见 <a href="./docs/enterprise-routing-groups.html">企业分组与多渠道成本路由详解</a>。</li>
       </ul>
     </section>
 

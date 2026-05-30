@@ -1,10 +1,12 @@
 # XDAPI 企业客户适配建议
 
-更新时间：2026-05-29 18:33 CST
+更新时间：2026-05-30 11:08 CST
 
 ## 结论
 
 企业客户的定价和权限建议放在 XDAPI/New API 侧实现，而不是改上游 MaaS。上游移动 MaaS、天翼云 MaaS 是成本与资源供应层；XDAPI 是客户、分组、倍率、限流、渠道路由、账单展示和审计的商业分发层。
+
+详细图解见：`docs/enterprise-routing-groups.md` / `enterprise-routing-groups.html`。
 
 ## 推荐做法
 
@@ -37,3 +39,11 @@
 - 新增企业客户时，按客户创建私有分组，例如 `ent_<customer>_<year>`，并为该分组配置明确倍率、模型范围、限流和结算周期。
 - 对大客户优先使用专属 token 和专属渠道标签，便于成本核算和故障定位。
 - 业务文档必须记录：客户分组、报价口径、上游成本来源、可用模型、限流、是否共用上游 key。
+
+
+## 关键补充：同模型多渠道与企业私有分组
+
+- XDAPI 路由按 `group + model` 选择渠道；多渠道满足同一条件时，先按 `priority`，同优先级按 `weight`。
+- 消费日志会记录 `channel_id`、`model_name`、`group`、tokens 和 quota，因此运营侧能区分同模型实际走了哪个渠道。
+- 默认扣费不按 `channel_id` 自动变化，而是按模型价/倍率与分组倍率计算；如果同一模型在不同上游成本不同，建议用企业私有 group 或模型别名隔离成本。
+- 企业私有 group 的落地方式是：企业用户/令牌绑定企业 group，渠道 group 只开放给该企业 group，合同价写入 `GroupRatio` 或 `GroupGroupRatio`，再用 token 模型限制和 group-level 限流收口。
