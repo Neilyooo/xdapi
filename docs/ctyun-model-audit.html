@@ -1,79 +1,123 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>天翼云 MaaS 模型清单审计</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./ctyun-model-audit.html">天翼云模型审计</a><a href="./mobile-ctyun-comparison.html">移动/天翼对比</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>天翼云 MaaS 模型清单审计</h1><p>XDAPI / MaaS 运营文档</p></section>
-<p>更新时间：2026-05-29 18:33 CST</p>
-<section class="section"><h2>结论</h2>
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>天翼云 MaaS 模型清单审计</title>
+  <style>
+    :root { --bg:#f6f8fc; --card:#fff; --text:#172033; --muted:#5f6b85; --line:#d9e1f2; --accent:#0f6fff; --ok:#0d8b5f; --warn:#b26b00; --bad:#b42318; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+    main { max-width:1180px; margin:0 auto; padding:34px 22px 70px; }
+    a { color:#174ea6; }
+    h1 { margin:0 0 12px; font-size:30px; line-height:1.25; }
+    h2 { margin:28px 0 10px; font-size:22px; }
+    h3 { margin:20px 0 8px; font-size:17px; }
+    p { margin:8px 0; }
+    ul { padding-left:22px; }
+    li { margin:5px 0; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:12px 0 20px; font-size:13px; }
+    th,td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; vertical-align:top; }
+    th { background:#f8fbff; color:#27406e; font-weight:720; }
+    code { background:#eef3fb; border:1px solid #dce6f5; padding:2px 6px; border-radius:6px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    pre { background:#111827; color:#e5e7eb; padding:16px; border-radius:12px; overflow:auto; border:1px solid #263245; }
+    pre code { background:transparent; border:0; color:inherit; padding:0; }
+    .note { color:var(--muted); }
+    .ok { color:var(--ok); font-weight:700; }
+    .warn { color:var(--warn); font-weight:700; }
+    .bad { color:var(--bad); font-weight:700; }
+    .nav { margin:0 0 18px; }
+  </style>
+</head><body><main><p class="nav"><a href="../index.html">返回首页</a></p><h1>天翼云 MaaS 模型清单审计</h1>
+<p>更新时间：2026-05-30 18:35 CST</p>
+<h2>结论</h2>
 <ul>
 <li>天翼云息壤 Token 服务控制台当前模型广场展示 <code>56</code> 款模型。</li>
-<li>本轮从控制台详情页提取到 <code>56/56</code> 个模型的 API 文档入口；入口统一表现为 <code>https://wishub-x6.ctyun.cn/v1/chat/completions</code> 或对应文档页中的 OpenAI 兼容接口说明。</li>
-<li>价格来源分两类：模型详情页直接展示的输入/输出价格，以及天翼云官方计费说明页 <code>https://www.ctyun.cn/document/11061839/11062267</code> 的 token 计费表。</li>
-<li><code>37/56</code> 个模型提取到可核对的 token 价格行；其余模型控制台可见但未提取到自助价格，或页面提示需客户经理/工单开通，不能强行填价格。</li>
-<li>本轮没有创建天翼云 API Key，也没有做真实 POST 调用；因此状态写为“API 文档入口可见”，不写成“运行时已验证成功”。</li>
-<li>公开文档不保存账号密码；本地 skill 只记录渠道身份和凭据处理规则。</li>
+<li>本轮已经使用用户提供的天翼云 API Key 做真实 POST 健康检查；公开文档不保存完整 Key。</li>
+<li>直连天翼云 <code>https://wishub-x6.ctyun.cn/v1/*</code>：<code>54</code> 个 token 模型通过，<code>2</code> 个图片/按次模型跳过消耗型生成测试。</li>
+<li>按“渠道-模型别名”策略，已将有明确 token 价格的 <code>37</code> 个模型部署为 XDAPI 公共别名，统一加 <code>-ctyun</code> 后缀，避免与中国移动同名模型混淆。</li>
+<li>XDAPI 公共模型广场 <code>/api/pricing</code> 本轮返回 <code>70</code> 个模型，其中 <code>37</code> 个是天翼云 <code>-ctyun</code> 别名。</li>
+<li>XDAPI 公共 relay 固定端点验证通过：<code>34/34</code> 个聊天模型走 <code>/v1/chat/completions</code>，<code>2/2</code> 个 rerank 模型走 <code>/v1/rerank</code>，<code>1/1</code> 个 embedding 模型走 <code>/v1/embeddings</code>。</li>
+<li>另外 <code>19</code> 个候选暂不公开：其中 <code>17</code> 个直连可用但未提取到精确自助价格，<code>2</code> 个是图片/按次模型，不适合直接塞进当前 token 计费前台。</li>
 </ul>
-</section>
-<section class="section"><h2>模型明细</h2>
-<table><thead><tr><th>模型</th><th>API model 参数</th><th>系列</th><th>类型</th><th>计费模式</th><th>价格证据</th><th>上下文</th><th>最大输出</th><th>限流</th><th>API 入口</th><th>状态说明</th></tr></thead><tbody>
-<tr><td><code>DeepSeek-V4-Pro</code></td><td><code>DeepSeek-V4-Pro</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 12 / 输出 24</td><td>1M tokens（输出长度上限为64k）。</td><td>64k</td><td>TPM 125,000 / RPM 50</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-V4-Flash</code></td><td><code>DeepSeek-V4-Flash</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 1 / 输出 2</td><td>1M tokens（输出长度上限为64k）。</td><td>64k</td><td>TPM 600,000 / RPM 250</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>GLM-5.1</code></td><td><code>GLM-5.1</code></td><td>智谱AI</td><td>文本生成</td><td>TOKENS</td><td>标准 输入(0, 32k]: 输入 6 / 输出 24, 输入(32k, 200k]: 输入 8 / 输出 28</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>TPM 500,000 / RPM 1000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3.5-122B-A10B</code></td><td><code>Qwen3.5-122B-A10B</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入(0, 128k]: 输入 0.8 / 输出 6.4, 输入(128k, 256k]: 输入 2 / 输出 16</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>TPM 200,000 / RPM 100</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3.5—35B—A3B</code></td><td><code>Qwen3.5-35B-A3B</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入(0, 128k]: 输入 0.4 / 输出 3.2, 输入(128k, 256k]: 输入 1.6 / 输出 12.8</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>TPM 200,000 / RPM 100</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-VL-235B-A22B-Instruct</code></td><td><code>Qwen3-VL-235B-A22B-Instruct</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入 2 / 输出 8</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>TPM 200,000 / RPM 100</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Minimax-M2.5</code></td><td><code>Minimax-M2.5</code></td><td>MiniMax</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 2.1 / 输出 8.4</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>TPM 50,000 / RPM 30</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Kimi-K2.5</code></td><td><code>Kimi-K2.5</code></td><td>月之暗面</td><td>图像理解</td><td>TOKENS</td><td>标准 输入 4 / 输出 21</td><td>256k tokens（输出长度上限为256k）。</td><td>256k</td><td>TPM 50,000 / RPM 30</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>GLM4.6V</code></td><td><code>GLM4.6V</code></td><td>智谱AI</td><td>图像理解</td><td>TOKENS</td><td>标准 输入(0, 32k]: 输入 1 / 输出 3, 输入(32k, 128k]: 输入 2 / 输出 6</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>TPM 10,000 / RPM 20</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-Next-80B-A3B-Instruct</code></td><td><code>Qwen3-Next-80B-A3B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 1 / 输出 4</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>TPM 200,000 / RPM 100</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-V3.2（旗舰版）</code></td><td><code>DeepSeek-V3.2-Pro</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入: 输入 2, 输入（缓存命中）: , 输出: 输出 3; 优惠 输入 1.0 / 输出 1.5</td><td>128K tokens（输出长度上限为32K）。</td><td>32K</td><td>TPM 1000000 / RPM 10000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>GLM-5（正式版）</code></td><td><code>GLM-5-Pro</code></td><td>智谱AI</td><td>文本生成</td><td>TOKENS</td><td>标准 输入(0, 32k]: 输入 4 / 输出 18, 输入(32k,200k]: 输入 6 / 输出 22; 优惠 输入(0, 32k]: 输入 2.0 / 输出 9.0, 输入(32k,200k]: 输入 3.0 / 输出 11.0</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>TPM 1000000 / RPM 500</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3.5-397B-A17B（正式版）</code></td><td><code>Qwen3.5-397B-A17B-Pro</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入(0, 128k]: 输入 1.2 / 输出 7.2, 输入(128k, 256k]: 输入 3 / 输出 18; 优惠 输入(0, 128k]: 输入 0.6 / 输出 3.6, 输入(128, 256k]: 输入 1.5 / 输出 9.0</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>TPM 125000 / RPM 50</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Doubao-Seed-2.0-pro</code></td><td><code>Doubao-Seed-2.0-pro</code></td><td>字节跳动</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen3-Max</code></td><td><code>Qwen3-Max</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>输入长度上限252k tokens，输出长度上限64k tokens。</td><td>见上下文字段/未提取到</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Doubao-Seed-1.8</code></td><td><code>Doubao-Seed-1.8</code></td><td>字节跳动</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Doubao-Seed-1.6-0615</code></td><td><code>Doubao-Seed-1.6-0615</code></td><td>字节跳动</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>224k tokens（输出长度上限为64k，思考输出长度上限为32k）。</td><td>64k，思考输出长度上限为32k</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Doubao1.5-pro-32k</code></td><td><code>Doubao1.5-pro-32k</code></td><td>字节跳动</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>32k tokens（可配置版本支持扩展至128k tokens），默认最大回答长度4k tokens，输出长度上限为12k tokens。</td><td>12k tokens。</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen3-Coder-Plus</code></td><td><code>Qwen3-Coder-Plus</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>输入长度上限254k tokens，输出长度上线32k tokens。</td><td>见上下文字段/未提取到</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen3-VL-Plus</code></td><td><code>Qwen3-VL-Plus</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>输入长度上限254k tokens，输出长度上限32k tokens。</td><td>见上下文字段/未提取到</td><td>TPM 250000 / RPM 150</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>DeepSeek-V3.1</code></td><td><code>DeepSeek-V3.1</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入: 输入 4, 输入（缓存命中）: , 输出: 输出 16; 优惠 输入 2.0 / 输出 8.0; 批量 输入 1.6 / 输出 6.4</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 5000000 / RPM 30000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Kimi-K2-Thinking</code></td><td><code>Kimi-K2-Thinking</code></td><td>月之暗面</td><td>文本生成</td><td>TOKENS</td><td>详情页 输入 4.0 / 输出 16.0 元/百万 tokens</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 500000 / RPM 5000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-R1-0528</code></td><td><code>DeepSeek-R1-0528</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 4 / 输出 16; 优惠 输入 1.0 / 输出 4.0; 批量 输入 1.6 / 输出 6.4</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1200000 / RPM 15000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-VL-30B-A3B-Instruct</code></td><td>``</td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入 0.75 / 输出 3</td><td>32k tokens（输出长度上限为16k）。</td><td>16k</td><td>TPM 300,000 / RPM 160</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-235B-A22B-Instruct-2507</code></td><td><code>Qwen3-235B-A22B-Instruct-2507</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 2 / 输出 8</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1000000 / RPM 1000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-Coder-480B-A35B-Instruct</code></td><td><code>Qwen3-Coder-480B-A35B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 8 / 输出 16</td><td>64K tokens（输出长度上限为32K）。</td><td>32K</td><td>TPM 1000000 / RPM 1000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>BGE-Reranker-V2-m3</code></td><td><code>bge-reranker-v2-m3</code></td><td>其他</td><td>向量模型</td><td>TOKENS</td><td>详情页 输入 0.07 / 输出 0.0 元/百万 tokens</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM 500000 / RPM 1800</td><td><code>https://wishub-x6.ctyun.cn/v1/rerank</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen-Image</code></td><td><code>Qwen-Image</code></td><td>阿里</td><td>文本生图</td><td>PER_USE</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/images/generations</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen3-30B-A3B-Instruct-2507</code></td><td><code>Qwen3-30B-A3B-Instruct-2507</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1000000 / RPM 1000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>DeepSeek-V3-0324</code></td><td><code>DeepSeek-V3-0324</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 2 / 输出 8; 优惠 输入 1.0 / 输出 4.0; 批量 输入 0.8 / 输出 3.2</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 5000000 / RPM 30000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Baichuan-M2-32B</code></td><td><code>Baichuan-M2-32B</code></td><td>百川智能</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 10000 / RPM 20</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen3-235B-A22B</code></td><td><code>Qwen3-235B-A22B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 2.5 / 输出 10</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-30B-A3B</code></td><td><code>Qwen3-30B-A3B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 1 / 输出 4</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-R1</code></td><td><code>DeepSeek-R1</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 4 / 输出 16; 优惠 输入 1.0 / 输出 4.0; 批量 输入 1.6 / 输出 6.4</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1200000 / RPM 15000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-V3</code></td><td><code>DeepSeek-V3</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 2 / 输出 8; 优惠 输入 1.0 / 输出 4.0; 批量 输入 0.8 / 输出 3.2</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1200000 / RPM 15000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-32B</code></td><td><code>Qwen3-32B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 1 / 输出 4</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-14B</code></td><td><code>Qwen3-14B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 0.8 / 输出 1.6</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-8B</code></td><td><code>Qwen3-8B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 0.3 / 输出 0.6</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen3-4B</code></td><td><code>Qwen3-4B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 0.3 / 输出 0.6</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Qwen2.5-VL-72B-Instruct</code></td><td><code>Qwen2.5-VL-72B-Instruct</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入 4.13 / 输出 4.13</td><td>8K tokens（输出长度上限为4K）。</td><td>4K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>QwQ-32B</code></td><td><code>QwQ-32B</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>DeepSeek-R1-Distill-Llama-70B</code></td><td><code>DeepSeek-R1-Distill-Llama-70B</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 4.1 / 输出 4.1</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 100000 / RPM 1000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-R1-Distill-Qwen-32B</code></td><td><code>DeepSeek-R1-Distill-Qwen-32B</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 1.3 / 输出 1.3</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM 1200000 / RPM 15000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>BGE-Reranker-Large</code></td><td><code>BGE-Reranker-Large</code></td><td>其他</td><td>向量模型</td><td>TOKENS</td><td>标准 输入 0.5</td><td>512 tokens。</td><td>见上下文字段/未提取到</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/rerank</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>BGE-m3</code></td><td><code>BGE-m3</code></td><td>其他</td><td>向量模型</td><td>TOKENS</td><td>标准 输入 0.5</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM 500000 / RPM 1800</td><td><code>https://wishub-x6.ctyun.cn/v1/embeddings</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>TeleChat-12B</code></td><td><code>TeleChat-12B</code></td><td>中国电信人工智能</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>4K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Baichuan2-Turbo</code></td><td><code>Baichuan2-Turbo</code></td><td>百川智能</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen2.5-72B-Instruct</code></td><td><code>Qwen2.5-72B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 4.13 / 输出 4.13</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>DeepSeek-V3.1-Terminus（即将下线）</code></td><td><code>DeepSeek-V3.1-Terminus</code></td><td>DeepSeek</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>128K tokens（输出长度上限为32K）。</td><td>32K</td><td>TPM 2000000 / RPM 1500</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen2-7B-Instruct</code></td><td><code>Qwen2-7B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Qwen-VL-Chat</code></td><td><code>Qwen-VL-Chat</code></td><td>阿里</td><td>图像理解</td><td>TOKENS</td><td>标准 输入 0.8 / 输出 1.6</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
-<tr><td><code>Llama3-70B-Instruct（即将下线）</code></td><td><code>None</code></td><td>Meta</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Llama3-8B-Instruct</code></td><td><code>Llama3-8B-Instruct</code></td><td>Meta</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>StableDiffusion-V2.1</code></td><td><code>StableDiffusion-V2.1</code></td><td>Stability AI</td><td>文本生图</td><td>PER_USE</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>未提取到</td><td>见上下文字段/未提取到</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/images/generations</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>ChatGLM3-6B（即将下线）</code></td><td><code>None</code></td><td>智谱AI</td><td>文本生成</td><td>TOKENS</td><td>未在本次详情页/官方计费表提取到 token 价格行</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>TPM - / RPM -</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见；价格未提取/可能需线下开通</td></tr>
-<tr><td><code>Kimi-K2-Instruct</code></td><td><code>Kimi-K2-Instruct</code></td><td>月之暗面</td><td>文本生成</td><td>TOKENS</td><td>标准 输入 4 / 输出 16</td><td>128K tokens（输出长度上限为32K）。</td><td>32K</td><td>TPM 500000 / RPM 5000</td><td><code>https://wishub-x6.ctyun.cn/v1/chat/completions</code></td><td>API 文档入口可见</td></tr>
+<h2>XDAPI 接入配置</h2>
+<table><thead><tr><th>项</th><th>当前值</th></tr></thead><tbody>
+<tr><td>公共渠道</td><td><code>#4 CTYun MaaS - Public Alias</code>，分组 <code>1x,3x,5x</code></td></tr>
+<tr><td>企业方案 B 渠道</td><td><code>#5 CTYun MaaS - Enterprise B</code>，分组 <code>ent_ctyun_b_2026</code></td></tr>
+<tr><td>模型命名</td><td>用户侧统一使用 <code>模型别名-ctyun</code>，例如 <code>deepseek-v4-flash-ctyun</code></td></tr>
+<tr><td>上游地址</td><td><code>https://wishub-x6.ctyun.cn</code>，按模型端点转发到 chat / rerank / embeddings</td></tr>
+<tr><td>公开证据</td><td><code>../evidence/ctyun_xdapi_deployment_20260530.json</code></td></tr>
 </tbody></table>
-</section>
-<section class="section"><h2>证据来源</h2>
+<h2>已部署模型明细</h2>
+<table><thead><tr><th>XDAPI 用户侧别名</th><th>天翼云上游 model</th><th>系列</th><th>类型</th><th>上下文</th><th>最大输出</th><th>价格证据</th><th>端点</th><th>状态</th></tr></thead><tbody>
+<tr><td><code>deepseek-v4-pro-ctyun</code></td><td><code>DeepSeek-V4-Pro</code></td><td>DeepSeek</td><td>文本生成</td><td>1M tokens（输出长度上限为64k）。</td><td>64k</td><td>标准 输入 12 / 输出 24</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-v4-flash-ctyun</code></td><td><code>DeepSeek-V4-Flash</code></td><td>DeepSeek</td><td>文本生成</td><td>1M tokens（输出长度上限为64k）。</td><td>64k</td><td>标准 输入 1 / 输出 2</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>glm-5.1-ctyun</code></td><td><code>GLM-5.1</code></td><td>智谱AI</td><td>文本生成</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>标准 输入(0, 32k]: 输入 6 / 输出 24, 输入(32k, 200k]: 输入 8 / 输出 28</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3.5-122b-a10b-ctyun</code></td><td><code>Qwen3.5-122B-A10B</code></td><td>阿里</td><td>图像理解</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>标准 输入(0, 128k]: 输入 0.8 / 输出 6.4, 输入(128k, 256k]: 输入 2 / 输出 16</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3.5-35b-a3b-ctyun</code></td><td><code>Qwen3.5-35B-A3B</code></td><td>阿里</td><td>图像理解</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>标准 输入(0, 128k]: 输入 0.4 / 输出 3.2, 输入(128k, 256k]: 输入 1.6 / 输出 12.8</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-vl-235b-a22b-instruct-ctyun</code></td><td><code>Qwen3-VL-235B-A22B-Instruct</code></td><td>阿里</td><td>图像理解</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>标准 输入 2 / 输出 8</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>minimax-m2.5-ctyun</code></td><td><code>Minimax-M2.5</code></td><td>MiniMax</td><td>文本生成</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>标准 输入 2.1 / 输出 8.4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>kimi-k2.5-ctyun</code></td><td><code>Kimi-K2.5</code></td><td>月之暗面</td><td>图像理解</td><td>256k tokens（输出长度上限为256k）。</td><td>256k</td><td>标准 输入 4 / 输出 21</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>glm4.6v-ctyun</code></td><td><code>GLM4.6V</code></td><td>智谱AI</td><td>图像理解</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>标准 输入(0, 32k]: 输入 1 / 输出 3, 输入(32k, 128k]: 输入 2 / 输出 6</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-next-80b-a3b-instruct-ctyun</code></td><td><code>Qwen3-Next-80B-A3B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>128k tokens（输出长度上限为32k）。</td><td>32k</td><td>标准 输入 1 / 输出 4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-v3.2-pro-ctyun</code></td><td><code>DeepSeek-V3.2-Pro</code></td><td>DeepSeek</td><td>文本生成</td><td>128K tokens（输出长度上限为32K）。</td><td>32K</td><td>标准 输入: 输入 2, 输入（缓存命中）: , 输出: 输出 3; 优惠 输入 1.0 / 输出 1.5</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>glm-5-pro-ctyun</code></td><td><code>GLM-5-Pro</code></td><td>智谱AI</td><td>文本生成</td><td>200k tokens（输出长度上限为128k）。</td><td>128k</td><td>标准 输入(0, 32k]: 输入 4 / 输出 18, 输入(32k,200k]: 输入 6 / 输出 22; 优惠 输入(0, 32k]: 输入 2.0 / 输出 9.0, 输入(32k,200k]: 输入 3.0 / 输出 11.0</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3.5-397b-a17b-pro-ctyun</code></td><td><code>Qwen3.5-397B-A17B-Pro</code></td><td>阿里</td><td>图像理解</td><td>256k tokens（输出长度上限为64k）。</td><td>64k</td><td>标准 输入(0, 128k]: 输入 1.2 / 输出 7.2, 输入(128k, 256k]: 输入 3 / 输出 18; 优惠 输入(0, 128k]: 输入 0.6 / 输出 3.6, 输入(128, 256k]: 输入 1.5 / 输出 9.0</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-v3.1-ctyun</code></td><td><code>DeepSeek-V3.1</code></td><td>DeepSeek</td><td>文本生成</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入: 输入 4, 输入（缓存命中）: , 输出: 输出 16; 优惠 输入 2.0 / 输出 8.0; 批量 输入 1.6 / 输出 6.4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>kimi-k2-thinking-ctyun</code></td><td><code>Kimi-K2-Thinking</code></td><td>月之暗面</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>详情页 输入 4.0 / 输出 16.0 元/百万 tokens</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-r1-0528-ctyun</code></td><td><code>DeepSeek-R1-0528</code></td><td>DeepSeek</td><td>文本生成</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 4 / 输出 16; 优惠 输入 1.0 / 输出 4.0; 批量 输入 1.6 / 输出 6.4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-vl-30b-a3b-instruct-ctyun</code></td><td><code>04803675379d46ab8e61b8fd613e057e</code></td><td>阿里</td><td>图像理解</td><td>32k tokens（输出长度上限为16k）。</td><td>16k</td><td>标准 输入 0.75 / 输出 3</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-235b-a22b-instruct-2507-ctyun</code></td><td><code>Qwen3-235B-A22B-Instruct-2507</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 2 / 输出 8</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-coder-480b-a35b-instruct-ctyun</code></td><td><code>Qwen3-Coder-480B-A35B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>64K tokens（输出长度上限为32K）。</td><td>32K</td><td>标准 输入 8 / 输出 16</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>bge-reranker-v2-m3-ctyun</code></td><td><code>bge-reranker-v2-m3</code></td><td>其他</td><td>向量模型</td><td>未提取到</td><td>未提取到</td><td>详情页 输入 0.07 / 输出 0.0 元/百万 tokens</td><td>/v1/rerank</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-v3-0324-ctyun</code></td><td><code>DeepSeek-V3-0324</code></td><td>DeepSeek</td><td>文本生成</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 2 / 输出 8; 优惠 输入 1.0 / 输出 4.0; 批量 输入 0.8 / 输出 3.2</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-235b-a22b-ctyun</code></td><td><code>Qwen3-235B-A22B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 2.5 / 输出 10</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-30b-a3b-ctyun</code></td><td><code>Qwen3-30B-A3B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 1 / 输出 4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-r1-ctyun</code></td><td><code>DeepSeek-R1</code></td><td>DeepSeek</td><td>文本生成</td><td>96K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 4 / 输出 16; 优惠 输入 1.0 / 输出 4.0; 批量 输入 1.6 / 输出 6.4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-v3-ctyun</code></td><td><code>DeepSeek-V3</code></td><td>DeepSeek</td><td>文本生成</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 2 / 输出 8; 优惠 输入 1.0 / 输出 4.0; 批量 输入 0.8 / 输出 3.2</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-32b-ctyun</code></td><td><code>Qwen3-32B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 1 / 输出 4</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-14b-ctyun</code></td><td><code>Qwen3-14B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 0.8 / 输出 1.6</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-8b-ctyun</code></td><td><code>Qwen3-8B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 0.3 / 输出 0.6</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen3-4b-ctyun</code></td><td><code>Qwen3-4B</code></td><td>阿里</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 0.3 / 输出 0.6</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen2.5-vl-72b-instruct-ctyun</code></td><td><code>Qwen2.5-VL-72B-Instruct</code></td><td>阿里</td><td>图像理解</td><td>8K tokens（输出长度上限为4K）。</td><td>4K</td><td>标准 输入 4.13 / 输出 4.13</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-r1-distill-llama-70b-ctyun</code></td><td><code>DeepSeek-R1-Distill-Llama-70B</code></td><td>DeepSeek</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 4.1 / 输出 4.1</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>deepseek-r1-distill-qwen-32b-ctyun</code></td><td><code>DeepSeek-R1-Distill-Qwen-32B</code></td><td>DeepSeek</td><td>文本生成</td><td>32K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 1.3 / 输出 1.3</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>bge-reranker-large-ctyun</code></td><td><code>BGE-Reranker-Large</code></td><td>其他</td><td>向量模型</td><td>512 tokens。</td><td>未提取到</td><td>标准 输入 0.5</td><td>/v1/rerank</td><td>已部署并验证</td></tr>
+<tr><td><code>bge-m3-ctyun</code></td><td><code>BGE-m3</code></td><td>其他</td><td>向量模型</td><td>未提取到</td><td>未提取到</td><td>标准 输入 0.5</td><td>/v1/embeddings</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen2.5-72b-instruct-ctyun</code></td><td><code>Qwen2.5-72B-Instruct</code></td><td>阿里</td><td>文本生成</td><td>128K tokens（输出长度上限为16K）。</td><td>16K</td><td>标准 输入 4.13 / 输出 4.13</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>qwen-vl-chat-ctyun</code></td><td><code>Qwen-VL-Chat</code></td><td>阿里</td><td>图像理解</td><td>8K tokens（输出长度上限为2K）。</td><td>2K</td><td>标准 输入 0.8 / 输出 1.6</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+<tr><td><code>kimi-k2-instruct-ctyun</code></td><td><code>Kimi-K2-Instruct</code></td><td>月之暗面</td><td>文本生成</td><td>128K tokens（输出长度上限为32K）。</td><td>32K</td><td>标准 输入 4 / 输出 16</td><td>/v1/chat/completions</td><td>已部署并验证</td></tr>
+</tbody></table>
+<h2>暂缓公开候选</h2>
+<table><thead><tr><th>序号</th><th>模型</th><th>直连状态</th><th>暂缓原因</th></tr></thead><tbody>
+<tr><td>14</td><td><code>Doubao-Seed-2.0-pro</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>15</td><td><code>Qwen3-Max</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>16</td><td><code>Doubao-Seed-1.8</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>17</td><td><code>Doubao-Seed-1.6-0615</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>18</td><td><code>Doubao1.5-pro-32k</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>19</td><td><code>Qwen3-Coder-Plus</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>20</td><td><code>Qwen3-VL-Plus</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>28</td><td><code>Qwen-Image</code></td><td>skipped_non_token_or_image</td><td>not runtime pass</td></tr>
+<tr><td>29</td><td><code>Qwen3-30B-A3B-Instruct-2507</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>31</td><td><code>Baichuan-M2-32B</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>41</td><td><code>QwQ-32B</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>46</td><td><code>TeleChat-12B</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>47</td><td><code>Baichuan2-Turbo</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>49</td><td><code>DeepSeek-V3.1-Terminus（即将下线）</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>50</td><td><code>Qwen2-7B-Instruct</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>52</td><td><code>Llama3-70B-Instruct（即将下线）</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>53</td><td><code>Llama3-8B-Instruct</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+<tr><td>54</td><td><code>StableDiffusion-V2.1</code></td><td>skipped_non_token_or_image</td><td>not runtime pass</td></tr>
+<tr><td>55</td><td><code>ChatGLM3-6B（即将下线）</code></td><td>pass</td><td>runtime pass but no exact deployable price</td></tr>
+</tbody></table>
+<h2>测试证据摘要</h2>
 <ul>
-<li>控制台：<code>https://ctxirang.ctyun.cn/maas/home</code> / 模型广场详情页。</li>
-<li>官方计费说明：<code>https://www.ctyun.cn/document/11061839/11062267</code>。</li>
-<li>脱敏汇总 JSON：<code>../evidence/ctyun_model_summary_20260529.json</code>。</li>
+<li>CTYun 直连探测文件：<code>/private/tmp/ctyun_direct_probe_20260530.json</code>，公开版只保留脱敏汇总。</li>
+<li>XDAPI 接入记录：<code>/private/tmp/xdapi_ctyun_live_apply_20260530.json</code>，已脱敏写入公开 evidence。</li>
+<li>XDAPI 初轮验证：<code>/private/tmp/xdapi_ctyun_verify_20260530.json</code>。</li>
+<li>XDAPI 固定端点补测：<code>/private/tmp/xdapi_ctyun_followup_verify_20260530.json</code>。</li>
+<li>固定端点补测结果：<code>bge-reranker-v2-m3-ctyun</code> 200 / 588ms，<code>bge-reranker-large-ctyun</code> 200 / 403ms，<code>bge-m3-ctyun</code> 200 / 430ms。</li>
+<li>企业方案 B 最小管理员链路：渠道 <code>#5</code> 对 <code>deepseek-v4-flash-ctyun</code> 返回 200 / 891ms，对 <code>glm-5.1-ctyun</code> 返回 200 / 2041ms。</li>
 </ul>
-</section></div></body></html>
+<h2>注意事项</h2>
+<ul>
+<li><code>channel/test</code> 默认按聊天请求构造 payload，因此对 rerank / embeddings 会出现缺少 <code>documents</code> 或 <code>input</code> 的 400；这不是模型不可用，固定端点 <code>/v1/rerank</code> 和 <code>/v1/embeddings</code> 已补测通过。</li>
+<li><code>qwen3-max-ctyun</code> 没有公开，是因为本轮未抓到天翼云精确自助价格；它在直连层可用，但不符合“先有价格证据再上架”的规则。</li>
+<li>企业私有分组不对普通用户开放；公开文档只记录分组名、渠道名和验证结果，不记录 token 或上游 Key。</li>
+</ul></main></body></html>

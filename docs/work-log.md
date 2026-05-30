@@ -1,5 +1,31 @@
 # XD API 工作记录
 
+## 2026-05-30 18:35 CST
+
+### 天翼云 37 个可核价模型接入 XDAPI，并完成企业方案 B 最小链路验证
+
+变更内容：
+
+- 按“渠道-模型别名”策略接入天翼云模型，用户侧统一使用 `-ctyun` 后缀自行选择天翼云渠道。
+- 天翼云直连健康检查覆盖 56 个模型：54 个 token 模型通过，2 个图片/按次模型跳过消耗型生成测试。
+- 只将有明确 token 价格证据的 37 个模型写入 XDAPI 模型广场；其余 19 个候选暂缓，避免无价格模型进入正式计费。
+- 新增/确认 XDAPI 渠道：公共渠道 `#4 CTYun MaaS - Public Alias` 绑定 `1x,3x,5x`；企业方案 B 渠道 `#5 CTYun MaaS - Enterprise B` 绑定 `ent_ctyun_b_2026`。
+- 首页已部署模型数更新为 70，其中中国移动/Moma 33 个、天翼云 `-ctyun` 37 个。
+
+验证方式：
+
+- `/api/pricing` 返回 `70` 个模型，其中 `37` 个是天翼云 `-ctyun` 别名。
+- 公共 relay 固定端点验证：34 个 chat 模型通过 `/v1/chat/completions`，2 个 rerank 模型通过 `/v1/rerank`，1 个 embedding 模型通过 `/v1/embeddings`。
+- 固定端点样本：`bge-reranker-v2-m3-ctyun` 200 / 588ms，`bge-reranker-large-ctyun` 200 / 403ms，`bge-m3-ctyun` 200 / 430ms。
+- 企业方案 B 最小管理员链路：`channel/test/5` 对 `deepseek-v4-flash-ctyun` 返回 200 / 891ms，对 `glm-5.1-ctyun` 返回 200 / 2041ms。
+- 脱敏公开证据写入 `evidence/ctyun_xdapi_deployment_20260530.json`。
+
+注意事项：
+
+- `channel/test` 对 rerank / embedding 的默认 payload 不适配，初轮返回缺少 `documents` / `input` 的 400；固定端点补测已经确认模型可用。
+- 企业用户自有 token 端到端仍需在正式企业用户持有 token 后验证；管理员 token 不代表企业私有分组用户权限。
+- 公开文档不保存天翼云 API Key、XDAPI 管理员密码或任何完整测试 token。
+
 ## 2026-05-30 11:08 CST
 
 ### 补充企业私有分组与同模型多渠道成本路由图解

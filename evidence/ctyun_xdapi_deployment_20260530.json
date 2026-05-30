@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-05-30 18:35 CST",
+  "direct_ctyun": {
+    "endpoint_family": "https://wishub-x6.ctyun.cn/v1/*",
+    "counts": {
+      "pass": 54,
+      "skipped_non_token_or_image": 2
+    },
+    "key": "[REDACTED]"
+  },
+  "xdapi_apply": {
+    "enabled_count": 37,
+    "pending_count": 19,
+    "channels": [
+      [
+        4,
+        "CTYun MaaS - Public Alias",
+        "1x,3x,5x"
+      ],
+      [
+        5,
+        "CTYun MaaS - Enterprise B",
+        "ent_ctyun_b_2026"
+      ]
+    ],
+    "token_key": "[REDACTED]"
+  },
+  "xdapi_pricing": {
+    "http": 200,
+    "success": true,
+    "count": 70,
+    "ctyun_count": 37
+  },
+  "public_relay_summary": {
+    "chat_success": "34/34",
+    "rerank_success": "2/2",
+    "embedding_success": "1/1"
+  },
+  "fixed_endpoint_evidence": [
+    {
+      "path": "/v1/rerank",
+      "model": "bge-reranker-v2-m3-ctyun",
+      "http": 200,
+      "elapsed_ms": 588,
+      "content_type": "application/json",
+      "body": "{\"results\":[{\"document\":{\"text\":\"这是测试文档\"},\"index\":0,\"relevance_score\":0.5252927},{\"document\":{\"text\":\"完全无关内容\"},\"index\":1,\"relevance_score\":0.0040385914}],\"usage\":{\"prompt_tokens\":12,\"completion_tokens\":0,\"total_tokens\":12,\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0},\"completion_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0,\"reasoning_tokens\":0},\"input_tokens\":0,\"output_tokens\":0,\"input_tokens_details\":null,\"claude_cache_creation_5_m_tokens\":0,\"claude_cache_creation_1_h_tokens\":0}}"
+    },
+    {
+      "path": "/v1/rerank",
+      "model": "bge-reranker-large-ctyun",
+      "http": 200,
+      "elapsed_ms": 403,
+      "content_type": "application/json",
+      "body": "{\"results\":[{\"document\":{\"text\":\"这是测试文档\"},\"index\":0,\"relevance_score\":0.94143915},{\"document\":{\"text\":\"完全无关内容\"},\"index\":1,\"relevance_score\":0.0021239663}],\"usage\":{\"prompt_tokens\":12,\"completion_tokens\":0,\"total_tokens\":12,\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0},\"completion_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0,\"reasoning_tokens\":0},\"input_tokens\":0,\"output_tokens\":0,\"input_tokens_details\":null,\"claude_cache_creation_5_m_tokens\":0,\"claude_cache_creation_1_h_tokens\":0}}"
+    },
+    {
+      "path": "/v1/embeddings",
+      "model": "bge-m3-ctyun",
+      "http": 200,
+      "elapsed_ms": 430,
+      "content_type": "application/json",
+      "body": "{\"code\":0,\"data\":[{\"index\":0,\"embedding\":[-0.0640869140625,0.0108489990234375,-0.014312744140625,-0.004810333251953125,0.00888824462890625,-0.005157470703125,0.01432037353515625,0.01519012451171875,-0.0113677978515625,0.0017118453979492188,0.0078125,-0.00679779052734375,-0.01282501220703125,-0.0030193328857421875,-0.006870269775390625,-0.0187225341796875,-0.01045989990234375,-0.0355224609375,-0.00760650634765625,-0.044097900390625,-0.044036865234375,-0.010772705078125,0.025177001953125,0.0347900390625,0.005054473876953125,0.02294921875,-0.039215087890625,-0.0280609130859375,-0.00908660888671875,0.0306549072265625,0.038970947265625,0.004581451416015625,0.0260009765625,-0.054412841796875,-0.0163116455078125,-0.016876220703125,0.01555633544921875,-0.027862548828125,-0.041534423828125,-0.001209259033203125,0.004547119140625,-0.0452880859375,-0.001361846923828125,-0.034332275390625,-9.5272064"
+    }
+  ],
+  "enterprise_plan_b_minimal_admin_channel_test": [
+    {
+      "channel_id": 5,
+      "model": "deepseek-v4-flash-ctyun",
+      "endpoint": "openai",
+      "http": 200,
+      "elapsed_ms": 891,
+      "body": "{\"message\":\"\",\"success\":true,\"time\":0.855}"
+    },
+    {
+      "channel_id": 5,
+      "model": "glm-5.1-ctyun",
+      "endpoint": "openai",
+      "http": 200,
+      "elapsed_ms": 2041,
+      "body": "{\"message\":\"\",\"success\":true,\"time\":1.891}"
+    }
+  ],
+  "caveats": [
+    "qwen3-max-ctyun was not deployed because no exact CTYun self-service price was captured.",
+    "User-owned enterprise token smoke remains a separate ownership-path check; admin channel test validates channel 5 and upstream chain."
+  ]
+}
