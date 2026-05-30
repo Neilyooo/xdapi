@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>企业分组与多渠道成本路由详解</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>企业分组与多渠道成本路由详解</h1><p>XDAPI / MaaS 运营文档</p></section>
+<p>更新时间：2026-05-30 11:08 CST</p>
+<section class="section"><h2>一句话结论</h2>
+<p>New API / XDAPI 可以区分“同一个模型走不同渠道”，因为每次请求最终都会落到一个具体 <code>channel_id</code>，日志里也会记录渠道。但默认计费不是按渠道成本自动变化，而是按“模型价格/倍率 + 使用分组倍率/特殊倍率”结算。不同上游成本要做成稳定商业方案，建议用企业私有分组或模型别名把路由和价格固定下来。</p>
+</section>
+<section class="section"><h2>1. 同模型多渠道时平台如何区分</h2>
+<p>请求进入 XDAPI 后，核心选择条件是：<code>using_group + model_name</code>。</p>
+<pre><code>
+用户 API Key
+
+  -&gt; 令牌 group / 用户 group
+
+  -&gt; 请求里的 model
+
+  -&gt; XDAPI 查找满足 group + model 的渠道
+
+  -&gt; 多个渠道可用时：先 priority，再 weight
+
+  -&gt; 选中一个具体 channel_id
+
+  -&gt; 转发到对应上游 base_url + upstream key
+
+  -&gt; 消费日志记录 model、group、channel_id、tokens、quota
+
+</code></pre>
+<h3>路由层能区分什么</h3>
+<table><thead><tr><th>维度</th><th>XDAPI 是否能区分</th><th>说明</th></tr></thead><tbody>
+<tr><td>同模型不同渠道</td><td>能</td><td>渠道有独立 <code>channel_id</code>、名称、上游地址、key、模型列表、分组、优先级、权重</td></tr>
+<tr><td>同模型不同上游成本</td><td>能记录，但不会自动按成本计价</td><td>日志能看到用了哪个渠道；价格仍由模型价和分组倍率决定</td></tr>
+<tr><td>同模型同分组多渠道负载均衡</td><td>能</td><td>同一 <code>group + model</code> 下多个渠道可配置 <code>priority/weight</code></td></tr>
+<tr><td>同模型给不同企业不同价格</td><td>能</td><td>用企业私有 group、<code>GroupRatio</code> / <code>GroupGroupRatio</code> / token 限制实现</td></tr>
+<tr><td>单次请求强制指定渠道</td><td>管理员可用，普通用户不支持</td><td>代码里普通用户指定渠道会被拒绝，避免绕过商业路由</td></tr>
+<h3>多渠道选择规则</h3>
+</tbody></table>
+<pre><code>
+候选渠道 = 所有 enabled 且支持这个 group + model 的渠道
+
+
+
+先按 priority 从高到低选：
+
+  priority 10: 渠道 A、渠道 B
+
+  priority  5: 渠道 C
+
+
+
+第一次请求优先在 priority 10 中选。
+
+如果同优先级有多个渠道，按 weight 加权随机：
+
+  渠道 A weight=80
+
+  渠道 B weight=20
+
+  约 80% 请求走 A，20% 请求走 B
+
+
+
+失败重试时才可能落到更低 priority 或其他可用组。
+
+</code></pre>
+</section>
+<section class="section"><h2>2. 为什么“同模型不同成本”不能随便混在同一分组</h2>
+<p>假设 <code>deepseek-v3</code> 同时有两个上游：</p>
+<table><thead><tr><th>渠道</th><th>上游</th><th>成本</th><th>对客户售价</th><th>放在同一 group 的风险</th></tr></thead><tbody>
+<tr><td>A</td><td>移动 MaaS</td><td>2 / 8 元每百万 tokens</td><td>统一按 1x 售价</td><td>成本低</td></tr>
+<tr><td>B</td><td>天翼云</td><td>4 / 16 元每百万 tokens</td><td>统一按 1x 售价</td><td>成本高，可能倒挂</td></tr>
+</tbody></table>
+<p>如果 A 和 B 都挂在同一个 <code>1x + deepseek-v3</code> 下并且随机路由，客户看到的是同一个模型同一个价格，但后台成本会随渠道浮动。这样可以做容灾，但不适合做精细毛利管理。</p>
+<p>更稳的做法有三种：</p>
+<table><thead><tr><th>方案</th><th>怎么做</th><th>适合场景</th><th>缺点</th></tr></thead><tbody>
+<tr><td>按企业私有分组隔离</td><td><code>ent_acme_2026</code> 只绑定指定渠道</td><td>B 端合同价、指定供应商、SLA</td><td>要维护企业 group 和渠道矩阵</td></tr>
+<tr><td>按模型别名隔离</td><td><code>deepseek-v3-cmcc</code>、<code>deepseek-v3-ctyun</code></td><td>需要让客户显式选择供应商</td><td>模型名变多，用户体验复杂</td></tr>
+<tr><td>同分组多渠道混用</td><td>同一模型多个渠道，靠 priority/weight</td><td>容灾、同成本线路、短期兜底</td><td>不适合成本差异大的渠道</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>3. 企业私有分组具体怎么支持</h2>
+<p>企业私有分组不是单独一套系统，而是利用 New API 已有的 group 体系：</p>
+<pre><code>
+企业用户 / 企业 token
+
+  -&gt; 所属用户组 user_group = ent_acme_2026
+
+  -&gt; 可用分组 UserUsableGroups 只开放 ent_acme_2026 或指定组合
+
+  -&gt; API token 固定 group = ent_acme_2026
+
+  -&gt; 渠道 group 里加入 ent_acme_2026
+
+  -&gt; 价格使用 GroupRatio 或 GroupGroupRatio
+
+  -&gt; 日志按 username / token_name / group / channel_id 汇总
+
+</code></pre>
+<h3>关键配置项</h3>
+<table><thead><tr><th>配置项</th><th>作用</th><th>企业场景写法</th></tr></thead><tbody>
+<tr><td><code>GroupRatio</code></td><td>定义每个业务分组的基础倍率</td><td><code>{&quot;1x&quot;:1,&quot;3x&quot;:3,&quot;5x&quot;:5,&quot;ent_acme_2026&quot;:0.82}</code></td></tr>
+<tr><td><code>GroupGroupRatio</code></td><td>针对“某用户组使用某分组”设置特殊倍率</td><td><code>{&quot;ent_acme_user&quot;:{&quot;ent_acme_2026&quot;:0.75}}</code></td></tr>
+<tr><td><code>UserUsableGroups</code></td><td>前台/令牌可选择哪些分组</td><td>只给企业用户开放 <code>ent_acme_2026</code>，避免误用公开组</td></tr>
+<tr><td>渠道 <code>group</code></td><td>哪些分组能走这个渠道</td><td>企业专属渠道只写 <code>ent_acme_2026</code>；共享渠道可追加企业 group</td></tr>
+<tr><td>token 模型限制</td><td>限制某个 token 能调用哪些模型</td><td>给企业 token 只开放合同模型清单</td></tr>
+<tr><td>group-level rate limit</td><td>控制企业分组请求频率</td><td>给企业分组设置独立 RPM / 成功请求上限</td></tr>
+<tr><td>日志字段</td><td>审计和成本核算</td><td>消费日志含 <code>model_name</code>、<code>group</code>、<code>channel</code>、tokens、quota</td></tr>
+</tbody></table>
+</section>
+<section class="section"><h2>4. 推荐实施方案</h2>
+<h3>方案 A：轻量企业折扣价，共用上游</h3>
+<p>适合试点客户，企业没有强 SLA，只是价格不同。</p>
+<pre><code>
+企业 token: group=ent_acme_2026
+
+GroupRatio: ent_acme_2026 = 0.85
+
+渠道 group: 在现有稳定渠道上追加 ent_acme_2026
+
+模型限制: 按合同模型开放
+
+日志核算: 按 group=ent_acme_2026 汇总
+
+</code></pre>
+<p>优点：实施快，不需要新上游 key。  </p>
+<p>风险：上游资源仍与公开用户共享，高峰期 SLA 没有强隔离。</p>
+<h3>方案 B：企业专属渠道，固定供应商成本</h3>
+<p>适合正式 B 端客户，尤其是指定供应商、要求稳定成本或 SLA 的客户。</p>
+<pre><code>
+企业 token: group=ent_acme_2026
+
+GroupRatio: ent_acme_2026 = 合同倍率
+
+新增渠道: China Mobile MaaS - Acme 或 CTYun MaaS - Acme
+
+渠道 group: 只写 ent_acme_2026
+
+渠道模型: 只放合同模型
+
+priority: 企业主渠道高优先级
+
+weight: 同优先级备线按比例分配
+
+日志核算: 按 channel_id + group 双维度统计成本
+
+</code></pre>
+<p>优点：成本口径清楚，审计清楚，可做 SLA。  </p>
+<p>风险：需要维护专属上游 key、渠道测试和余额/额度监控。</p>
+<h3>方案 C：同模型不同上游都要卖，但价格不同</h3>
+<p>如果客户需要同一个模型名但不同供应商价格不同，建议不要让同一个 <code>model_name</code> 在同一个 group 下随机走不同成本渠道。更建议拆成企业分组或模型别名。</p>
+<pre><code>
+不推荐：
+
+  group=1x, model=deepseek-v3 -&gt; 移动 / 天翼随机
+
+
+
+推荐 1：按企业分组
+
+  group=ent_acme_cmcc, model=deepseek-v3 -&gt; 移动渠道
+
+  group=ent_acme_ctyun, model=deepseek-v3 -&gt; 天翼渠道
+
+
+
+推荐 2：按模型别名
+
+  model=deepseek-v3-cmcc -&gt; 移动渠道映射 deepseek-v3
+
+  model=deepseek-v3-ctyun -&gt; 天翼渠道映射 DeepSeek-V3
+
+</code></pre>
+</section>
+<section class="section"><h2>5. 图解：路由和计费是两条线</h2>
+<pre><code>
+              路由线                                       计费线
+
+
+
+请求 model ─┐                                  model_name ─&gt; ModelRatio / ModelPrice
+
+            ├─ group + model 找渠道 ─┐                    ├─ CompletionRatio
+
+请求 group ─┘                        ├─ channel_id        └─ GroupRatio / GroupGroupRatio
+
+                                     └─ 上游成本                    │
+
+                                                                   v
+
+                                                         用户扣费 quota / 余额
+
+</code></pre>
+<p>关键点：<code>channel_id</code> 决定请求走哪个上游，<code>group</code> 决定客户按哪个商业倍率结算。两者有关联，但不是同一个东西。</p>
+</section>
+<section class="section"><h2>6. 给 XDAPI 当前项目的建议</h2>
+<ul>
+<li>公开零售继续保持 <code>1x/3x/5x</code>，不要恢复 <code>vip/agent/auto</code> 做公开业务分组。</li>
+<li>每个正式企业客户创建一个私有 group，例如 <code>ent_&lt;customer&gt;_&lt;year&gt;</code>。</li>
+<li>企业合同价优先落在 <code>GroupRatio</code> 或 <code>GroupGroupRatio</code>，不要改全局模型价影响所有用户。</li>
+<li>如果企业指定移动或天翼云，给企业 group 绑定指定渠道，避免同模型跨上游混用。</li>
+<li>如果企业只要求折扣不要求 SLA，可以共用渠道；如果要求 SLA、隔离、审计，必须专属渠道 + 专属上游 key。</li>
+<li>每个企业上线前必须记录：企业 group、token 名、可用模型、渠道 ID、上游成本来源、报价倍率、限流、是否允许备用渠道。</li>
+</ul>
+</section>
+<section class="section"><h2>7. 上线检查表</h2>
+<table><thead><tr><th>步骤</th><th>检查项</th><th>必须结果</th></tr></thead><tbody>
+<tr><td>1</td><td>创建企业 group</td><td><code>GroupRatio</code> 中存在企业 group</td></tr>
+<tr><td>2</td><td>用户/令牌绑定</td><td>企业 token 固定到企业 group</td></tr>
+<tr><td>3</td><td>渠道绑定</td><td>至少一个渠道的 <code>group</code> 包含企业 group</td></tr>
+<tr><td>4</td><td>模型限制</td><td>token 只开放合同模型</td></tr>
+<tr><td>5</td><td>价格核算</td><td>合同价 &gt;= 上游成本 + 目标毛利</td></tr>
+<tr><td>6</td><td>通路测试</td><td><code>chat/completions</code> 真实返回 200</td></tr>
+<tr><td>7</td><td>日志核算</td><td>日志能按 group 和 channel_id 查到消耗</td></tr>
+<tr><td>8</td><td>文档归档</td><td>GitHub Pages 和 skill 当前状态同步更新</td></tr>
+</tbody></table>
+</section></div></body></html>

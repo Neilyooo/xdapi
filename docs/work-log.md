@@ -1,5 +1,28 @@
 # XD API 工作记录
 
+## 2026-05-30 11:08 CST
+
+### 补充企业私有分组与同模型多渠道成本路由图解
+
+变更内容：
+
+- 新增 `docs/enterprise-routing-groups.md/html`，解释 New API / XDAPI 在同模型多渠道场景下如何按 `group + model` 选择渠道。
+- 明确多渠道同模型时的选择规则：先 `priority`，同优先级再按 `weight`；最终请求会落到具体 `channel_id`。
+- 明确计费规则：默认扣费按模型价/倍率和使用分组倍率，不会因为渠道成本不同自动改变价格。
+- 补充企业私有分组实施方案：企业 group、企业 token、渠道 group、`GroupRatio`、`GroupGroupRatio`、模型限制、限流和日志审计。
+- 更新企业接入策略、业务框架和首页入口。
+
+验证方式：
+
+- 核对本地 New API 代码：`middleware/distributor.go` 使用 `usingGroup + model` 进入渠道选择；`model/channel_cache.go` 按 `priority/weight` 选渠道；`relay/helper/price.go` 使用 `GroupRatio/GroupGroupRatio` 参与扣费；`model/log.go` 消费日志记录 `channel_id`、`model_name`、`group`、tokens 和 quota。
+- 本轮只更新业务解释和文档，不修改线上 XDAPI 配置。
+
+注意事项：
+
+- 如果两个上游同模型成本不同，不建议在同一 group 下随机混用，除非售价能覆盖最高或加权成本。
+- 正式企业客户建议按 `ent_<customer>_<year>` 建私有分组；需要 SLA 或成本隔离时，再叠加专属渠道和专属上游 key。
+
+
 ## 2026-05-29 18:33 CST
 
 ### 新增天翼云 MaaS 渠道审计、移动/天翼横向对比与企业接入策略
