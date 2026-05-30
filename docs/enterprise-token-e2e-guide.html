@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>企业 ToB 方案 B 端到端接入教程</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}main{max-width:1180px;margin:0 auto;padding:34px 22px 70px}a{color:#174ea6}h1{font-size:30px}h2{margin-top:28px}table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #d9e1f2;margin:12px 0 20px;font-size:13px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}code{background:#eef3fb;border:1px solid #dce6f5;padding:2px 6px;border-radius:6px}pre{background:#111827;color:#e5e7eb;padding:16px;border-radius:12px;overflow:auto;border:1px solid #263245}pre code{background:transparent;border:0;color:inherit;padding:0}.note{color:#5f6b85}</style></head><body><main><p><a href="../index.html">返回首页</a></p><h1>企业 ToB 方案 B 端到端接入教程</h1>
+<p>更新时间：2026-05-30 19:22 CST</p>
+<p>本文给企业内部验证用户使用，目标是让企业用户拿自己的 API Key 直接从外部调用 XDAPI，并确认请求实际走到企业专属渠道。</p>
+<h2>本次验证结论</h2>
+<p>企业用户 <code>ent</code> 的企业 API Key 已完成端到端闭环验证。公开文档只记录脱敏 key，不保存完整密钥或登录密码。</p>
+<table><thead><tr><th>测试项</th><th>Endpoint</th><th>模型</th><th>HTTP</th><th>耗时</th><th>结论</th></tr></thead><tbody>
+<tr><td>模型列表</td><td><code>GET /v1/models</code></td><td>-</td><td>200</td><td>112.25 ms</td><td>企业 key 可被 XDAPI 识别</td></tr>
+<tr><td>聊天非流式</td><td><code>POST /v1/chat/completions</code></td><td><code>deepseek-v4-flash-ctyun</code></td><td>200</td><td>910.61 ms</td><td>企业 token 可调用 CTYun chat 模型</td></tr>
+<tr><td>聊天流式</td><td><code>POST /v1/chat/completions</code></td><td><code>glm-5.1-ctyun</code></td><td>200</td><td>1649.67 ms</td><td>SSE 流式返回正常</td></tr>
+<tr><td>重排</td><td><code>POST /v1/rerank</code></td><td><code>bge-reranker-v2-m3-ctyun</code></td><td>200</td><td>593.87 ms</td><td>rerank 固定端点正常</td></tr>
+<tr><td>向量</td><td><code>POST /v1/embeddings</code></td><td><code>bge-m3-ctyun</code></td><td>200</td><td>523.55 ms</td><td>embedding 固定端点正常</td></tr>
+</tbody></table>
+<p>脱敏证据文件：<a href="../evidence/enterprise_b_e2e_20260530.json"><code>enterprise_b_e2e_20260530.json</code></a></p>
+<h2>用户要填什么</h2>
+<p>如果软件要求填写“API 地址 / Base URL”，优先填：</p>
+<pre><code>
+https://api.xingdingwangluo.cn/v1
+</code></pre>
+<p>如果软件像 Chatbox 的某些自定义提供方一样要求填写“完整接口地址 / API Host”，填：</p>
+<pre><code>
+https://api.xingdingwangluo.cn/v1/chat/completions
+</code></pre>
+<p>API Key 填企业后台生成的 <code>sk-...</code> 密钥。不要把 key 写进截图、工单或公开文档。</p>
+<h2>模型名怎么选</h2>
+<p>XDAPI 现在采用“渠道-模型别名”策略，把渠道选择暴露给用户：</p>
+<table><thead><tr><th>用户想走的渠道</th><th>模型名规则</th><th>示例</th></tr></thead><tbody>
+<tr><td>中国移动 / Moma</td><td>使用原模型名</td><td><code>deepseek-v4-flash</code>、<code>qwen3-max</code></td></tr>
+<tr><td>天翼云 CTYun</td><td>使用 <code>-ctyun</code> 后缀</td><td><code>deepseek-v4-flash-ctyun</code>、<code>glm-5.1-ctyun</code></td></tr>
+</tbody></table>
+<p>企业方案 B 默认推荐使用 <code>-ctyun</code> 后缀模型，因为企业专属渠道当前绑定的是天翼云 CTYun。</p>
+<h2>Windows 命令行测试</h2>
+<p>PowerShell 示例：</p>
+<pre><code>
+$env:XDAPI_KEY=&quot;替换为企业APIKey&quot;
+
+Invoke-RestMethod `
+  -Uri &quot;https://api.xingdingwangluo.cn/v1/chat/completions&quot; `
+  -Method Post `
+  -Headers @{ Authorization = &quot;Bearer $env:XDAPI_KEY&quot;; &quot;Content-Type&quot; = &quot;application/json&quot; } `
+  -Body &#x27;{
+    &quot;model&quot;: &quot;deepseek-v4-flash-ctyun&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;只回复 ok&quot;}],
+    &quot;max_tokens&quot;: 20,
+    &quot;temperature&quot;: 0.7
+  }&#x27;
+</code></pre>
+<h2>macOS / Linux 命令行测试</h2>
+<pre><code>
+export XDAPI_KEY=&quot;替换为企业APIKey&quot;
+
+curl https://api.xingdingwangluo.cn/v1/chat/completions \
+  -H &quot;Authorization: Bearer $XDAPI_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{
+    &quot;model&quot;: &quot;deepseek-v4-flash-ctyun&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;只回复 ok&quot;}],
+    &quot;max_tokens&quot;: 20,
+    &quot;temperature&quot;: 0.7
+  }&#x27;
+</code></pre>
+<h2>Python 测试</h2>
+<pre><code>
+import os
+import requests
+
+url = &quot;https://api.xingdingwangluo.cn/v1/chat/completions&quot;
+headers = {
+    &quot;Authorization&quot;: f&quot;Bearer {os.environ[&#x27;XDAPI_KEY&#x27;]}&quot;,
+    &quot;Content-Type&quot;: &quot;application/json&quot;,
+}
+payload = {
+    &quot;model&quot;: &quot;deepseek-v4-flash-ctyun&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;只回复 ok&quot;}],
+    &quot;max_tokens&quot;: 20,
+    &quot;temperature&quot;: 0.7,
+}
+
+resp = requests.post(url, headers=headers, json=payload, timeout=60)
+print(resp.status_code)
+print(resp.text)
+</code></pre>
+<h2>VS Code / Cursor / OpenAI 兼容插件</h2>
+<p>大多数 OpenAI-compatible 插件填写：</p>
+<pre><code>
+Base URL: https://api.xingdingwangluo.cn/v1
+API Key: 企业自己的 sk-... key
+Model: deepseek-v4-flash-ctyun
+</code></pre>
+<p>如果插件提示 <code>Invalid URL (GET /v1)</code>，通常是把 root URL 当成完整接口调了。改为 <code>https://api.xingdingwangluo.cn/v1</code>，或者在只接受完整接口的工具里填 <code>https://api.xingdingwangluo.cn/v1/chat/completions</code>。</p>
+<h2>Claude Code / Codex 类 CLI</h2>
+<p>如果 CLI 支持 OpenAI-compatible provider，一般使用：</p>
+<pre><code>
+export OPENAI_API_KEY=&quot;企业自己的 sk-... key&quot;
+export OPENAI_BASE_URL=&quot;https://api.xingdingwangluo.cn/v1&quot;
+</code></pre>
+<p>然后在 CLI 的模型配置里选择：</p>
+<pre><code>
+deepseek-v4-flash-ctyun
+</code></pre>
+<p>不同 CLI 的环境变量名称可能不同，关键原则不变：base URL 用 <code>/v1</code>，模型名带渠道后缀。</p>
+<h2>Chatbox 设置</h2>
+<p>如果 Chatbox 选择自定义 OpenAI-compatible provider：</p>
+<pre><code>
+API 密钥：企业自己的 sk-... key
+API 主机：https://api.xingdingwangluo.cn/v1/chat/completions
+模型：deepseek-v4-flash-ctyun
+</code></pre>
+<p>如果 Chatbox 当前 provider 是固定厂商模板，例如 MiniMax、Gemini、Claude，不要直接套 XDAPI key；应新建自定义 OpenAI-compatible provider，避免软件把请求改成厂商私有协议。</p>
+<h2>常见错误</h2>
+<table><thead><tr><th>错误</th><th>常见原因</th><th>处理</th></tr></thead><tbody>
+<tr><td><code>Invalid token</code></td><td>key 拼错、复制了空格、key 已删除或不是 XDAPI key</td><td>重新复制企业 API Key</td></tr>
+<tr><td><code>Invalid URL (GET /v1)</code></td><td>软件把 root URL 当完整 endpoint 调用</td><td>Base URL 填 <code>/v1</code>，完整接口模式填 <code>/v1/chat/completions</code></td></tr>
+<tr><td><code>model_not_found</code></td><td>模型名缺少渠道后缀或该 key 无权限</td><td>天翼云模型使用 <code>-ctyun</code> 后缀</td></tr>
+<tr><td>SSE <code>openai_error</code></td><td>流式返回被客户端误解析，或模型/endpoint 不匹配</td><td>先用非流式 curl 验证，再切回 stream</td></tr>
+<tr><td>rerank / embedding 返回 payload 错误</td><td>用 chat payload 调了非 chat 模型</td><td>rerank 用 <code>/v1/rerank</code>，embedding 用 <code>/v1/embeddings</code></td></tr>
+</tbody></table>
+<h2>企业方案 B 闭环判定标准</h2>
+<p>一次企业端到端验证必须同时满足：</p>
+<p>1. 企业 API Key 调 <code>GET /v1/models</code> 返回 200。</p>
+<p>2. 企业 API Key 调企业模型别名返回 200。</p>
+<p>3. 聊天、rerank、embedding 按各自 endpoint 调用，不能混用 chat payload。</p>
+<p>4. 后台日志能看到企业用户、企业 token、企业 group、模型名、渠道 ID 和 tokens。</p>
+<p>5. 公开文档只记录脱敏证据，不保存完整 API Key 或登录密码。</p></main></body></html>

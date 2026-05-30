@@ -1,0 +1,86 @@
+{
+  "tested_at": "2026-05-30T19:19:40.609697+08:00",
+  "base_url": "https://api.xingdingwangluo.cn",
+  "api_key_redacted": "sk-hTD...HhjMph",
+  "purpose": "enterprise scheme B end-to-end customer-token validation",
+  "tests": [
+    {
+      "method": "GET",
+      "path": "/v1/models",
+      "payload": null,
+      "stream": false,
+      "http": 200,
+      "elapsed_ms": 112.25,
+      "body_preview": "{\"data\":[{\"id\":\"bge-base-zh-v1.5\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"bge-m3\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"bge-m3-ctyun\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"bge-reranker-large-ctyun\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"bge-reranker-v2-m3\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"bge-reranker-v2-m3-ctyun\",\"object\":\"model\",\"created\":1626777600,\"owned_by\":\"custom\",\"supported_endpoint_types\":[\"openai\"]},{\"id\":\"deepseek-r1\",\"object\":\"model\",\"created\":16267776"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "payload": {
+        "model": "deepseek-v4-flash-ctyun",
+        "messages": [
+          {
+            "role": "user",
+            "content": "只回复 ok"
+          }
+        ],
+        "max_tokens": 20,
+        "temperature": 0.7,
+        "stream": false
+      },
+      "stream": false,
+      "http": 200,
+      "elapsed_ms": 910.61,
+      "body_preview": "{\"code\":0,\"id\":\"chatcmpl-a58d22d5-a371-4d26-8e3d-8dd98d265ae8\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\",\"reasoning_content\":null},\"finish_reason\":\"stop\"}],\"created\":1780139358,\"model\":\"deepseek-v4-flash\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":2,\"prompt_tokens\":7,\"total_tokens\":9}}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/chat/completions",
+      "payload": {
+        "model": "glm-5.1-ctyun",
+        "messages": [
+          {
+            "role": "user",
+            "content": "只回复 ok"
+          }
+        ],
+        "max_tokens": 20,
+        "temperature": 0.7,
+        "stream": true
+      },
+      "stream": true,
+      "http": 200,
+      "elapsed_ms": 1649.67,
+      "body_preview": "data: {\"code\":0,\"id\":\"chatcmpl-1780139982099982000044671172\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null}}],\"created\":1780139982,\"model\":\"glm-51\",\"object\":\"chat.completion.chunk\",\"usage\":null}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/rerank",
+      "payload": {
+        "model": "bge-reranker-v2-m3-ctyun",
+        "query": "北京天气",
+        "documents": [
+          "北京今天有雨",
+          "上海天气晴朗"
+        ],
+        "top_n": 2
+      },
+      "stream": false,
+      "http": 200,
+      "elapsed_ms": 593.87,
+      "body_preview": "{\"results\":[{\"document\":{\"text\":\"北京今天有雨\"},\"index\":0,\"relevance_score\":0.908293},{\"document\":{\"text\":\"上海天气晴朗\"},\"index\":1,\"relevance_score\":0.040616777}],\"usage\":{\"prompt_tokens\":13,\"completion_tokens\":0,\"total_tokens\":13,\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0},\"completion_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0,\"reasoning_tokens\":0},\"input_tokens\":0,\"output_tokens\":0,\"input_tokens_details\":null,\"claude_cache_creation_5_m_tokens\":0,\"claude_cache_creation_1_h_tokens\":0}}"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/embeddings",
+      "payload": {
+        "model": "bge-m3-ctyun",
+        "input": "企业端到端测试"
+      },
+      "stream": false,
+      "http": 200,
+      "elapsed_ms": 523.55,
+      "body_preview": "{\"code\":0,\"data\":[{\"index\":0,\"embedding\":[-0.05987548828125,0.030609130859375,-0.00826263427734375,-0.03961181640625,-0.0189208984375,-3.9696693420410156E-4,0.006011962890625,-0.0145263671875,4.324913024902344E-4,-0.00933074951171875,0.01158905029296875,0.03173828125,0.020477294921875,-0.01409912109375,0.004878997802734375,-0.048492431640625,0.00661468505859375,-0.045379638671875,0.0189666748046875,-0.027191162109375,0.013427734375,-0.04180908203125,0.03594970703125,0.0302581787109375,-0.0146942138671875,-0.008392333984375,-0.025146484375,-0.0293426513671875,0.020538330078125,0.027587890625,0.02001953125,-6.871223449707031E-4,0.00989532470703125,-0.06805419921875,-0.032928466796875,-0.046173095703125,0.024688720703125,-0.0024204254150390625,-0.06011962890625,-0.0209197998046875,0.008407592"
+    }
+  ]
+}

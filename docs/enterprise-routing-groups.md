@@ -1,12 +1,12 @@
 # 企业分组与多渠道成本路由详解
 
-更新时间：2026-05-30 18:35 CST
+更新时间：2026-05-30 19:22 CST
 
 ## 本轮执行结论
 
 - 同模型多渠道采用“渠道-模型别名”策略，不再把不同上游隐藏在同一个模型名后面。
 - 天翼云用户侧模型统一使用 `-ctyun` 后缀，例如 `deepseek-v4-flash-ctyun`；中国移动/Moma 保留既有模型名。
-- 企业 ToB 先落地方案 B：企业私有分组 + 企业专属渠道 + 企业专属 token / 用户。当前最小管理员链路已经验证通过。
+- 企业 ToB 先落地方案 B：企业私有分组 + 企业专属渠道 + 企业专属 token / 用户。当前管理员最小链路和企业用户自有 token 端到端链路均已验证通过。
 - XDAPI 已有公共天翼云渠道 `#4 CTYun MaaS - Public Alias`，分组 `1x,3x,5x`；企业渠道 `#5 CTYun MaaS - Enterprise B`，分组 `ent_ctyun_b_2026`。
 - 本轮已公开 37 个有价格证据且 runtime 通过的 `-ctyun` 模型；`/api/pricing` 当前返回 70 个模型，其中 37 个为天翼云别名。
 
@@ -23,14 +23,26 @@
 | 公共模型广场可见 | 已完成 | `/api/pricing` 返回 70 个模型，其中 37 个 `-ctyun` |
 | 公共 relay 固定端点测试 | 已完成 | 34 chat + 2 rerank + 1 embedding 全部 200 |
 | 企业方案 B 最小管理员链路 | 已完成 | `channel/test/5` 对 `deepseek-v4-flash-ctyun`、`glm-5.1-ctyun` 返回 200 |
-| 企业用户自有 token 端到端 | 待正式客户创建时完成 | 管理员 token 不能代表企业用户组权限；正式客户需由企业组用户持有 token |
+| 企业用户自有 token 端到端 | 已完成 | 企业用户 `ent` 的自有 API Key 调 `/v1/models`、chat、stream chat、rerank、embedding 均返回 200 |
 | 公开文档脱敏 | 已完成 | 不写完整 API Key、管理员密码或 token |
 
 ## 当前限制
 
-- 企业方案 B 目前完成的是管理员侧最小链路验证：企业渠道 `#5` 能到上游并返回 200。
-- 企业用户自有 token 的完整链路要在正式客户账号创建后验证；token 所属用户必须在 `ent_ctyun_b_2026` 分组，否则会返回“无权访问分组”。
+- 企业方案 B 已完成管理员侧最小链路验证：企业渠道 `#5` 能到上游并返回 200。
+- 企业用户自有 token 的完整链路已补测通过；token 所属用户必须在 `ent_ctyun_b_2026` 分组，否则会返回“无权访问分组”。
 - `channel/test` 对 rerank / embedding 的默认 payload 不适配，必须使用 `/v1/rerank` 与 `/v1/embeddings` 固定端点验证。
+
+## 2026-05-30 企业 token 端到端样本
+
+| 测试项 | Endpoint | 模型 | HTTP | 耗时 |
+| --- | --- | --- | ---: | ---: |
+| 模型列表 | `GET /v1/models` | - | 200 | 112.25 ms |
+| 聊天非流式 | `POST /v1/chat/completions` | `deepseek-v4-flash-ctyun` | 200 | 910.61 ms |
+| 聊天流式 | `POST /v1/chat/completions` | `glm-5.1-ctyun` | 200 | 1649.67 ms |
+| 重排 | `POST /v1/rerank` | `bge-reranker-v2-m3-ctyun` | 200 | 593.87 ms |
+| 向量 | `POST /v1/embeddings` | `bge-m3-ctyun` | 200 | 523.55 ms |
+
+小白接入教程：[`enterprise-token-e2e-guide.md`](enterprise-token-e2e-guide.md) / [`enterprise-token-e2e-guide.html`](enterprise-token-e2e-guide.html)
 
 ## 1. 同模型多渠道时平台如何区分
 

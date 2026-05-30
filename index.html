@@ -49,6 +49,7 @@
       <a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>
       <a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>
       <a href="./docs/enterprise-routing-groups.html">企业路由方案B</a>
+      <a href="./docs/enterprise-token-e2e-guide.html">企业Token教程</a>
       <a href="./docs/work-log.html">工作记录</a>
       <a href="./docs/latency-diagnosis.html">链路延迟诊断</a>
       <a href="./docs/cli-ide-setup-tutorial.md">教程 Markdown</a>
@@ -57,12 +58,13 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组继续承载中国移动/Moma 模型；2026-05-30 18:35 CST 已把天翼云 MaaS 37 个可核价模型以 <code>-ctyun</code> 别名接入 XDAPI，公开模型广场当前共 70 个模型。企业 ToB 试点采用方案 B：企业私有分组 + 企业专属渠道 + 专属 token / 用户。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组继续承载中国移动/Moma 模型；2026-05-30 18:35 CST 已把天翼云 MaaS 37 个可核价模型以 <code>-ctyun</code> 别名接入 XDAPI，公开模型广场当前共 70 个模型。2026-05-30 19:22 CST 已完成企业 ToB 方案 B 的企业用户自有 token 端到端验证。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-05-30 18:35 CST</span>
+        <span class="chip">更新时间：2026-05-30 19:22 CST</span>
         <span class="chip">天翼云接入：2026-05-30 18:35 CST</span>
+        <span class="chip">企业Token闭环：2026-05-30 19:22 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
-        <span class="chip">证据文件：ctyun_xdapi_deployment_20260530.json</span>
+        <span class="chip">证据文件：enterprise_b_e2e_20260530.json</span>
       </div>
     </section>
 
@@ -102,9 +104,26 @@
         <li>XDAPI 公共模型广场 <code>/api/pricing</code> 当前返回 <code>70</code> 个模型，其中 <code>37</code> 个为天翼云别名。</li>
         <li>公共 relay 固定端点验证完成：34 个 chat 模型走 <code>/v1/chat/completions</code>，2 个 rerank 模型走 <code>/v1/rerank</code>，1 个 embedding 模型走 <code>/v1/embeddings</code>，全部返回 <code>200</code>。</li>
         <li>企业方案 B 最小管理员链路完成：企业渠道 <code>#5 CTYun MaaS - Enterprise B</code> 对 <code>deepseek-v4-flash-ctyun</code> 与 <code>glm-5.1-ctyun</code> 返回 <code>200</code>。</li>
+        <li>企业用户自有 token 端到端已补测通过：<code>GET /v1/models</code>、chat 非流式、chat 流式、rerank、embedding 均返回 <code>200</code>。</li>
         <li>报告入口：<a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>、<a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>、<a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>
-      <a href="./docs/enterprise-routing-groups.html">企业路由方案B</a>、<a href="./evidence/ctyun_xdapi_deployment_20260530.json">脱敏证据 JSON</a>。</li>
+      <a href="./docs/enterprise-routing-groups.html">企业路由方案B</a>、<a href="./docs/enterprise-token-e2e-guide.html">企业Token教程</a>、<a href="./evidence/enterprise_b_e2e_20260530.json">企业闭环证据 JSON</a>。</li>
       </ul>
+    </section>
+
+    <section class="section">
+      <h2>企业 ToB 方案 B 端到端验证</h2>
+      <p class="small">本轮使用企业用户自有 API Key 从外部调用 XDAPI，不再只依赖管理员渠道测试。企业客户应使用 <code>https://api.xingdingwangluo.cn/v1</code> 作为 OpenAI-compatible Base URL；天翼云渠道模型使用 <code>-ctyun</code> 后缀。</p>
+      <table>
+        <thead><tr><th>测试项</th><th>Endpoint</th><th>模型</th><th>HTTP</th><th>耗时</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>模型列表</td><td><code>GET /v1/models</code></td><td>-</td><td>200</td><td>112.25 ms</td><td>企业 key 可被 XDAPI 识别</td></tr>
+          <tr><td>聊天非流式</td><td><code>POST /v1/chat/completions</code></td><td><code>deepseek-v4-flash-ctyun</code></td><td>200</td><td>910.61 ms</td><td>返回 <code>ok</code></td></tr>
+          <tr><td>聊天流式</td><td><code>POST /v1/chat/completions</code></td><td><code>glm-5.1-ctyun</code></td><td>200</td><td>1649.67 ms</td><td>SSE 返回正常</td></tr>
+          <tr><td>重排</td><td><code>POST /v1/rerank</code></td><td><code>bge-reranker-v2-m3-ctyun</code></td><td>200</td><td>593.87 ms</td><td>固定端点正常</td></tr>
+          <tr><td>向量</td><td><code>POST /v1/embeddings</code></td><td><code>bge-m3-ctyun</code></td><td>200</td><td>523.55 ms</td><td>固定端点正常</td></tr>
+        </tbody>
+      </table>
+      <p class="small">接入教程见 <a href="./docs/enterprise-token-e2e-guide.html">企业 ToB 方案 B 端到端接入教程</a>；脱敏证据见 <a href="./evidence/enterprise_b_e2e_20260530.json">enterprise_b_e2e_20260530.json</a>。</p>
     </section>
 
     <section class="grid">

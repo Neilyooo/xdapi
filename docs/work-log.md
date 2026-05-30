@@ -1,5 +1,31 @@
 # XD API 工作记录
 
+## 2026-05-30 19:22 CST
+
+### 企业用户自有 token 端到端闭环验证通过，并补充小白接入教程
+
+变更内容：
+
+- 使用企业用户 `ent` 的自有 API Key 进行外部端到端验证，不再只依赖管理员 `channel/test`。
+- 新增企业 ToB 方案 B 接入教程 `docs/enterprise-token-e2e-guide.md/html`，覆盖 Windows、macOS、Linux、Python、VS Code、Cursor、Claude/Codex 类 CLI 和 Chatbox 的 URL/API Key 填写方式。
+- 明确渠道商后缀策略：天翼云 CTYun 模型统一使用 `-ctyun` 后缀，中国移动/Moma 保留既有模型名。
+- 更新企业路由方案页的检查表，把“企业用户自有 token 端到端”从待完成改为已完成。
+- 新增脱敏证据 `evidence/enterprise_b_e2e_20260530.json`，不保存完整 API Key 或登录密码。
+
+验证方式：
+
+- 企业 API Key 调 `GET /v1/models` 返回 200 / 112.25ms。
+- 企业 API Key 调 `POST /v1/chat/completions`，模型 `deepseek-v4-flash-ctyun`，非流式返回 200 / 910.61ms，响应片段为 `ok`。
+- 企业 API Key 调 `POST /v1/chat/completions`，模型 `glm-5.1-ctyun`，流式 SSE 返回 200 / 1649.67ms。
+- 企业 API Key 调 `POST /v1/rerank`，模型 `bge-reranker-v2-m3-ctyun`，返回 200 / 593.87ms。
+- 企业 API Key 调 `POST /v1/embeddings`，模型 `bge-m3-ctyun`，返回 200 / 523.55ms。
+
+注意事项：
+
+- OpenAI-compatible 客户端通常填写 `https://api.xingdingwangluo.cn/v1`；只接受完整接口地址的软件填写 `https://api.xingdingwangluo.cn/v1/chat/completions`。
+- 企业 token 必须属于企业分组并能访问 `ent_ctyun_b_2026` 绑定的渠道；否则即使管理员渠道测试成功，企业客户也可能无法调用。
+- rerank 和 embedding 不能用 chat payload 验证，必须分别调用 `/v1/rerank` 与 `/v1/embeddings`。
+
 ## 2026-05-30 18:35 CST
 
 ### 天翼云 37 个可核价模型接入 XDAPI，并完成企业方案 B 最小链路验证
