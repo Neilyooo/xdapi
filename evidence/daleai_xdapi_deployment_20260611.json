@@ -1,46 +1,62 @@
 {
-  "timestamp": "2026-06-11 11:31 CST",
+  "timestamp": "2026-06-11 15:31 CST",
   "xdapi_base_url": "https://api.xingdingwangluo.cn",
   "daleai_base_url": "https://www.daleai.shop",
-  "public_pricing_count_after": 72,
+  "public_pricing_count_after": 74,
   "deployed_daleai_aliases": [
     "claude-opus-4-6-dale",
     "claude-opus-4-7-dale",
     "claude-opus-4-8-dale",
     "claude-sonnet-4-6-dale",
-    "codex-auto-review-dale"
+    "codex-auto-review-dale",
+    "gpt-5.4-dale",
+    "gpt-5.4-openai-compact-dale"
   ],
   "channels": [
     {
-      "id": 6,
       "name": "DaleAI GPT Codex - Public Alias",
       "group": "1x,3x,5x",
-      "models": [
-        "codex-auto-review-dale"
-      ],
-      "mapping": {
-        "codex-auto-review-dale": "codex-auto-review"
-      }
+      "alias": "codex-auto-review-dale",
+      "upstream": "codex-auto-review"
     },
     {
-      "id": 7,
+      "name": "DaleAI GPT Codex - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "gpt-5.4-dale",
+      "upstream": "gpt-5.4"
+    },
+    {
+      "name": "DaleAI GPT Codex - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "gpt-5.4-openai-compact-dale",
+      "upstream": "gpt-5.4-openai-compact"
+    },
+    {
       "name": "DaleAI Claude - Public Alias",
       "group": "1x,3x,5x",
-      "models": [
-        "claude-opus-4-7-dale",
-        "claude-opus-4-6-dale",
-        "claude-opus-4-8-dale",
-        "claude-sonnet-4-6-dale"
-      ],
-      "mapping": {
-        "claude-opus-4-7-dale": "claude-opus-4-7",
-        "claude-opus-4-6-dale": "claude-opus-4-6",
-        "claude-opus-4-8-dale": "claude-opus-4-8",
-        "claude-sonnet-4-6-dale": "claude-sonnet-4-6"
-      }
+      "alias": "claude-opus-4-7-dale",
+      "upstream": "claude-opus-4-7"
+    },
+    {
+      "name": "DaleAI Claude - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "claude-opus-4-6-dale",
+      "upstream": "claude-opus-4-6"
+    },
+    {
+      "name": "DaleAI Claude - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "claude-opus-4-8-dale",
+      "upstream": "claude-opus-4-8"
+    },
+    {
+      "name": "DaleAI Claude - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "claude-sonnet-4-6-dale",
+      "upstream": "claude-sonnet-4-6"
     }
   ],
-  "final_channel_tests": [
+  "initial_channel_tests_5_aliases": [
     {
       "channel_id": 6,
       "channel": "DaleAI GPT Codex - Public Alias",
@@ -142,46 +158,130 @@
       "message": ""
     }
   ],
-  "relay_test": {
-    "token_id": 30,
-    "token_ref": "hgwt...tku0",
-    "model": "codex-auto-review-dale",
-    "http_status": 200,
-    "elapsed_ms": 3082.73,
-    "snippet": "{\"id\":\"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa\",\"object\":\"chat.completion\",\"created\":1781146882,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":14"
-  },
-  "cleanup": {
-    "token_id": 30,
-    "success": true
-  },
-  "disabled_or_pending": [
+  "supplemental_matrix_summary": [
     {
-      "model": "gpt-5.5-openai-compact-dale",
-      "reason": "DaleAI direct / XDAPI retest returned 502, timeout, or upstream 429"
+      "model": "gpt-5.5-openai-compact",
+      "result": "direct_fail",
+      "detail": "www.daleai.shop/v1/chat/completions model=gpt-5.5-openai-compact status=400 snippet={\"error\":{\"message\":\"openai_error\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
     },
     {
-      "model": "gpt-5.5-dale",
-      "reason": "XDAPI eventually passed after retry but had 502 and 29s non-stream latency, not stable enough for public listing"
+      "model": "gpt-5.5",
+      "result": "direct_pass",
+      "detail": "www.daleai.shop/v1/chat/completions model=gpt-5.5 non-stream 200; stream=400"
     },
     {
-      "model": "gpt-5.4-dale",
-      "reason": "XDAPI non-stream failed repeatedly with 502/429; stream only passed intermittently"
+      "model": "gpt-5.4",
+      "result": "direct_pass",
+      "detail": "www.daleai.shop/v1/chat/completions model=gpt-5.4 non-stream 200; stream=200"
     },
     {
-      "model": "gpt-5.4-openai-compact-dale",
-      "reason": "DaleAI direct and XDAPI retest returned 502"
+      "model": "gpt-5.4-mini",
+      "result": "direct_fail",
+      "detail": "www.daleai.shop/v1/chat/completions model=gpt-5.4-mini status=400 snippet={\"error\":{\"message\":\"openai_error\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
     },
     {
-      "model": "gpt-5.4-mini-dale",
-      "reason": "XDAPI non-stream and relay passed, but stream retest returned 502; removed from public listing"
+      "model": "gpt-5.4-openai-compact",
+      "result": "direct_pass",
+      "detail": "www.daleai.shop/v1/chat/completions model=gpt-5.4-openai-compact non-stream 200; stream=200"
     },
     {
       "model": "claude-fable-5",
-      "reason": "DaleAI upstream direct chat returned HTTP 400 in previous probe"
+      "result": "direct_fail",
+      "detail": "www.daleai.shop/v1/chat/completions model=claude-fable-5 status=400 snippet={\"error\":{\"message\":\"bad response status code 400 (request id: 202606110711268684935898268d9d6L6g25lAj)\",\"type\":\"bad_response_status_code\",\""
     },
     {
       "model": "gpt-image-2",
-      "reason": "Image/per-call pricing row, not token-priced chat completion"
+      "result": "not_chat_shape",
+      "detail": "checked 3 variants/endpoints; no chat success"
     }
-  ]
+  ],
+  "readded_gpt54_channel_tests": [
+    {
+      "model": "gpt-5.4-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 16.244,
+      "message": ""
+    },
+    {
+      "model": "gpt-5.4-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 29.768,
+      "message": ""
+    },
+    {
+      "model": "gpt-5.4-openai-compact-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 5.593,
+      "message": ""
+    },
+    {
+      "model": "gpt-5.4-openai-compact-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 8.031,
+      "message": ""
+    }
+  ],
+  "relay_tests": [
+    {
+      "token_id": 30,
+      "token_ref": "hgwt...tku0",
+      "model": "codex-auto-review-dale",
+      "http_status": 200,
+      "elapsed_ms": 3082.73,
+      "snippet": "{\"id\":\"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa\",\"object\":\"chat.completion\",\"created\":1781146882,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":14"
+    },
+    {
+      "model": "gpt-5.4-dale",
+      "http_status": 200,
+      "elapsed_ms": 41679.42,
+      "snippet": "{\"id\":\"resp_0b5320b319f57a4f016a2a60d002bc819b8c97048f77b3f9f1\",\"object\":\"chat.completion\",\"created\":1781162230,\"model\":\"gpt-5.4\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"tota"
+    },
+    {
+      "model": "gpt-5.4-openai-compact-dale",
+      "http_status": 200,
+      "elapsed_ms": 2685.79,
+      "snippet": "{\"id\":\"resp_0169dfd330d84d86016a2a60f82d0c819aa334857c84b75743\",\"object\":\"chat.completion\",\"created\":1781162233,\"model\":\"gpt-5.4\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"tota"
+    }
+  ],
+  "cleanup": {
+    "initial_token_cleanup": {
+      "token_id": 30,
+      "success": true
+    },
+    "gpt54_token_cleanup": {
+      "token_id": 31,
+      "success": true
+    }
+  },
+  "still_disabled_or_pending": [
+    {
+      "model": "gpt-5.5-openai-compact-dale",
+      "reason": "supplemental exact /v1/chat/completions returned 400 openai_error; prefixed/compact variants returned model_not_found or endpoint failures"
+    },
+    {
+      "model": "gpt-5.5-dale",
+      "reason": "non-stream direct passed once, but direct stream returned 400 openai_error; not public until stream path is stable"
+    },
+    {
+      "model": "gpt-5.4-mini-dale",
+      "reason": "exact non-stream returned 400 openai_error; variants returned model_not_found or endpoint failures"
+    },
+    {
+      "model": "claude-fable-5-dale",
+      "reason": "exact OpenAI-compatible chat returned 400 bad_response_status_code; Anthropic-prefixed variants unavailable"
+    },
+    {
+      "model": "gpt-image-2-dale",
+      "reason": "image/per-call model; /v1/images/generations requires prompt and is not token chat completion shape"
+    }
+  ],
+  "notes": "Secrets are redacted; full DaleAI tokens, cookies and passwords are intentionally omitted from public evidence."
 }

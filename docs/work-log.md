@@ -1,5 +1,17 @@
 # XD API 工作记录
 
+## 2026-06-11 15:31 CST
+
+### 修正 DaleAI GPT 模型验证流程并补回 2 个 GPT 5.4 别名
+
+- 复核早期 DaleAI 失败结论，确认 11:31 CST 测试没有完整覆盖 `/v1/models`、模型名变体、备用 URL/path 与流式/非流式组合。
+- 补充矩阵测试后，`gpt-5.4` 与 `gpt-5.4-openai-compact` 在 DaleAI 直连 `www.daleai.shop/v1/chat/completions` 通过非流式和流式验证。
+- 已将 `gpt-5.4-dale`、`gpt-5.4-openai-compact-dale` 补回 `DaleAI GPT Codex - Public Alias` 渠道，绑定 `1x,3x,5x`，并更新 ModelRatio / CompletionRatio / CacheRatio / CreateCacheRatio。
+- XDAPI channel/test：`gpt-5.4-dale` 非流式 16.244s、流式 29.768s；`gpt-5.4-openai-compact-dale` 非流式 5.593s、流式 8.031s，全部 HTTP 200 / success=true。
+- 临时 `1x` token 真实 relay：`gpt-5.4-dale` HTTP 200，约 41679.42 ms；`gpt-5.4-openai-compact-dale` HTTP 200，约 2685.79 ms；临时 token 已删除。
+- live `/api/pricing` 当前返回 74 个模型，其中 DaleAI `-dale` 别名 7 个。
+- 仍不公开：`gpt-5.5-openai-compact-dale`、`gpt-5.5-dale`、`gpt-5.4-mini-dale`、`claude-fable-5-dale`、`gpt-image-2-dale`，原因见 DaleAI 模型审计页。
+
 ## 2026-06-11 11:31 CST
 
 ### 新增 DaleAI 上游渠道并上线 5 个稳定 Claude/Codex 别名
