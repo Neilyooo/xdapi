@@ -1,56 +1,28 @@
 # XD API 工作记录
 
-## 2026-05-30 19:22 CST
+## 2026-06-11 11:31 CST
 
-### 企业用户自有 token 端到端闭环验证通过，并补充小白接入教程
-
-变更内容：
-
-- 使用企业用户 `ent` 的自有 API Key 进行外部端到端验证，不再只依赖管理员 `channel/test`。
-- 新增企业 ToB 方案 B 接入教程 `docs/enterprise-token-e2e-guide.md/html`，覆盖 Windows、macOS、Linux、Python、VS Code、Cursor、Claude/Codex 类 CLI 和 Chatbox 的 URL/API Key 填写方式。
-- 明确渠道商后缀策略：天翼云 CTYun 模型统一使用 `-ctyun` 后缀，中国移动/Moma 保留既有模型名。
-- 更新企业路由方案页的检查表，把“企业用户自有 token 端到端”从待完成改为已完成。
-- 新增脱敏证据 `evidence/enterprise_b_e2e_20260530.json`，不保存完整 API Key 或登录密码。
-
-验证方式：
-
-- 企业 API Key 调 `GET /v1/models` 返回 200 / 112.25ms。
-- 企业 API Key 调 `POST /v1/chat/completions`，模型 `deepseek-v4-flash-ctyun`，非流式返回 200 / 910.61ms，响应片段为 `ok`。
-- 企业 API Key 调 `POST /v1/chat/completions`，模型 `glm-5.1-ctyun`，流式 SSE 返回 200 / 1649.67ms。
-- 企业 API Key 调 `POST /v1/rerank`，模型 `bge-reranker-v2-m3-ctyun`，返回 200 / 593.87ms。
-- 企业 API Key 调 `POST /v1/embeddings`，模型 `bge-m3-ctyun`，返回 200 / 523.55ms。
-
-注意事项：
-
-- OpenAI-compatible 客户端通常填写 `https://api.xingdingwangluo.cn/v1`；只接受完整接口地址的软件填写 `https://api.xingdingwangluo.cn/v1/chat/completions`。
-- 企业 token 必须属于企业分组并能访问 `ent_ctyun_b_2026` 绑定的渠道；否则即使管理员渠道测试成功，企业客户也可能无法调用。
-- rerank 和 embedding 不能用 chat payload 验证，必须分别调用 `/v1/rerank` 与 `/v1/embeddings`。
-
-## 2026-05-30 18:35 CST
-
-### 天翼云 37 个可核价模型接入 XDAPI，并完成企业方案 B 最小链路验证
+### 新增 DaleAI 上游渠道并上线 5 个稳定 Claude/Codex 别名
 
 变更内容：
 
-- 按“渠道-模型别名”策略接入天翼云模型，用户侧统一使用 `-ctyun` 后缀自行选择天翼云渠道。
-- 天翼云直连健康检查覆盖 56 个模型：54 个 token 模型通过，2 个图片/按次模型跳过消耗型生成测试。
-- 只将有明确 token 价格证据的 37 个模型写入 XDAPI 模型广场；其余 19 个候选暂缓，避免无价格模型进入正式计费。
-- 新增/确认 XDAPI 渠道：公共渠道 `#4 CTYun MaaS - Public Alias` 绑定 `1x,3x,5x`；企业方案 B 渠道 `#5 CTYun MaaS - Enterprise B` 绑定 `ent_ctyun_b_2026`。
-- 首页已部署模型数更新为 70，其中中国移动/Moma 33 个、天翼云 `-ctyun` 37 个。
+- 新增/更新 XDAPI 供应商 `DaleAI`。
+- 新增/更新两个公开逻辑渠道：`DaleAI GPT Codex - Public Alias` 与 `DaleAI Claude - Public Alias`，均绑定 `1x,3x,5x`。
+- 采用渠道后缀策略，用户侧模型统一使用 `-dale` 后缀，避免与移动、天翼云等其他渠道同名模型混淆。
+- 最终公开 5 个稳定别名：`codex-auto-review-dale`、`claude-opus-4-7-dale`、`claude-opus-4-6-dale`、`claude-opus-4-8-dale`、`claude-sonnet-4-6-dale`。
+- live `/api/pricing` 当前返回 72 个模型，其中 DaleAI `-dale` 别名 5 个。
 
 验证方式：
 
-- `/api/pricing` 返回 `70` 个模型，其中 `37` 个是天翼云 `-ctyun` 别名。
-- 公共 relay 固定端点验证：34 个 chat 模型通过 `/v1/chat/completions`，2 个 rerank 模型通过 `/v1/rerank`，1 个 embedding 模型通过 `/v1/embeddings`。
-- 固定端点样本：`bge-reranker-v2-m3-ctyun` 200 / 588ms，`bge-reranker-large-ctyun` 200 / 403ms，`bge-m3-ctyun` 200 / 430ms。
-- 企业方案 B 最小管理员链路：`channel/test/5` 对 `deepseek-v4-flash-ctyun` 返回 200 / 891ms，对 `glm-5.1-ctyun` 返回 200 / 2041ms。
-- 脱敏公开证据写入 `evidence/ctyun_xdapi_deployment_20260530.json`。
+- 5 个公开别名全部通过 XDAPI 管理员态 `channel/test` 的 `stream=false` 与 `stream=true` 双验证。
+- 使用临时 XDAPI `1x` token 对 `codex-auto-review-dale` 做真实 `POST /v1/chat/completions`，返回 HTTP 200，响应片段 `ok`，临时 token 已删除。
+- 公开证据见 `evidence/daleai_xdapi_deployment_20260611.json`。
 
 注意事项：
 
-- `channel/test` 对 rerank / embedding 的默认 payload 不适配，初轮返回缺少 `documents` / `input` 的 400；固定端点补测已经确认模型可用。
-- 企业用户自有 token 端到端仍需在正式企业用户持有 token 后验证；管理员 token 不代表企业私有分组用户权限。
-- 公开文档不保存天翼云 API Key、XDAPI 管理员密码或任何完整测试 token。
+- `gpt-5.5-openai-compact-dale`、`gpt-5.5-dale`、`gpt-5.4-dale`、`gpt-5.4-openai-compact-dale`、`gpt-5.4-mini-dale` 因 502、429、timeout 或流式不稳定，已从公开 channel/pricing 中移除并禁用模型元数据，后续可单独复测。
+- `claude-fable-5` 上游直连返回 400，`gpt-image-2` 属于图片/按次计费，不纳入当前 token-priced chat 模型接入。
+- 完整 DaleAI token、密码和 cookie 不写入 GitHub Pages；公开文档只保留脱敏证据。
 
 ## 2026-05-30 11:08 CST
 

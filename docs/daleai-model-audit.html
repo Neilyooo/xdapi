@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>DaleAI 渠道接入与模型验证记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h1{font-size:30px;margin:0 0 16px}h2{font-size:21px;margin:24px 0 10px}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}p{margin:8px 0}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./work-log.html">工作记录</a><a href="../evidence/daleai_xdapi_deployment_20260611.json">证据 JSON</a></nav><section class="section"><h1>DaleAI 渠道接入与模型验证记录</h1>
+<p>更新时间：2026-06-11 11:31 CST</p>
+<h2>结论</h2>
+<p>• 已在 XDAPI 线上新增/更新 DaleAI 供应商和两个逻辑渠道：</p>
+<p>  - `#6 DaleAI GPT Codex - Public Alias`</p>
+<p>  - `#7 DaleAI Claude - Public Alias`</p>
+<p>• 当前公开到 `/api/pricing` 的 DaleAI 别名为 `5` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。</p>
+<p>• live `/api/pricing` 当前总数为 `72`。</p>
+<p>• 完整保留的公开别名：</p>
+<p>  - `claude-opus-4-6-dale`</p>
+<p>  - `claude-opus-4-7-dale`</p>
+<p>  - `claude-opus-4-8-dale`</p>
+<p>  - `claude-sonnet-4-6-dale`</p>
+<p>  - `codex-auto-review-dale`</p>
+<h2>渠道与映射</h2>
+<table><tbody>
+<tr><th>渠道</th><th>分组</th><th>用户模型名</th><th>上游模型名</th></tr>
+<tr><td>`DaleAI GPT Codex - Public Alias`</td><td>`1x,3x,5x`</td><td>`codex-auto-review-dale`</td><td>`codex-auto-review`</td></tr>
+<tr><td>`DaleAI Claude - Public Alias`</td><td>`1x,3x,5x`</td><td>`claude-opus-4-7-dale`</td><td>`claude-opus-4-7`</td></tr>
+<tr><td>`DaleAI Claude - Public Alias`</td><td>`1x,3x,5x`</td><td>`claude-opus-4-6-dale`</td><td>`claude-opus-4-6`</td></tr>
+<tr><td>`DaleAI Claude - Public Alias`</td><td>`1x,3x,5x`</td><td>`claude-opus-4-8-dale`</td><td>`claude-opus-4-8`</td></tr>
+<tr><td>`DaleAI Claude - Public Alias`</td><td>`1x,3x,5x`</td><td>`claude-sonnet-4-6-dale`</td><td>`claude-sonnet-4-6`</td></tr>
+</tbody></table>
+<h2>最终 XDAPI 渠道测试</h2>
+<table><tbody>
+<tr><th>模型</th><th>渠道</th><th>stream</th><th>HTTP</th><th>结果</th><th>耗时</th><th>响应</th></tr>
+<tr><td>`codex-auto-review-dale`</td><td>`DaleAI GPT Codex - Public Alias`</td><td>`False`</td><td>200</td><td>通过</td><td>1.901s</td><td>`ok`</td></tr>
+<tr><td>`codex-auto-review-dale`</td><td>`DaleAI GPT Codex - Public Alias`</td><td>`True`</td><td>200</td><td>通过</td><td>2.522s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-7-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`False`</td><td>200</td><td>通过</td><td>2.695s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-7-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`True`</td><td>200</td><td>通过</td><td>2.466s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-6-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`False`</td><td>200</td><td>通过</td><td>2.875s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-6-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`True`</td><td>200</td><td>通过</td><td>3.969s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-8-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`False`</td><td>200</td><td>通过</td><td>2.134s</td><td>`ok`</td></tr>
+<tr><td>`claude-opus-4-8-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`True`</td><td>200</td><td>通过</td><td>2.324s</td><td>`ok`</td></tr>
+<tr><td>`claude-sonnet-4-6-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`False`</td><td>200</td><td>通过</td><td>34.728s</td><td>`ok`</td></tr>
+<tr><td>`claude-sonnet-4-6-dale`</td><td>`DaleAI Claude - Public Alias`</td><td>`True`</td><td>200</td><td>通过</td><td>3.621s</td><td>`ok`</td></tr>
+</tbody></table>
+<h2>真实 relay 验证</h2>
+<p>使用临时 XDAPI `1x` token 调用 `POST /v1/chat/completions`，模型 `codex-auto-review-dale`：</p>
+<p>• HTTP：`200`</p>
+<p>• 耗时：`3082.73 ms`</p>
+<p>• 响应片段：`{&quot;id&quot;:&quot;resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa&quot;,&quot;object&quot;:&quot;chat.completion&quot;,&quot;created&quot;:1781146882,&quot;model&quot;:&quot;codex-auto-review&quot;,&quot;choices&quot;:[{&quot;index&quot;:0,&quot;message&quot;:{&quot;role&quot;:`</p>
+<p>• 临时 token：`hgwt...tku0`，测试后删除状态 `True`</p>
+<h2>暂不公开项</h2>
+<table><tbody>
+<tr><th>模型</th><th>原因</th></tr>
+<tr><td>`gpt-5.5-openai-compact-dale`</td><td>DaleAI direct / XDAPI 复测返回 502、timeout 或上游 429</td></tr>
+<tr><td>`gpt-5.5-dale`</td><td>XDAPI 可重试成功，但出现 502 和 29s 非流式耗时，稳定性不足</td></tr>
+<tr><td>`gpt-5.4-dale`</td><td>XDAPI 非流式连续 502/429，流式只间歇成功</td></tr>
+<tr><td>`gpt-5.4-openai-compact-dale`</td><td>DaleAI direct 与 XDAPI 复测均有 502</td></tr>
+<tr><td>`gpt-5.4-mini-dale`</td><td>非流式和真实 relay 通过，但 stream 复测 502，已从公开列表移除</td></tr>
+<tr><td>`claude-fable-5`</td><td>上游直连 chat 返回 400</td></tr>
+<tr><td>`gpt-image-2`</td><td>图片/按次计费模型，不属于当前 token-priced chat 接入范围</td></tr>
+</tbody></table>
+<h2>证据文件</h2>
+<p>• `evidence/daleai_xdapi_deployment_20260611.json`</p>
+<p>完整 API key、密码和 cookie 不写入公开文档；证据只保留脱敏 token 引用、状态码、耗时和响应片段。</p></section></div></body></html>

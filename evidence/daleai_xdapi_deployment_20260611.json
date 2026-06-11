@@ -1,0 +1,187 @@
+{
+  "timestamp": "2026-06-11 11:31 CST",
+  "xdapi_base_url": "https://api.xingdingwangluo.cn",
+  "daleai_base_url": "https://www.daleai.shop",
+  "public_pricing_count_after": 72,
+  "deployed_daleai_aliases": [
+    "claude-opus-4-6-dale",
+    "claude-opus-4-7-dale",
+    "claude-opus-4-8-dale",
+    "claude-sonnet-4-6-dale",
+    "codex-auto-review-dale"
+  ],
+  "channels": [
+    {
+      "id": 6,
+      "name": "DaleAI GPT Codex - Public Alias",
+      "group": "1x,3x,5x",
+      "models": [
+        "codex-auto-review-dale"
+      ],
+      "mapping": {
+        "codex-auto-review-dale": "codex-auto-review"
+      }
+    },
+    {
+      "id": 7,
+      "name": "DaleAI Claude - Public Alias",
+      "group": "1x,3x,5x",
+      "models": [
+        "claude-opus-4-7-dale",
+        "claude-opus-4-6-dale",
+        "claude-opus-4-8-dale",
+        "claude-sonnet-4-6-dale"
+      ],
+      "mapping": {
+        "claude-opus-4-7-dale": "claude-opus-4-7",
+        "claude-opus-4-6-dale": "claude-opus-4-6",
+        "claude-opus-4-8-dale": "claude-opus-4-8",
+        "claude-sonnet-4-6-dale": "claude-sonnet-4-6"
+      }
+    }
+  ],
+  "final_channel_tests": [
+    {
+      "channel_id": 6,
+      "channel": "DaleAI GPT Codex - Public Alias",
+      "model": "codex-auto-review-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 1.901,
+      "message": ""
+    },
+    {
+      "channel_id": 6,
+      "channel": "DaleAI GPT Codex - Public Alias",
+      "model": "codex-auto-review-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.522,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-7-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.695,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-7-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.466,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-6-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.875,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-6-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 3.969,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-8-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.134,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-opus-4-8-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 2.324,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-sonnet-4-6-dale",
+      "stream": false,
+      "http_status": 200,
+      "success": true,
+      "time_s": 34.728,
+      "message": ""
+    },
+    {
+      "channel_id": 7,
+      "channel": "DaleAI Claude - Public Alias",
+      "model": "claude-sonnet-4-6-dale",
+      "stream": true,
+      "http_status": 200,
+      "success": true,
+      "time_s": 3.621,
+      "message": ""
+    }
+  ],
+  "relay_test": {
+    "token_id": 30,
+    "token_ref": "hgwt...tku0",
+    "model": "codex-auto-review-dale",
+    "http_status": 200,
+    "elapsed_ms": 3082.73,
+    "snippet": "{\"id\":\"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa\",\"object\":\"chat.completion\",\"created\":1781146882,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":14"
+  },
+  "cleanup": {
+    "token_id": 30,
+    "success": true
+  },
+  "disabled_or_pending": [
+    {
+      "model": "gpt-5.5-openai-compact-dale",
+      "reason": "DaleAI direct / XDAPI retest returned 502, timeout, or upstream 429"
+    },
+    {
+      "model": "gpt-5.5-dale",
+      "reason": "XDAPI eventually passed after retry but had 502 and 29s non-stream latency, not stable enough for public listing"
+    },
+    {
+      "model": "gpt-5.4-dale",
+      "reason": "XDAPI non-stream failed repeatedly with 502/429; stream only passed intermittently"
+    },
+    {
+      "model": "gpt-5.4-openai-compact-dale",
+      "reason": "DaleAI direct and XDAPI retest returned 502"
+    },
+    {
+      "model": "gpt-5.4-mini-dale",
+      "reason": "XDAPI non-stream and relay passed, but stream retest returned 502; removed from public listing"
+    },
+    {
+      "model": "claude-fable-5",
+      "reason": "DaleAI upstream direct chat returned HTTP 400 in previous probe"
+    },
+    {
+      "model": "gpt-image-2",
+      "reason": "Image/per-call pricing row, not token-priced chat completion"
+    }
+  ]
+}
