@@ -1,5 +1,29 @@
 # XD API 工作记录
 
+## 2026-06-11 11:31 CST
+
+### 新增 DaleAI 上游渠道并上线 5 个稳定 Claude/Codex 别名
+
+变更内容：
+
+- 新增/更新 XDAPI 供应商 `DaleAI`。
+- 新增/更新两个公开逻辑渠道：`DaleAI GPT Codex - Public Alias` 与 `DaleAI Claude - Public Alias`，均绑定 `1x,3x,5x`。
+- 采用渠道后缀策略，用户侧模型统一使用 `-dale` 后缀，避免与移动、天翼云等其他渠道同名模型混淆。
+- 最终公开 5 个稳定别名：`codex-auto-review-dale`、`claude-opus-4-7-dale`、`claude-opus-4-6-dale`、`claude-opus-4-8-dale`、`claude-sonnet-4-6-dale`。
+- live `/api/pricing` 当前返回 72 个模型，其中 DaleAI `-dale` 别名 5 个。
+
+验证方式：
+
+- 5 个公开别名全部通过 XDAPI 管理员态 `channel/test` 的 `stream=false` 与 `stream=true` 双验证。
+- 使用临时 XDAPI `1x` token 对 `codex-auto-review-dale` 做真实 `POST /v1/chat/completions`，返回 HTTP 200，响应片段 `ok`，临时 token 已删除。
+- 公开证据见 `evidence/daleai_xdapi_deployment_20260611.json`。
+
+注意事项：
+
+- `gpt-5.5-openai-compact-dale`、`gpt-5.5-dale`、`gpt-5.4-dale`、`gpt-5.4-openai-compact-dale`、`gpt-5.4-mini-dale` 因 502、429、timeout 或流式不稳定，已从公开 channel/pricing 中移除并禁用模型元数据，后续可单独复测。
+- `claude-fable-5` 上游直连返回 400，`gpt-image-2` 属于图片/按次计费，不纳入当前 token-priced chat 模型接入。
+- 完整 DaleAI token、密码和 cookie 不写入 GitHub Pages；公开文档只保留脱敏证据。
+
 ## 2026-05-30 11:08 CST
 
 ### 补充企业私有分组与同模型多渠道成本路由图解
