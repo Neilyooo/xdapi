@@ -1,5 +1,17 @@
 # XD API 工作记录
 
+## 2026-06-12 00:45 CST
+
+### 复测 DaleAI GPT 5.5 并上线 2 个 GPT 5.5 别名
+
+- DaleAI `/v1/models` 现已返回 `gpt-5.5` 与 `gpt-5.5-openai-compact`，均标记 `supported_endpoint_types=["openai"]`。
+- 直连 `https://www.daleai.shop/v1/chat/completions` 验证通过：`gpt-5.5` 非流式 22521.18ms、流式 8445.86ms；`gpt-5.5-openai-compact` 非流式 5876.71ms、流式 7135.70ms。
+- 已将 `gpt-5.5-dale`、`gpt-5.5-openai-compact-dale` 补入 `DaleAI GPT Codex - Public Alias` 渠道，继续绑定 `1x,3x,5x`。
+- XDAPI `channel/test` 全部通过：`gpt-5.5-dale` 非流式 2.952s、流式 1.758s；`gpt-5.5-openai-compact-dale` 非流式 3.831s、流式 2.772s。
+- 临时 `1x` token 真实 relay 通过：`gpt-5.5-dale` HTTP 200 / 1594.59ms，`gpt-5.5-openai-compact-dale` HTTP 200 / 28371.01ms；临时 token 已删除。
+- caveat：DaleAI 返回体的 `model` 字段目前是内部路由名，`gpt-5.5` 返回 `gpt-5.4-mini`，`gpt-5.5-openai-compact` 返回 `codex-auto-review`；这已写入审计证据。
+- live `/api/pricing` 当前返回 76 个模型，其中 DaleAI `-dale` 别名 9 个。
+
 ## 2026-06-11 15:31 CST
 
 ### 修正 DaleAI GPT 模型验证流程并补回 2 个 GPT 5.4 别名
