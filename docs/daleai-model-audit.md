@@ -1,14 +1,14 @@
 # DaleAI 渠道接入与模型验证记录
 
-更新时间：2026-06-11 15:31 CST
+更新时间：2026-06-12 00:45 CST
 
 ## 摘要
 
 - 已在 XDAPI 线上新增/更新 DaleAI 供应商和两个逻辑渠道：
   - `#6 DaleAI GPT Codex - Public Alias`
   - `#7 DaleAI Claude - Public Alias`
-- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `7` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
-- live `/api/pricing` 当前总数为 `74`。
+- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `9` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
+- live `/api/pricing` 当前总数为 `76`。
 - 重要修正：11:31 CST 的早期结论只覆盖“定价页原始模型名 + `www.daleai.shop/v1/chat/completions` + 当前 channel test”，未完整覆盖历史/变体模型名和备用 URL。15:31 CST 已补充模型名/URL 矩阵，发现 `gpt-5.4` 与 `gpt-5.4-openai-compact` 可稳定接入，已重新上架。
 
 ## 当前公开映射
@@ -18,10 +18,32 @@
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `codex-auto-review-dale` | `codex-auto-review` |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.4-dale` | `gpt-5.4` |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.4-openai-compact-dale` | `gpt-5.4-openai-compact` |
+| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-dale` | `gpt-5.5` |
+| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-openai-compact-dale` | `gpt-5.5-openai-compact` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-7-dale` | `claude-opus-4-7` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-6-dale` | `claude-opus-4-6` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-8-dale` | `claude-opus-4-8` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-sonnet-4-6-dale` | `claude-sonnet-4-6` |
+
+
+## 2026-06-12 GPT 5.5 复测与上线
+
+| 模型 | 层级 | stream | HTTP | 结果 | 耗时 | 响应片段 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `gpt-5.5` | DaleAI direct | `false` | 200 | 通过 | 22521.18 ms | `model=gpt-5.4-mini; content=ok` |
+| `gpt-5.5` | DaleAI direct | `true` | 200 | 通过 | 8445.86 ms | `model=gpt-5.4-mini; SSE ok` |
+| `gpt-5.5-openai-compact` | DaleAI direct | `false` | 200 | 通过 | 5876.71 ms | `model=codex-auto-review; content=ok` |
+| `gpt-5.5-openai-compact` | DaleAI direct | `true` | 200 | 通过 | 7135.70 ms | `model=codex-auto-review; SSE ok` |
+| `gpt-5.5-dale` | XDAPI channel/test | `false` | 200 | 通过 | 2.952s | `ok` |
+| `gpt-5.5-dale` | XDAPI channel/test | `true` | 200 | 通过 | 1.758s | `ok` |
+| `gpt-5.5-openai-compact-dale` | XDAPI channel/test | `false` | 200 | 通过 | 3.831s | `ok` |
+| `gpt-5.5-openai-compact-dale` | XDAPI channel/test | `true` | 200 | 通过 | 2.772s | `ok` |
+| `gpt-5.5-dale` | XDAPI temporary token relay | `false` | 200 | 通过 | 1594.59 ms | `model=gpt-5.4-mini; content=ok` |
+| `gpt-5.5-openai-compact-dale` | XDAPI temporary token relay | `false` | 200 | 通过 | 28371.01 ms | `model=codex-auto-review; content=ok` |
+
+备注：这两个模型已经可通过 XDAPI 调用，但 DaleAI 返回体里的 `model` 字段目前显示上游内部路由模型名：`gpt-5.5` 返回 `gpt-5.4-mini`，`gpt-5.5-openai-compact` 返回 `codex-auto-review`。这不是 XDAPI 改名导致，直接调用 DaleAI 时也出现同样字段。
+
+证据：[`daleai_gpt55_retest_20260612.json`](../evidence/daleai_gpt55_retest_20260612.json)。
 
 ## XDAPI channel/test 结果
 
@@ -68,8 +90,6 @@
 
 | 模型 | 原因 |
 | --- | --- |
-| `gpt-5.5-openai-compact-dale` | exact `/v1/chat/completions` 返回 400 `openai_error`；常见 prefix/compact 变体为 `model_not_found` 或 endpoint 失败。 |
-| `gpt-5.5-dale` | 非流式直连成功一次，但直连流式返回 400 `openai_error`，不满足公开模型的双模式稳定条件。 |
 | `gpt-5.4-mini-dale` | exact 非流式返回 400 `openai_error`；prefix/latest 变体不可用。 |
 | `claude-fable-5-dale` | exact OpenAI-compatible chat 返回 400 `bad_response_status_code`；Anthropic-prefixed 变体不可用。 |
 | `gpt-image-2-dale` | 图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略。 |

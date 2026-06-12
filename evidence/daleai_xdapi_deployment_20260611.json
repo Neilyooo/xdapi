@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-06-11 15:31 CST",
+  "timestamp": "2026-06-12 00:45 CST",
   "xdapi_base_url": "https://api.xingdingwangluo.cn",
   "daleai_base_url": "https://www.daleai.shop",
-  "public_pricing_count_after": 74,
+  "public_pricing_count_after": 76,
   "deployed_daleai_aliases": [
     "claude-opus-4-6-dale",
     "claude-opus-4-7-dale",
@@ -10,7 +10,9 @@
     "claude-sonnet-4-6-dale",
     "codex-auto-review-dale",
     "gpt-5.4-dale",
-    "gpt-5.4-openai-compact-dale"
+    "gpt-5.4-openai-compact-dale",
+    "gpt-5.5-dale",
+    "gpt-5.5-openai-compact-dale"
   ],
   "channels": [
     {
@@ -30,6 +32,18 @@
       "group": "1x,3x,5x",
       "alias": "gpt-5.4-openai-compact-dale",
       "upstream": "gpt-5.4-openai-compact"
+    },
+    {
+      "name": "DaleAI GPT Codex - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "gpt-5.5-openai-compact-dale",
+      "upstream": "gpt-5.5-openai-compact"
+    },
+    {
+      "name": "DaleAI GPT Codex - Public Alias",
+      "group": "1x,3x,5x",
+      "alias": "gpt-5.5-dale",
+      "upstream": "gpt-5.5"
     },
     {
       "name": "DaleAI Claude - Public Alias",
@@ -263,14 +277,6 @@
   },
   "still_disabled_or_pending": [
     {
-      "model": "gpt-5.5-openai-compact-dale",
-      "reason": "supplemental exact /v1/chat/completions returned 400 openai_error; prefixed/compact variants returned model_not_found or endpoint failures"
-    },
-    {
-      "model": "gpt-5.5-dale",
-      "reason": "non-stream direct passed once, but direct stream returned 400 openai_error; not public until stream path is stable"
-    },
-    {
       "model": "gpt-5.4-mini-dale",
       "reason": "exact non-stream returned 400 openai_error; variants returned model_not_found or endpoint failures"
     },
@@ -283,5 +289,81 @@
       "reason": "image/per-call model; /v1/images/generations requires prompt and is not token chat completion shape"
     }
   ],
-  "notes": "Secrets are redacted; full DaleAI tokens, cookies and passwords are intentionally omitted from public evidence."
+  "notes": "Secrets are redacted; full DaleAI tokens, cookies and passwords are intentionally omitted from public evidence.",
+  "gpt55_retest_20260612": {
+    "evidence_file": "evidence/daleai_gpt55_retest_20260612.json",
+    "upstream_passed": [
+      {
+        "canonical": "gpt-5.5",
+        "endpoint": "www_v1_chat",
+        "tested_model": "gpt-5.5",
+        "non_stream_status": 200,
+        "non_stream_elapsed_ms": 22521.18,
+        "non_stream_snippet": "{\"id\":\"resp_080bf03f3d2cb45a016a2b9fe29e7c8190883a03bb9acb1d42\",\"object\":\"chat.completion\",\"created\":1781243875,\"model\":\"gpt-5.4-mini\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"total_tokens\":5094,\"prompt_tokens_detai",
+        "stream_status": 200,
+        "stream_elapsed_ms": 8445.86,
+        "stream_snippet": "data: {\"id\":\"resp_0274b27d589a2762016a2b9feb09a48196a78833645dbf4ae3\",\"object\":\"chat.completion.chunk\",\"created\":1781243883,\"model\":\"gpt-5.4-mini\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\"},\"finish_reason\":null}]}\\n\\ndata: {\"id\":\"resp_0274b27d589a2762016a2b9feb09a48196a78833645dbf4ae3\",\"object\":\"chat.completion"
+      },
+      {
+        "canonical": "gpt-5.5-openai-compact",
+        "endpoint": "www_v1_chat",
+        "tested_model": "gpt-5.5-openai-compact",
+        "non_stream_status": 200,
+        "non_stream_elapsed_ms": 5876.71,
+        "non_stream_snippet": "{\"id\":\"resp_0fa04982263bd62a016a2b9ff3b8b081988c626b6ccdbd55f7\",\"object\":\"chat.completion\",\"created\":1781243892,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":305,\"completion_tokens\":5,\"total_tokens\":310}}",
+        "stream_status": 200,
+        "stream_elapsed_ms": 7135.7,
+        "stream_snippet": "data: {\"id\":\"resp_0f0374209bdf51cb016a2b9ffa3c5c8196bbfbd658a0b17e64\",\"object\":\"chat.completion.chunk\",\"created\":1781243899,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\"},\"finish_reason\":null}]}\\n\\ndata: {\"id\":\"resp_0f0374209bdf51cb016a2b9ffa3c5c8196bbfbd658a0b17e64\",\"object\":\"chat.compl"
+      }
+    ],
+    "xdapi_channel_tests": [
+      {
+        "model": "gpt-5.5-dale",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.952,
+        "message": ""
+      },
+      {
+        "model": "gpt-5.5-dale",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.758,
+        "message": ""
+      },
+      {
+        "model": "gpt-5.5-openai-compact-dale",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.831,
+        "message": ""
+      },
+      {
+        "model": "gpt-5.5-openai-compact-dale",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.772,
+        "message": ""
+      }
+    ],
+    "xdapi_relay_tests": [
+      {
+        "model": "gpt-5.5-dale",
+        "http_status": 200,
+        "elapsed_ms": 1594.59,
+        "snippet": "{\"id\":\"resp_028feb3ba7df43d3016a2ba00d90248197a53e19c4c412cf37\",\"object\":\"chat.completion\",\"created\":1781243918,\"model\":\"gpt-5.4-mini\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"total_tokens\":5094,\"prompt_tokens_details\":{\"cached_tokens\":4864}}}"
+      },
+      {
+        "model": "gpt-5.5-openai-compact-dale",
+        "http_status": 200,
+        "elapsed_ms": 28371.01,
+        "snippet": "{\"id\":\"resp_025a19062dd964d9016a2ba02939c481958453b65ce2649818\",\"object\":\"chat.completion\",\"created\":1781243946,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5114,\"completion_tokens\":5,\"total_tokens\":5119,\"prompt_tokens_details\":{\"cached_tokens\":4864}}}"
+      }
+    ],
+    "caveat": "DaleAI accepted gpt-5.5 and gpt-5.5-openai-compact requests, but response model fields currently show internal routed model names: gpt-5.4-mini and codex-auto-review."
+  }
 }
