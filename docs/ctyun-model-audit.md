@@ -1,15 +1,17 @@
 # 天翼云 MaaS 模型清单审计
 
-更新时间：2026-05-29 18:33 CST
+更新时间：2026-06-13 18:15 CST
 
 ## 结论
 
 - 天翼云息壤 Token 服务控制台当前模型广场展示 `56` 款模型。
-- 本轮从控制台详情页提取到 `56/56` 个模型的 API 文档入口；入口统一表现为 `https://wishub-x6.ctyun.cn/v1/chat/completions` 或对应文档页中的 OpenAI 兼容接口说明。
+- 控制台详情页提取到 `56/56` 个模型的 API 文档入口；入口统一表现为 `https://wishub-x6.ctyun.cn/v1/chat/completions` 或对应文档页中的 OpenAI 兼容接口说明。
 - 价格来源分两类：模型详情页直接展示的输入/输出价格，以及天翼云官方计费说明页 `https://www.ctyun.cn/document/11061839/11062267` 的 token 计费表。
 - `37/56` 个模型提取到可核对的 token 价格行；其余模型控制台可见但未提取到自助价格，或页面提示需客户经理/工单开通，不能强行填价格。
-- 本轮没有创建天翼云 API Key，也没有做真实 POST 调用；因此状态写为“API 文档入口可见”，不写成“运行时已验证成功”。
-- 公开文档不保存账号密码；本地 skill 只记录渠道身份和凭据处理规则。
+- 后续已基于内部授权 API key 做过真实 CTYun direct POST 健康检查：`54` 个 token 模型直连通过，`2` 个图片/按次计费模型未做消耗式生成测试。
+- 当前 XDAPI 公共 `/api/pricing` 中可见 `35` 个 `-ctyun` 别名；`glm-5-pro-coding-ctyun` 已在公开目录中。
+- 历史上已验证通过的 3 个 fixed-endpoint 别名 `bge-m3-ctyun`、`bge-reranker-v2-m3-ctyun`、`bge-reranker-large-ctyun` 在 2026-06-13 relay 复核时返回上游 `429 免费额度已结束，请开通付费`，因此当前继续隐藏，不把它们写成“现网公开可用”。
+- 公开文档不保存账号密码、API key 或完整 relay token；只保留脱敏结论和证据链接。
 
 ## 模型明细
 

@@ -1,5 +1,17 @@
 # XD API 工作记录
 
+## 2026-06-13 18:15 CST
+
+### 修复 DaleAI / CTYun 公开目录漂移并同步 GitHub Pages
+
+- live `/api/pricing` 漂移复核：异常时总数掉到 `72`，其中 CTYun `-ctyun` 仅 `35` 个、DaleAI `-dale` 仅 `4` 个。
+- 管理员态检查确认，缺失的多个公开模型不是渠道被删，而是模型元数据 `status=0`；对应 channel / ratio 仍在。
+- 已恢复 DaleAI 4 个公开别名：`codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale`。
+- `gpt-5.4-openai-compact-dale` 暂不恢复：当前 admin `channel/test/6` 在流式和非流式下都返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)`。
+- CTYun 历史上通过过的 3 个 fixed-endpoint 别名 `bge-m3-ctyun`、`bge-reranker-v2-m3-ctyun`、`bge-reranker-large-ctyun` 本轮 relay 复测统一返回上游 `429 免费额度已结束，请开通付费`，因此保持隐藏，不写成当前公开可用。
+- 修复后再次读取 live `/api/pricing`：总数回到 `76`，其中 CTYun `-ctyun` 为 `35` 个，DaleAI `-dale` 为 `8` 个。
+- 已同步更新 GitHub Pages 首页、DaleAI 审计页、天翼云审计页、移动/天翼对比页、工作记录和 skill `current-state`。
+
 ## 2026-06-12 00:45 CST
 
 ### 复测 DaleAI GPT 5.5 并上线 2 个 GPT 5.5 别名

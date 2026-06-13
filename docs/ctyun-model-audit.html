@@ -1,13 +1,15 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>天翼云 MaaS 模型清单审计</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./ctyun-model-audit.html">天翼云模型审计</a><a href="./mobile-ctyun-comparison.html">移动/天翼对比</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>天翼云 MaaS 模型清单审计</h1><p>XDAPI / MaaS 运营文档</p></section>
-<p>更新时间：2026-05-29 18:33 CST</p>
+<p>更新时间：2026-06-13 18:15 CST</p>
 <section class="section"><h2>结论</h2>
 <ul>
 <li>天翼云息壤 Token 服务控制台当前模型广场展示 <code>56</code> 款模型。</li>
-<li>本轮从控制台详情页提取到 <code>56/56</code> 个模型的 API 文档入口；入口统一表现为 <code>https://wishub-x6.ctyun.cn/v1/chat/completions</code> 或对应文档页中的 OpenAI 兼容接口说明。</li>
+<li>控制台详情页提取到 <code>56/56</code> 个模型的 API 文档入口；入口统一表现为 <code>https://wishub-x6.ctyun.cn/v1/chat/completions</code> 或对应文档页中的 OpenAI 兼容接口说明。</li>
 <li>价格来源分两类：模型详情页直接展示的输入/输出价格，以及天翼云官方计费说明页 <code>https://www.ctyun.cn/document/11061839/11062267</code> 的 token 计费表。</li>
 <li><code>37/56</code> 个模型提取到可核对的 token 价格行；其余模型控制台可见但未提取到自助价格，或页面提示需客户经理/工单开通，不能强行填价格。</li>
-<li>本轮没有创建天翼云 API Key，也没有做真实 POST 调用；因此状态写为“API 文档入口可见”，不写成“运行时已验证成功”。</li>
-<li>公开文档不保存账号密码；本地 skill 只记录渠道身份和凭据处理规则。</li>
+<li>后续已基于内部授权 API key 做过真实 CTYun direct POST 健康检查：<code>54</code> 个 token 模型直连通过，<code>2</code> 个图片/按次计费模型未做消耗式生成测试。</li>
+<li>当前 XDAPI 公共 <code>/api/pricing</code> 中可见 <code>35</code> 个 <code>-ctyun</code> 别名；<code>glm-5-pro-coding-ctyun</code> 已在公开目录中。</li>
+<li>历史上已验证通过的 3 个 fixed-endpoint 别名 <code>bge-m3-ctyun</code>、<code>bge-reranker-v2-m3-ctyun</code>、<code>bge-reranker-large-ctyun</code> 在 2026-06-13 relay 复核时返回上游 <code>429 免费额度已结束，请开通付费</code>，因此当前继续隐藏，不把它们写成“现网公开可用”。</li>
+<li>公开文档不保存账号密码、API key 或完整 relay token；只保留脱敏结论和证据链接。</li>
 </ul>
 </section>
 <section class="section"><h2>模型明细</h2>
