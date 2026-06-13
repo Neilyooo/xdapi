@@ -1,15 +1,16 @@
 # DaleAI 渠道接入与模型验证记录
 
-更新时间：2026-06-12 00:45 CST
+更新时间：2026-06-13 18:15 CST
 
 ## 摘要
 
 - 已在 XDAPI 线上新增/更新 DaleAI 供应商和两个逻辑渠道：
   - `#6 DaleAI GPT Codex - Public Alias`
   - `#7 DaleAI Claude - Public Alias`
-- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `9` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
+- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `8` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
 - live `/api/pricing` 当前总数为 `76`。
 - 重要修正：11:31 CST 的早期结论只覆盖“定价页原始模型名 + `www.daleai.shop/v1/chat/completions` + 当前 channel test”，未完整覆盖历史/变体模型名和备用 URL。15:31 CST 已补充模型名/URL 矩阵，发现 `gpt-5.4` 与 `gpt-5.4-openai-compact` 可稳定接入，已重新上架。
+- 2026-06-13 18:15 CST 再次复核发现公开可见性发生漂移：5 个 GPT/Codex 别名中有 4 个被模型元数据 `status=0` 隐藏。已恢复其中 4 个，`gpt-5.4-openai-compact-dale` 暂不恢复，因为当前 runtime 仍报 distributor 无可用渠道。
 
 ## 当前公开映射
 
@@ -17,7 +18,6 @@
 | --- | --- | --- | --- |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `codex-auto-review-dale` | `codex-auto-review` |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.4-dale` | `gpt-5.4` |
-| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.4-openai-compact-dale` | `gpt-5.4-openai-compact` |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-dale` | `gpt-5.5` |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-openai-compact-dale` | `gpt-5.5-openai-compact` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-7-dale` | `claude-opus-4-7` |
@@ -25,6 +25,22 @@
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-8-dale` | `claude-opus-4-8` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-sonnet-4-6-dale` | `claude-sonnet-4-6` |
 
+## 2026-06-13 可见性漂移复核与修复
+
+| 项目 | 结果 |
+| --- | --- |
+| 漂移前 live `/api/pricing` | 总数 `72`，其中 `-dale` 仅剩 `4` 个 |
+| 漂移原因 | `codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.4-openai-compact-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale` 的模型元数据 `status` 被压成 `0`，但渠道与 ratio 仍在 |
+| 已恢复公开 | `codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale` |
+| 保持隐藏 | `gpt-5.4-openai-compact-dale` |
+| `gpt-5.4-openai-compact-dale` 当前原因 | admin `channel/test/6` 在 `stream=false/true` 下都返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)` |
+| 复核后的 live `/api/pricing` | 总数 `76`，其中 `-dale` 为 `8` 个 |
+
+补充说明：
+
+- 临时 XDAPI `1x` relay 复核：`codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.5-dale` 均返回 HTTP `200`。
+- `gpt-5.5-openai-compact-dale` 首次 relay 命中过一次上游并发 `429`，随后重试返回 HTTP `200`，因此判定为上游瞬时并发/配额现象，不作为永久下线依据。
+- 这次修复说明：公开模型“消失”不一定是渠道被删，也可能只是模型元数据 `status` 漂成 `0`。
 
 ## 2026-06-12 GPT 5.5 复测与上线
 
@@ -61,16 +77,14 @@
 | `claude-sonnet-4-6-dale` | `DaleAI Claude - Public Alias` | `True` | 200 | 通过 | 3.621s | `ok` |
 | `gpt-5.4-dale` | `DaleAI GPT Codex - Public Alias` | `False` | 200 | 通过 | 16.244s | `ok` |
 | `gpt-5.4-dale` | `DaleAI GPT Codex - Public Alias` | `True` | 200 | 通过 | 29.768s | `ok` |
-| `gpt-5.4-openai-compact-dale` | `DaleAI GPT Codex - Public Alias` | `False` | 200 | 通过 | 5.593s | `ok` |
-| `gpt-5.4-openai-compact-dale` | `DaleAI GPT Codex - Public Alias` | `True` | 200 | 通过 | 8.031s | `ok` |
-
 ## 临时 token relay 结果
 
 | 模型 | HTTP | 耗时 | 响应片段 |
 | --- | --- | --- | --- |
 | `codex-auto-review-dale` | 200 | 3082.73 ms | `{"id":"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa","object":"chat.completion","created":1781146882,"model":` |
 | `gpt-5.4-dale` | 200 | 41679.42 ms | `{"id":"resp_0b5320b319f57a4f016a2a60d002bc819b8c97048f77b3f9f1","object":"chat.completion","created":1781162230,"model":` |
-| `gpt-5.4-openai-compact-dale` | 200 | 2685.79 ms | `{"id":"resp_0169dfd330d84d86016a2a60f82d0c819aa334857c84b75743","object":"chat.completion","created":1781162233,"model":` |
+| `gpt-5.5-dale` | 200 | 5268.02 ms | `model=gpt-5.4-mini; content=ok` |
+| `gpt-5.5-openai-compact-dale` | 200 | 2246.22 ms | `model=codex-auto-review; content=ok` |
 
 临时 token 已删除；公开证据只保留脱敏 token ref。
 
@@ -90,6 +104,7 @@
 
 | 模型 | 原因 |
 | --- | --- |
+| `gpt-5.4-openai-compact-dale` | 2026-06-13 当前 admin `channel/test/6` 继续返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)`；因此保持隐藏。 |
 | `gpt-5.4-mini-dale` | exact 非流式返回 400 `openai_error`；prefix/latest 变体不可用。 |
 | `claude-fable-5-dale` | exact OpenAI-compatible chat 返回 400 `bad_response_status_code`；Anthropic-prefixed 变体不可用。 |
 | `gpt-image-2-dale` | 图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略。 |

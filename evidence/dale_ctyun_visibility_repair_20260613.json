@@ -1,0 +1,52 @@
+{
+  "event": "dale_ctyun_visibility_repair",
+  "timestamp_cst": "2026-06-13 18:15 CST",
+  "scope": "public-pricing-visibility-repair",
+  "before": {
+    "public_total": 72,
+    "ctyun_visible": 35,
+    "dale_visible": 4
+  },
+  "root_cause": [
+    {
+      "type": "model_status_drift",
+      "details": "Several DaleAI public aliases still existed in channel and ratio configuration, but their model metadata status had drifted to 0."
+    }
+  ],
+  "restored_dale_aliases": [
+    "codex-auto-review-dale",
+    "gpt-5.4-dale",
+    "gpt-5.5-dale",
+    "gpt-5.5-openai-compact-dale"
+  ],
+  "kept_hidden_dale_aliases": [
+    {
+      "model": "gpt-5.4-openai-compact-dale",
+      "reason": "admin channel/test still returns No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)"
+    }
+  ],
+  "kept_hidden_ctyun_aliases": [
+    {
+      "model": "bge-m3-ctyun",
+      "reason": "relay recheck returned upstream 429 免费额度已结束，请开通付费"
+    },
+    {
+      "model": "bge-reranker-v2-m3-ctyun",
+      "reason": "relay recheck returned upstream 429 免费额度已结束，请开通付费"
+    },
+    {
+      "model": "bge-reranker-large-ctyun",
+      "reason": "relay recheck returned upstream 429 免费额度已结束，请开通付费"
+    }
+  ],
+  "after": {
+    "public_total": 76,
+    "ctyun_visible": 35,
+    "dale_visible": 8
+  },
+  "notes": [
+    "Public evidence is redacted and does not include full API keys, cookies, passwords, or GitHub tokens.",
+    "This repair only restored public visibility for models already verified usable in current routing.",
+    "CTYun full direct-check matrix remains documented separately in ctyun-model-audit."
+  ]
+}
