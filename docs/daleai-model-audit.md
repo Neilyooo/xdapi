@@ -1,6 +1,6 @@
 # DaleAI 渠道接入与模型验证记录
 
-更新时间：2026-06-13 18:15 CST
+更新时间：2026-06-14 15:10 CST
 
 ## 摘要
 
@@ -9,6 +9,7 @@
   - `#7 DaleAI Claude - Public Alias`
 - 当前公开到 `/api/pricing` 的 DaleAI 别名为 `8` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
 - live `/api/pricing` 当前总数为 `76`。
+- 2026-06-14 已确认 DaleAI “补全价格已锁定”问题不是整条渠道故障，而是公开 alias 名在 live `CompletionRatioMeta` 上触发了锁定元数据。当前公开别名已迁移到 `openai-* -dale` / `anthropic-* -dale` 形式，并完成 live 解锁。
 - 重要修正：11:31 CST 的早期结论只覆盖“定价页原始模型名 + `www.daleai.shop/v1/chat/completions` + 当前 channel test”，未完整覆盖历史/变体模型名和备用 URL。15:31 CST 已补充模型名/URL 矩阵，发现 `gpt-5.4` 与 `gpt-5.4-openai-compact` 可稳定接入，已重新上架。
 - 2026-06-13 18:15 CST 再次复核发现公开可见性发生漂移：5 个 GPT/Codex 别名中有 4 个被模型元数据 `status=0` 隐藏。已恢复其中 4 个，`gpt-5.4-openai-compact-dale` 暂不恢复，因为当前 runtime 仍报 distributor 无可用渠道。
 
@@ -17,13 +18,34 @@
 | 渠道 | 分组 | 用户可见别名 | DaleAI upstream model |
 | --- | --- | --- | --- |
 | `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `codex-auto-review-dale` | `codex-auto-review` |
-| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.4-dale` | `gpt-5.4` |
-| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-dale` | `gpt-5.5` |
-| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `gpt-5.5-openai-compact-dale` | `gpt-5.5-openai-compact` |
-| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-7-dale` | `claude-opus-4-7` |
-| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-6-dale` | `claude-opus-4-6` |
-| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-opus-4-8-dale` | `claude-opus-4-8` |
-| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `claude-sonnet-4-6-dale` | `claude-sonnet-4-6` |
+| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `openai-gpt-5.4-dale` | `gpt-5.4` |
+| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `openai-gpt-5.5-dale` | `gpt-5.5` |
+| `DaleAI GPT Codex - Public Alias` | `1x,3x,5x` | `openai-gpt-5.5-openai-compact-dale` | `gpt-5.5-openai-compact` |
+| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-opus-4-7-dale` | `claude-opus-4-7` |
+| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-opus-4-6-dale` | `claude-opus-4-6` |
+| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-opus-4-8-dale` | `claude-opus-4-8` |
+| `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-sonnet-4-6-dale` | `claude-sonnet-4-6` |
+
+## 2026-06-14 补全价格锁定元数据排查与修复
+
+| 项目 | 结果 |
+| --- | --- |
+| 触发现象 | 管理员价格页对部分 DaleAI 别名显示“补全价格已锁定”，无法手改补全价格 |
+| live 直接证据 | `/api/option/` 中 `CompletionRatioMeta.locked=true` 命中了 `7` 个公开 Dale 别名和 `1` 个隐藏 Dale 别名 |
+| 同渠道反证 | `codex-auto-review-dale` 在同一 GPT Dale 渠道中没有锁定，因此不是“整条 Dale 渠道都锁” |
+| canary before | `gpt-5.4-openai-compact-dale -> {"ratio":6,"locked":true}` |
+| canary after | `openai-gpt-5.4-openai-compact-dale -> {"ratio":6,"locked":false}` |
+| 结论 | 根因是公开 alias 名触发了 live 锁定元数据，不是上游 key、base_url、group 或整个渠道整体故障 |
+| live 修复动作 | 迁移 GPT 别名到 `openai-gpt-* -dale`，迁移 Claude 别名到 `anthropic-* -dale`，并同步更新 `models`、`model_mapping`、`ModelRatio`、`CompletionRatio`、`CacheRatio`、`CreateCacheRatio` |
+| 修复后状态 | live `CompletionRatioMeta` 中已无剩余 `locked=true` 的公共 `-dale` 别名 |
+| 代表性 channel/test | `openai-gpt-5.4-dale` 2.321s/2.025s；`openai-gpt-5.5-dale` 1.993s/3.634s；`anthropic-opus-4-6-dale` 3.551s/2.101s；`anthropic-sonnet-4-6-dale` 1.818s/3.067s |
+| 当前残留 caveat | `openai-gpt-5.4-openai-compact-dale` 已解锁但继续隐藏，因为当前 distributor 仍返回 `No available channel ... under group daleGPT专属` |
+
+补充说明：
+
+- 这轮修复没有动 DaleAI 上游模型名本身，改的是 XDAPI 对外公开 alias 和对应 live 配置 key。
+- 这轮也把“新增公开 alias 后必须检查 live `CompletionRatioMeta.locked`”补入了 skill pipeline 和公开《新模型测试流程》。
+- 脱敏证据见：[`dale_alias_unlock_20260614.json`](../evidence/dale_alias_unlock_20260614.json)。
 
 ## 2026-06-13 可见性漂移复核与修复
 
@@ -104,8 +126,8 @@
 
 | 模型 | 原因 |
 | --- | --- |
-| `gpt-5.4-openai-compact-dale` | 2026-06-13 当前 admin `channel/test/6` 继续返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)`；因此保持隐藏。 |
-| `gpt-5.4-mini-dale` | exact 非流式返回 400 `openai_error`；prefix/latest 变体不可用。 |
+| `openai-gpt-5.4-openai-compact-dale` | 2026-06-14 已完成 alias 解锁，但当前 admin `channel/test/6` 仍返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)`；因此继续隐藏。 |
+| `openai-gpt-5.4-mini-dale` | exact 非流式返回 400 `openai_error`；prefix/latest 变体不可用。 |
 | `claude-fable-5-dale` | exact OpenAI-compatible chat 返回 400 `bad_response_status_code`；Anthropic-prefixed 变体不可用。 |
 | `gpt-image-2-dale` | 图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略。 |
 

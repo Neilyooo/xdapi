@@ -1,6 +1,120 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="section"><h2>2026-06-13 18:15 CST</h2><h3>修复 DaleAI / CTYun 公开目录漂移并同步 GitHub Pages</h3><p>live <code>/api/pricing</code> 漂移复核：异常时总数掉到 <code>72</code>，其中 CTYun <code>-ctyun</code> 仅 <code>35</code> 个、DaleAI <code>-dale</code> 仅 <code>4</code> 个。</p><p>管理员态检查确认，缺失的多个公开模型不是渠道被删，而是模型元数据 <code>status=0</code>；对应 channel / ratio 仍在。</p><p>已恢复 DaleAI 4 个公开别名：<code>codex-auto-review-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code>。</p><p><code>gpt-5.4-openai-compact-dale</code> 暂不恢复：当前 admin <code>channel/test/6</code> 在流式和非流式下都返回 <code>No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)</code>。</p><p>CTYun 历史上通过过的 3 个 fixed-endpoint 别名 <code>bge-m3-ctyun</code>、<code>bge-reranker-v2-m3-ctyun</code>、<code>bge-reranker-large-ctyun</code> 本轮 relay 复测统一返回上游 <code>429 免费额度已结束，请开通付费</code>，因此保持隐藏，不写成当前公开可用。</p><p>修复后再次读取 live <code>/api/pricing</code>：总数回到 <code>76</code>，其中 CTYun <code>-ctyun</code> 为 <code>35</code> 个，DaleAI <code>-dale</code> 为 <code>8</code> 个。</p><p>已同步更新 GitHub Pages 首页、DaleAI 审计页、天翼云审计页、移动/天翼对比页、工作记录和 skill <code>current-state</code>。</p></section><section class="section"><h2>2026-06-12 00:45 CST</h2><h3>复测 DaleAI GPT 5.5 并上线 2 个 GPT 5.5 别名</h3><p>DaleAI <code>/v1/models</code> 现已返回 <code>gpt-5.5</code> 与 <code>gpt-5.5-openai-compact</code>，均标记 <code>supported_endpoint_types=["openai"]</code>。</p><p>直连 <code>https://www.daleai.shop/v1/chat/completions</code> 验证通过：<code>gpt-5.5</code> 非流式 22521.18ms、流式 8445.86ms；<code>gpt-5.5-openai-compact</code> 非流式 5876.71ms、流式 7135.70ms。</p><p>已将 <code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code> 补入 <code>DaleAI GPT Codex - Public Alias</code> 渠道，继续绑定 <code>1x,3x,5x</code>。XDAPI <code>channel/test</code> 全部通过，临时 <code>1x</code> token 真实 relay 也返回 HTTP 200，临时 token 已删除。</p><p>caveat：DaleAI 返回体的 <code>model</code> 字段目前是内部路由名，<code>gpt-5.5</code> 返回 <code>gpt-5.4-mini</code>，<code>gpt-5.5-openai-compact</code> 返回 <code>codex-auto-review</code>；这已写入 <a href="./daleai-model-audit.html">审计证据</a>。</p><p>live <code>/api/pricing</code> 当前返回 76 个模型，其中 DaleAI <code>-dale</code> 别名 9 个。</p></section><section class="section"><h2>2026-06-11 15:31 CST</h2><h3>修正 DaleAI GPT 模型验证流程并补回 2 个 GPT 5.4 别名</h3><p>复核早期 DaleAI 失败结论，确认 11:31 CST 测试没有完整覆盖 <code>/v1/models</code>、模型名变体、备用 URL/path 与流式/非流式组合。补充矩阵测试后，<code>gpt-5.4</code> 与 <code>gpt-5.4-openai-compact</code> 在 DaleAI 直连 <code>www.daleai.shop/v1/chat/completions</code> 通过非流式和流式验证。</p><p>已将 <code>gpt-5.4-dale</code>、<code>gpt-5.4-openai-compact-dale</code> 补回 <code>DaleAI GPT Codex - Public Alias</code> 渠道，绑定 <code>1x,3x,5x</code>，并更新价格/缓存相关 ratio。</p><p>XDAPI <code>channel/test</code>：<code>gpt-5.4-dale</code> 非流式 16.244s、流式 29.768s；<code>gpt-5.4-openai-compact-dale</code> 非流式 5.593s、流式 8.031s，全部 HTTP 200 / success=true。</p><p>临时 <code>1x</code> token 真实 relay：<code>gpt-5.4-dale</code> HTTP 200，约 41679.42 ms；<code>gpt-5.4-openai-compact-dale</code> HTTP 200，约 2685.79 ms；临时 token 已删除。live <code>/api/pricing</code> 当前返回 74 个模型，其中 DaleAI <code>-dale</code> 别名 7 个。</p><p>仍不公开：<code>gpt-5.5-openai-compact-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.4-mini-dale</code>、<code>claude-fable-5-dale</code>、<code>gpt-image-2-dale</code>，原因见 <a href="./daleai-model-audit.html">DaleAI 模型审计</a>。</p></section><section class="section"><h2>2026-06-11 11:31 CST</h2><h3>新增 DaleAI 上游渠道并上线 5 个稳定 Claude/Codex 别名</h3><p>变更内容：新增/更新 XDAPI 供应商 <code>DaleAI</code>；新增/更新 <code>DaleAI GPT Codex - Public Alias</code> 与 <code>DaleAI Claude - Public Alias</code> 两个公开渠道，均绑定 <code>1x,3x,5x</code>；公开模型统一使用 <code>-dale</code> 后缀。</p><p>最终公开 5 个稳定别名：<code>codex-auto-review-dale</code>、<code>claude-opus-4-7-dale</code>、<code>claude-opus-4-6-dale</code>、<code>claude-opus-4-8-dale</code>、<code>claude-sonnet-4-6-dale</code>；live <code>/api/pricing</code> 当前返回 72 个模型。</p><p>验证方式：5 个公开别名全部通过 XDAPI <code>channel/test</code> 的非流式/流式双验证；临时 XDAPI <code>1x</code> token 调用 <code>/v1/chat/completions</code> 到 <code>codex-auto-review-dale</code> 返回 HTTP 200 和响应片段 <code>ok</code>，临时 token 已删除。</p><p>暂不公开：<code>gpt-5.5-openai-compact-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.4-openai-compact-dale</code>、<code>gpt-5.4-mini-dale</code> 因 502、429、timeout 或流式不稳定已移除；<code>claude-fable-5</code> 上游 400，<code>gpt-image-2</code> 为图片/按次计费。</p><p>证据：<a href="../evidence/daleai_xdapi_deployment_20260611.json">daleai_xdapi_deployment_20260611.json</a>；完整 token、密码和 cookie 不写入公开页面。</p></section>
-<section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section>
-<section class="section"><h2>2026-05-30 11:08 CST</h2>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XD API 工作记录</title>
+  <style>
+    body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}
+    .topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+    .topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
+    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}
+    .hero h1{margin:0 0 8px;font-size:32px}
+    .hero p{margin:0;color:rgba(255,255,255,.88)}
+    .section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
+    h1{font-size:30px;margin:0 0 16px}
+    h2{margin:22px 0 10px;font-size:21px}
+    h3{margin:16px 0 8px;font-size:17px}
+    p{margin:8px 0}
+    ul,ol{margin:8px 0 0 22px;padding:0}
+    li{margin:6px 0}
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}
+    th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}
+    th{background:#f8fbff;color:#27406e;position:sticky;top:0}
+    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}
+    pre code{background:transparent;border:0;color:inherit;padding:0}
+    a{color:#174ea6}
+  </style>
+  
+</head>
+<body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-06-14 15:10 CST</h2>
+<h3>定位并修复 DaleAI 补全价格锁定状态</h3>
+<ul>
+<li>直接读取 live <code>/api/option/</code> 复核后确认：<code>CompletionRatioMeta.locked=true</code> 当前不是“所有 <code>-dale</code> 模型都锁”，而是命中了 7 个公开 Dale 别名和 1 个隐藏 Dale 别名：</li>
+<li>公开：<code>gpt-5.4-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code>、<code>claude-opus-4-6-dale</code>、<code>claude-opus-4-7-dale</code>、<code>claude-opus-4-8-dale</code>、<code>claude-sonnet-4-6-dale</code></li>
+<li>隐藏：<code>gpt-5.4-openai-compact-dale</code></li>
+<li>同一 GPT 渠道中的 <code>codex-auto-review-dale</code> 没有锁定，因此根因不是 “Dale 渠道整体有问题”，而是公开 alias 名本身触发了 live 锁定元数据。</li>
+<li>canary 证据先落在隐藏别名上：<code>gpt-5.4-openai-compact-dale</code> 在 live <code>CompletionRatioMeta</code> 里先返回 <code>{"ratio":6,"locked":true}</code>；改名为 <code>openai-gpt-5.4-openai-compact-dale</code>，并同步更新 channel <code>models</code>、<code>model_mapping</code> 以及 <code>ModelRatio</code> / <code>CompletionRatio</code> / <code>CacheRatio</code> / <code>CreateCacheRatio</code> key 后，live 返回 <code>{"ratio":6,"locked":false}</code>。</li>
+<li>在 canary 成立后，已对 live DaleAI 公共别名做整组迁移：</li>
+<li>GPT: <code>gpt-5.4-dale</code> -&gt; <code>openai-gpt-5.4-dale</code></li>
+<li>GPT: <code>gpt-5.5-dale</code> -&gt; <code>openai-gpt-5.5-dale</code></li>
+<li>GPT: <code>gpt-5.5-openai-compact-dale</code> -&gt; <code>openai-gpt-5.5-openai-compact-dale</code></li>
+<li>GPT hidden: <code>gpt-5.4-openai-compact-dale</code> -&gt; <code>openai-gpt-5.4-openai-compact-dale</code></li>
+<li>GPT hidden: <code>gpt-5.4-mini-dale</code> -&gt; <code>openai-gpt-5.4-mini-dale</code></li>
+<li>Claude: <code>claude-opus-4-7-dale</code> -&gt; <code>anthropic-opus-4-7-dale</code></li>
+<li>Claude: <code>claude-opus-4-6-dale</code> -&gt; <code>anthropic-opus-4-6-dale</code></li>
+<li>Claude: <code>claude-opus-4-8-dale</code> -&gt; <code>anthropic-opus-4-8-dale</code></li>
+<li>Claude: <code>claude-sonnet-4-6-dale</code> -&gt; <code>anthropic-sonnet-4-6-dale</code></li>
+<li>live 配置层同步修改了 DaleAI 两个渠道 <code>#6</code> / <code>#7</code> 的 <code>models</code> 与 <code>model_mapping</code>，并把相关 ratio key 全部迁移到新 alias 名上；其中 <code>openai-gpt-5.5-dale</code> 额外把历史残留的 <code>CompletionRatio=0</code> 修正回 <code>6</code>。</li>
+<li>修复后再次读取 live <code>CompletionRatioMeta</code>，当前已不存在任何仍然 <code>locked=true</code> 的 <code>-dale</code> 公共别名；<code>/api/user/models</code>、<code>/api/channel/models_enabled</code> 和公开 <code>/api/pricing</code> 也都已刷新到新 alias 名。</li>
+<li>代表性 live <code>channel/test</code> 复核：</li>
+<li><code>openai-gpt-5.4-dale</code>：非流式 <code>2.321s</code>，流式 <code>2.025s</code></li>
+<li><code>openai-gpt-5.5-dale</code>：非流式 <code>1.993s</code>，流式 <code>3.634s</code></li>
+<li><code>anthropic-opus-4-6-dale</code>：非流式 <code>3.551s</code>，流式 <code>2.101s</code></li>
+<li><code>anthropic-sonnet-4-6-dale</code>：非流式 <code>1.818s</code>，流式 <code>3.067s</code></li>
+<li>当前残留 caveat 只剩一个：<code>openai-gpt-5.4-openai-compact-dale</code> 已解锁，但仍因 distributor <code>No available channel ... under group daleGPT专属</code> 保持隐藏，不计入当前公开数。</li>
+<li>本轮同时把“新增公开 alias 后必须检查 live <code>CompletionRatioMeta.locked</code>”补入 skill pipeline 和公开《新模型测试流程》，作为后续发布前 gate。</li>
+<li>证据：<a href="../evidence/dale_alias_unlock_20260614.json"><code>dale_alias_unlock_20260614.json</code></a></li>
+</ul>
+<h2>2026-06-13 18:15 CST</h2>
+<h3>修复 DaleAI / CTYun 公开目录漂移并同步 GitHub Pages</h3>
+<ul>
+<li>live <code>/api/pricing</code> 漂移复核：异常时总数掉到 <code>72</code>，其中 CTYun <code>-ctyun</code> 仅 <code>35</code> 个、DaleAI <code>-dale</code> 仅 <code>4</code> 个。</li>
+<li>管理员态检查确认，缺失的多个公开模型不是渠道被删，而是模型元数据 <code>status=0</code>；对应 channel / ratio 仍在。</li>
+<li>已恢复 DaleAI 4 个公开别名：<code>codex-auto-review-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code>。</li>
+<li><code>gpt-5.4-openai-compact-dale</code> 暂不恢复：当前 admin <code>channel/test/6</code> 在流式和非流式下都返回 <code>No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)</code>。</li>
+<li>CTYun 历史上通过过的 3 个 fixed-endpoint 别名 <code>bge-m3-ctyun</code>、<code>bge-reranker-v2-m3-ctyun</code>、<code>bge-reranker-large-ctyun</code> 本轮 relay 复测统一返回上游 <code>429 免费额度已结束，请开通付费</code>，因此保持隐藏，不写成当前公开可用。</li>
+<li>修复后再次读取 live <code>/api/pricing</code>：总数回到 <code>76</code>，其中 CTYun <code>-ctyun</code> 为 <code>35</code> 个，DaleAI <code>-dale</code> 为 <code>8</code> 个。</li>
+<li>已同步更新 GitHub Pages 首页、DaleAI 审计页、天翼云审计页、移动/天翼对比页、工作记录和 skill <code>current-state</code>。</li>
+</ul>
+<h2>2026-06-12 00:45 CST</h2>
+<h3>复测 DaleAI GPT 5.5 并上线 2 个 GPT 5.5 别名</h3>
+<ul>
+<li>DaleAI <code>/v1/models</code> 现已返回 <code>gpt-5.5</code> 与 <code>gpt-5.5-openai-compact</code>，均标记 <code>supported_endpoint_types=["openai"]</code>。</li>
+<li>直连 <code>https://www.daleai.shop/v1/chat/completions</code> 验证通过：<code>gpt-5.5</code> 非流式 22521.18ms、流式 8445.86ms；<code>gpt-5.5-openai-compact</code> 非流式 5876.71ms、流式 7135.70ms。</li>
+<li>已将 <code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code> 补入 <code>DaleAI GPT Codex - Public Alias</code> 渠道，继续绑定 <code>1x,3x,5x</code>。</li>
+<li>XDAPI <code>channel/test</code> 全部通过：<code>gpt-5.5-dale</code> 非流式 2.952s、流式 1.758s；<code>gpt-5.5-openai-compact-dale</code> 非流式 3.831s、流式 2.772s。</li>
+<li>临时 <code>1x</code> token 真实 relay 通过：<code>gpt-5.5-dale</code> HTTP 200 / 1594.59ms，<code>gpt-5.5-openai-compact-dale</code> HTTP 200 / 28371.01ms；临时 token 已删除。</li>
+<li>caveat：DaleAI 返回体的 <code>model</code> 字段目前是内部路由名，<code>gpt-5.5</code> 返回 <code>gpt-5.4-mini</code>，<code>gpt-5.5-openai-compact</code> 返回 <code>codex-auto-review</code>；这已写入审计证据。</li>
+<li>live <code>/api/pricing</code> 当前返回 76 个模型，其中 DaleAI <code>-dale</code> 别名 9 个。</li>
+</ul>
+<h2>2026-06-11 15:31 CST</h2>
+<h3>修正 DaleAI GPT 模型验证流程并补回 2 个 GPT 5.4 别名</h3>
+<ul>
+<li>复核早期 DaleAI 失败结论，确认 11:31 CST 测试没有完整覆盖 <code>/v1/models</code>、模型名变体、备用 URL/path 与流式/非流式组合。</li>
+<li>补充矩阵测试后，<code>gpt-5.4</code> 与 <code>gpt-5.4-openai-compact</code> 在 DaleAI 直连 <code>www.daleai.shop/v1/chat/completions</code> 通过非流式和流式验证。</li>
+<li>已将 <code>gpt-5.4-dale</code>、<code>gpt-5.4-openai-compact-dale</code> 补回 <code>DaleAI GPT Codex - Public Alias</code> 渠道，绑定 <code>1x,3x,5x</code>，并更新 ModelRatio / CompletionRatio / CacheRatio / CreateCacheRatio。</li>
+<li>XDAPI channel/test：<code>gpt-5.4-dale</code> 非流式 16.244s、流式 29.768s；<code>gpt-5.4-openai-compact-dale</code> 非流式 5.593s、流式 8.031s，全部 HTTP 200 / success=true。</li>
+<li>临时 <code>1x</code> token 真实 relay：<code>gpt-5.4-dale</code> HTTP 200，约 41679.42 ms；<code>gpt-5.4-openai-compact-dale</code> HTTP 200，约 2685.79 ms；临时 token 已删除。</li>
+<li>live <code>/api/pricing</code> 当前返回 74 个模型，其中 DaleAI <code>-dale</code> 别名 7 个。</li>
+<li>仍不公开：<code>gpt-5.5-openai-compact-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.4-mini-dale</code>、<code>claude-fable-5-dale</code>、<code>gpt-image-2-dale</code>，原因见 DaleAI 模型审计页。</li>
+</ul>
+<h2>2026-06-11 11:31 CST</h2>
+<h3>新增 DaleAI 上游渠道并上线 5 个稳定 Claude/Codex 别名</h3>
+<p>变更内容：</p>
+<ul>
+<li>新增/更新 XDAPI 供应商 <code>DaleAI</code>。</li>
+<li>新增/更新两个公开逻辑渠道：<code>DaleAI GPT Codex - Public Alias</code> 与 <code>DaleAI Claude - Public Alias</code>，均绑定 <code>1x,3x,5x</code>。</li>
+<li>采用渠道后缀策略，用户侧模型统一使用 <code>-dale</code> 后缀，避免与移动、天翼云等其他渠道同名模型混淆。</li>
+<li>最终公开 5 个稳定别名：<code>codex-auto-review-dale</code>、<code>claude-opus-4-7-dale</code>、<code>claude-opus-4-6-dale</code>、<code>claude-opus-4-8-dale</code>、<code>claude-sonnet-4-6-dale</code>。</li>
+<li>live <code>/api/pricing</code> 当前返回 72 个模型，其中 DaleAI <code>-dale</code> 别名 5 个。</li>
+</ul>
+<p>验证方式：</p>
+<ul>
+<li>5 个公开别名全部通过 XDAPI 管理员态 <code>channel/test</code> 的 <code>stream=false</code> 与 <code>stream=true</code> 双验证。</li>
+<li>使用临时 XDAPI <code>1x</code> token 对 <code>codex-auto-review-dale</code> 做真实 <code>POST /v1/chat/completions</code>，返回 HTTP 200，响应片段 <code>ok</code>，临时 token 已删除。</li>
+<li>公开证据见 <code>evidence/daleai_xdapi_deployment_20260611.json</code>。</li>
+</ul>
+<p>注意事项：</p>
+<ul>
+<li><code>gpt-5.5-openai-compact-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.4-openai-compact-dale</code>、<code>gpt-5.4-mini-dale</code> 因 502、429、timeout 或流式不稳定，已从公开 channel/pricing 中移除并禁用模型元数据，后续可单独复测。</li>
+<li><code>claude-fable-5</code> 上游直连返回 400，<code>gpt-image-2</code> 属于图片/按次计费，不纳入当前 token-priced chat 模型接入。</li>
+<li>完整 DaleAI token、密码和 cookie 不写入 GitHub Pages；公开文档只保留脱敏证据。</li>
+</ul>
+<h2>2026-05-30 11:08 CST</h2>
 <h3>补充企业私有分组与同模型多渠道成本路由图解</h3>
 <p>变更内容：</p>
 <ul>
@@ -20,8 +134,7 @@
 <li>如果两个上游同模型成本不同，不建议在同一 group 下随机混用，除非售价能覆盖最高或加权成本。</li>
 <li>正式企业客户建议按 <code>ent_&lt;customer&gt;_&lt;year&gt;</code> 建私有分组；需要 SLA 或成本隔离时，再叠加专属渠道和专属上游 key。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-29 18:33 CST</h2>
+<h2>2026-05-29 18:33 CST</h2>
 <h3>新增天翼云 MaaS 渠道审计、移动/天翼横向对比与企业接入策略</h3>
 <p>变更内容：</p>
 <ul>
@@ -44,8 +157,7 @@
 <li>天翼云登录密码和任何上游 key 不写入 GitHub Pages；公开文档只保留账号身份、门户和脱敏证据。</li>
 <li>后续若正式接入天翼云到 XDAPI，需要先创建/取得天翼云 API Key，完成真实 POST 验证，再新增 XDAPI 渠道和价格配置。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-28 14:31 CST</h2>
+<h2>2026-05-28 14:31 CST</h2>
 <h3>复修 Moma 新模型操练场失败：渠道 key 失效</h3>
 <p>变更内容：</p>
 <ul>
@@ -59,15 +171,13 @@
 <ul>
 <li>替换 key 后，<code>channel/test/3</code> 关键样本恢复 <code>200</code>：<code>qwen3-max</code> 0.828s、<code>qwen3.6-plus</code> 6.203s、<code>qwen3.5-plus</code> 5.290s。</li>
 <li>替换 key 后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：</li>
-</ul>
-<p>  - <code>qwen3.6-plus</code> 4.39s</p>
-<p>  - <code>qwen3-vl-plus</code> 0.79s</p>
-<p>  - <code>qwen-mt-plus</code> 0.42s</p>
-<p>  - <code>qwen3-omni-flash</code> 0.50s</p>
-<p>  - <code>qwen-mt-flash</code> 0.41s</p>
-<p>  - <code>qwen3.5-plus</code> 6.25s</p>
-<p>  - <code>qwen3-max</code> 0.81s</p>
-<ul>
+<li><code>qwen3.6-plus</code> 4.39s</li>
+<li><code>qwen3-vl-plus</code> 0.79s</li>
+<li><code>qwen-mt-plus</code> 0.42s</li>
+<li><code>qwen3-omni-flash</code> 0.50s</li>
+<li><code>qwen-mt-flash</code> 0.41s</li>
+<li><code>qwen3.5-plus</code> 6.25s</li>
+<li><code>qwen3-max</code> 0.81s</li>
 <li><code>qwen3-max</code> 与 <code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 均返回 <code>200</code> 和 <code>content-type: text/event-stream</code>。</li>
 </ul>
 <p>注意事项：</p>
@@ -76,8 +186,7 @@
 <li>直接原因是渠道 3 保存的 MaaS API key 已失效或被替换，导致上游统一返回 <code>401 Invalid apikey</code>。</li>
 <li>后续若再次出现同类错误，优先按顺序检查：<code>base_url</code>、<code>channel/test</code> 的上游状态码、MaaS key 直连有效性，再看操练场页面层。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-27 11:13 CST</h2>
+<h2>2026-05-27 11:13 CST</h2>
 <h3>修复 Moma 新模型在 XDAPI 操练场的 SSE / openai_error</h3>
 <p>变更内容：</p>
 <ul>
@@ -90,16 +199,14 @@
 <li>修复前，<code>/api/channel/test/3?model=qwen3.5-plus&amp;endpoint_type=openai</code> 返回 <code>bad response status code 503</code>，底层 body 为 <code>&lt;h1&gt;no tunnel here :(&lt;/h1&gt;</code>，说明请求落到了失效隧道。</li>
 <li>修复后，渠道测试返回 <code>200</code>：<code>qwen3.5-plus</code> 6.407s、<code>qwen3-max</code> 0.715s、<code>qwen3.6-plus</code> 5.348s、<code>qwen3-omni-flash</code> 0.467s。</li>
 <li>修复后，操练场同路径 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 对 7 个 Moma 新模型全部返回 <code>200</code>：</li>
-</ul>
-<p>  - <code>qwen3.6-plus</code> 4.51s</p>
-<p>  - <code>qwen3-vl-plus</code> 1.71s</p>
-<p>  - <code>qwen-mt-plus</code> 0.48s</p>
-<p>  - <code>qwen3-omni-flash</code> 0.56s</p>
-<p>  - <code>qwen-mt-flash</code> 0.50s</p>
-<p>  - <code>qwen3.5-plus</code> 6.86s</p>
-<p>  - <code>qwen3-max</code> 1.34s</p>
-<ul>
-<li><code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回 <code>200</code>、<code>content-type: text/event-stream</code>，首段为标准 <code>data: {&quot;choices&quot;:[{&quot;delta&quot;:...</code> chunk，不再是错误 JSON。</li>
+<li><code>qwen3.6-plus</code> 4.51s</li>
+<li><code>qwen3-vl-plus</code> 1.71s</li>
+<li><code>qwen-mt-plus</code> 0.48s</li>
+<li><code>qwen3-omni-flash</code> 0.56s</li>
+<li><code>qwen-mt-flash</code> 0.50s</li>
+<li><code>qwen3.5-plus</code> 6.86s</li>
+<li><code>qwen3-max</code> 1.34s</li>
+<li><code>qwen3.5-plus</code> 的 <code>stream=true</code> smoke test 返回 <code>200</code>、<code>content-type: text/event-stream</code>，首段为标准 <code>data: {"choices":[{"delta":...</code> chunk，不再是错误 JSON。</li>
 </ul>
 <p>注意事项：</p>
 <ul>
@@ -107,8 +214,7 @@
 <li>直接原因也不是 <code>group=auto</code>。<code>auto</code> 如果被传入会返回无权访问分组，但本次 Moma 模型在 <code>group=1x</code> 下也曾报错，根因是线上渠道 3 上游地址错误。</li>
 <li><code>qwen3.5-plus</code> 和 <code>qwen3.6-plus</code> 会输出较长 reasoning 内容，耗时比 <code>qwen3-max</code>、<code>qwen-mt-flash</code> 更高；这属于模型输出行为，不是本次 503/SSE 错误。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-27 00:26 CST</h2>
+<h2>2026-05-27 00:26 CST</h2>
 <h3>将 7 个已验证的 Moma 候选并入 XDAPI 公共 relay，并修复公开目录计数到 34</h3>
 <p>变更内容：</p>
 <ul>
@@ -130,8 +236,7 @@
 <li><code>gui-plus</code> 与 <code>glm-5.1</code> 仍然不接入，避免把未通过的候选混入前台。</li>
 <li>这次只补公共目录、渠道映射和前台展示，不改上游 MaaS 资源。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 21:40 CST</h2>
+<h2>2026-05-26 21:40 CST</h2>
 <h3>补强新模型测试流程并用矩阵脚本复测 9 个候选</h3>
 <p>变更内容：</p>
 <ul>
@@ -152,9 +257,8 @@
 <li>这轮结果推翻了旧的“9 个候选都不通”的笼统结论：至少 <code>moma.cmecloud.cn</code> 上已经有 7 个候选可用，但它们依赖的是 <code>qwen/...</code> 前缀名。</li>
 <li>XDAPI relay / channel / pricing 接入这一步还没做，因为当前没有拿到可直接写 admin 配置的有效管理员态 token；脚本和测试流程已经准备好，等管理员态可用后再把 <code>moma.cmecloud.cn</code> 渠道接入 XDAPI。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 21:12 CST</h2>
-<h3>复测 `qwen3.6-plus` 示例代码并确认流式/非流式都可用</h3>
+<h2>2026-05-26 21:12 CST</h2>
+<h3>复测 <code>qwen3.6-plus</code> 示例代码并确认流式/非流式都可用</h3>
 <p>变更内容：</p>
 <ul>
 <li>按用户给出的 Python 示例，使用同一 MaaS API key 直接调用 <code>https://moma.cmecloud.cn/v1/chat/completions</code>。</li>
@@ -172,8 +276,7 @@
 <li>这次结果说明 <code>qwen3.6-plus</code> 的真实可用状态比前面那轮临时测法更好；前面出现的 404/401 主要与请求形态和测试路径有关，不应当再当成最终结论。</li>
 <li>后续如果要写入 XDAPI 公共目录，仍需单独补 <code>ModelRatio</code>、价格和中转渠道映射，然后再做 XDAPI 侧通路验证。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 21:00 CST</h2>
+<h2>2026-05-26 21:00 CST</h2>
 <h3>使用 RAM 子账号创建的 MaaS API key 直接复核新候选模型</h3>
 <p>变更内容：</p>
 <ul>
@@ -196,8 +299,7 @@
 <li>这次结果说明“API key 已可用”与“某个具体模型已可用”是两件事。</li>
 <li><code>qwen3.6-plus</code> 目前仍未通过真实上游 POST 直连验证；同批模型中真正跑通的是 <code>qwen3-omni-flash</code> 和 <code>qwen3-max</code>。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 20:31 CST</h2>
+<h2>2026-05-26 20:31 CST</h2>
 <h3>验证 RAM 子账号凭据不能直接作为 MaaS bearer API Key</h3>
 <p>变更内容：</p>
 <ul>
@@ -217,9 +319,8 @@
 <li>后续要继续测试 <code>qwen3.6-plus</code> 等新候选，仍需要先在 MaaS 控制台里生成真正的开发者 API key。</li>
 <li>本次验证仅排除“RAM AccessKey 直接可直连”的假设，不代表新模型 runtime 已可用。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 16:53 CST</h2>
-<h3>直接探测 `moma.cmecloud.cn/v1/chat/completions` 的上游直连入口</h3>
+<h2>2026-05-26 16:53 CST</h2>
+<h3>直接探测 <code>moma.cmecloud.cn/v1/chat/completions</code> 的上游直连入口</h3>
 <p>变更内容：</p>
 <ul>
 <li>按用户要求直接探测 <code>https://moma.cmecloud.cn/v1/chat/completions</code>，而不是之前验证过的 <code>zhenze-huhehaote.cmecloud.cn</code> 运行时网关。</li>
@@ -236,9 +337,8 @@
 <li>这次探测证明的是 <code>moma.cmecloud.cn</code> 这条直连地址本身在匿名与现有浏览器会话态下都不直接返回可用 API 响应。</li>
 <li>这不等于证明上游 runtime 已经不可用；真正的 chat-completions 直连结论仍需要一个有效的 MaaS API key 做 POST 级别验证。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 16:43 CST</h2>
-<h3>复核 `qwen3.6-plus` 的上游前缀命名与 runtime 可用性</h3>
+<h2>2026-05-26 16:43 CST</h2>
+<h3>复核 <code>qwen3.6-plus</code> 的上游前缀命名与 runtime 可用性</h3>
 <p>变更内容：</p>
 <ul>
 <li>先临时把 <code>qwen3.6-plus</code> 的 XDAPI 渠道映射改成上游原文样式 <code>qwen/qwen3.6-plus</code>，只验证命名层是否影响调用链路。</li>
@@ -257,8 +357,7 @@
 <ul>
 <li>这轮不能写成“改了前缀就能用”；正确结论是“前缀映射能进入上游链路，但上游还是 404”。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 16:14 CST</h2>
+<h2>2026-05-26 16:14 CST</h2>
 <h3>管理员态临时补 ModelRatio 后复核 9 个新候选模型</h3>
 <p>变更内容：</p>
 <ul>
@@ -279,8 +378,7 @@
 <ul>
 <li>这轮不能写成“已公开可用”；它只是把“价格缺失”和“runtime 404”两层问题拆开了。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-24 16:59 CST</h2>
+<h2>2026-05-24 16:59 CST</h2>
 <h3>管理员态 channel test 复核剩余 8 个新候选模型</h3>
 <p>变更内容：</p>
 <ul>
@@ -299,9 +397,8 @@
 <ul>
 <li>这轮测试把“渠道路由 / 计费缺口”与“上游 runtime 不可用”再次拆开了：前者 XDAPI 可补，后者仍是上游问题。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-24 16:50 CST</h2>
-<h3>临时启用 `qwen3.6-plus` 验证 XDAPI 能否独立修复公开缺口</h3>
+<h2>2026-05-24 16:50 CST</h2>
+<h3>临时启用 <code>qwen3.6-plus</code> 验证 XDAPI 能否独立修复公开缺口</h3>
 <p>变更内容：</p>
 <ul>
 <li>从上游 <code>fetch_models</code> 里挑 <code>qwen3.6-plus</code>，先临时加入 <code>1x</code> 公共目录，验证 XDAPI 自己能不能把这批新模型从“目录可见”推进到“对外可调用”。</li>
@@ -320,8 +417,7 @@
 <ul>
 <li>这轮不能写成“已经解决”，正确表述是“XDAPI 侧可修复公共路由和计费缺口，但上游 runtime 仍未打通”。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-24 16:09 CST</h2>
+<h2>2026-05-24 16:09 CST</h2>
 <h3>公共 1x 令牌复测 9 个新候选模型</h3>
 <p>变更内容：</p>
 <ul>
@@ -341,8 +437,7 @@
 <li>当前复测结果不能写成“仍然是 404”，因为这次公共路径实际返回的是 503。</li>
 <li>如果后续要继续验证上游 runtime 是否接通，需要先把候选模型重新放入可用渠道，再重复同一组请求。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-22 16:05 CST</h2>
+<h2>2026-05-22 16:05 CST</h2>
 <h3>扩展新增 Qwen/通义候选模型准入测试</h3>
 <p>变更内容：</p>
 <ul>
@@ -365,8 +460,7 @@
 <li>“模型广场/上游列表可见”不等于当前 API key 和当前运行时 endpoint 可调用。</li>
 <li>新模型上线仍需要同时满足运行时 API 成功、官方/截图价格证据可核对、上下文/最大输出证据可核对或明确标注缺口。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-22 11:53 CST</h2>
+<h2>2026-05-22 11:53 CST</h2>
 <h3>补充 DeepSeek-V4-Flash 移动 MaaS 详情页证据</h3>
 <p>变更内容：</p>
 <ul>
@@ -383,8 +477,7 @@
 <ul>
 <li>截图证据可以用于人工审计和文档记录；如果要让 XDAPI 前台稳定展示，需要把这些字段做成后端 source-backed metadata，而不是前端 mock。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-22 11:22 CST</h2>
+<h2>2026-05-22 11:22 CST</h2>
 <h3>修正价格详情页事实参数展示口径</h3>
 <p>变更内容：</p>
 <ul>
@@ -402,8 +495,7 @@
 <li>这是本地代码修正，线上价格页需要部署新版前端后才会去掉这些 mock 参数。</li>
 <li>本机未安装 <code>bun</code>，且当前目录缺少 <code>tsc</code>，所以本轮未完成前端 typecheck；部署前需先安装依赖并跑 <code>bun run typecheck</code> 或等价检查。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-22 11:08 CST</h2>
+<h2>2026-05-22 11:08 CST</h2>
 <h3>明确上下文/最大输出证据口径</h3>
 <p>变更内容：</p>
 <ul>
@@ -419,8 +511,7 @@
 <ul>
 <li>后续模型信息维护必须保留可核对来源；不能用历史配置、同系列外推或缺少模型名的截图片段补参数。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-22 10:50 CST</h2>
+<h2>2026-05-22 10:50 CST</h2>
 <h3>新增 Qwen 模型准入测试与源站信息审计</h3>
 <p>变更内容：</p>
 <ul>
@@ -442,8 +533,7 @@
 <li>27 个公开模型中，26 个有本轮采集到的官方 token 价格原文；<code>deepseek-v4-flash</code> 暂缺本轮采集到的官方价格行。</li>
 <li>上下文/最大输出的官方表格证据仅覆盖 Qwen2.5-VL、bge embedding/rerank、MiniMax-M2.5；多数纯文本聊天模型缺少可核对的官方上下文/最大输出表格。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-19 10:47 CST</h2>
+<h2>2026-05-19 10:47 CST</h2>
 <h3>清理残留非倍率用户分组</h3>
 <p>变更内容：</p>
 <ul>
@@ -454,16 +544,15 @@
 </ul>
 <p>验证方式：</p>
 <ul>
-<li>迁移后活跃用户分布为 <code>{&#x27;1x&#x27;: 11}</code>。</li>
-<li>迁移后活跃令牌分布为 <code>{&#x27;1x&#x27;: 3}</code>。</li>
+<li>迁移后活跃用户分布为 <code>{'1x': 11}</code>。</li>
+<li>迁移后活跃令牌分布为 <code>{'1x': 3}</code>。</li>
 <li>活跃 <code>auto</code> 用户和活跃 <code>auto</code> 令牌均为空。</li>
 </ul>
 <p>注意事项：</p>
 <ul>
 <li>后台仍可看到 1 个已删除用户保留历史 <code>default</code> 字段；它不属于活跃用户，不参与现网调用路由。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-19 10:40 CST</h2>
+<h2>2026-05-19 10:40 CST</h2>
 <h3>倍率分组发布收尾与现网复核</h3>
 <p>变更内容：</p>
 <ul>
@@ -480,8 +569,7 @@
 <ul>
 <li><code>/api/user/models</code> 需要登录态，匿名请求返回 401 属于预期行为。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-18 11:11 CST</h2>
+<h2>2026-05-18 11:11 CST</h2>
 <h3>分组改为 1x / 3x / 5x 倍率体系</h3>
 <p>变更内容：</p>
 <ul>
@@ -502,8 +590,7 @@
 <li>变更前备份保存在本地：<code>/private/tmp/xdw_backup_before_ratio_groups_1779073701.json</code>。</li>
 <li>当前 3x/5x 主要体现更高计费倍率和 group-level 请求额度；真实更快响应仍需要独立更快上游资源或优先级队列支撑。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-18 10:51 CST</h2>
+<h2>2026-05-18 10:51 CST</h2>
 <h3>新增分组权限与可用模型报告</h3>
 <p>变更内容：</p>
 <ul>
@@ -523,8 +610,7 @@
 <li><code>default</code>、<code>vip</code>、<code>agent</code> 当前倍率均为 <code>1.00x</code>，均可路由到 27 个公开 CMCC token 模型。</li>
 <li><code>vip</code> 与 <code>agent</code> 当前只是历史兼容 key，不在普通用户自选列表里，也不提供额外模型权限。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-16 15:34 CST</h2>
+<h2>2026-05-16 15:34 CST</h2>
 <h3>完成 27 个模型链路延迟诊断</h3>
 <p>变更内容：</p>
 <ul>
@@ -547,8 +633,7 @@
 <li>DeepSeek V3 / R1 / 部分 72B 系列吞吐约 8-12 tokens/s，是 500 token 输出接近 1 分钟的主要原因。</li>
 <li><code>deepseek-v3-0324</code> 短输出和 <code>qwen2.5-72b-instruct</code> 128 token 测试出现 XDAPI 额外开销嫌疑，建议后续重复采样确认。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-16 14:26 CST</h2>
+<h2>2026-05-16 14:26 CST</h2>
 <h3>公开 27 个 CMCC token 计费模型到前台目录</h3>
 <p>变更内容：</p>
 <ul>
@@ -568,8 +653,7 @@
 <li>高成本模型仍保留在独立逻辑渠道中便于维护和观测，但不作为前台可见性限制。</li>
 <li>语音类 <code>SenseVoice</code>、<code>CosyVoice</code> 暂不公开，因为当前商业计费结构仍以 token 为主。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-16 14:12 CST</h2>
+<h2>2026-05-16 14:12 CST</h2>
 <h3>统一分组策略：分组从“访问门槛”改为“速度/价格倍率档位”</h3>
 <p>变更内容：</p>
 <ul>
@@ -591,9 +675,8 @@
 <li>14:26 CST 已完成前台目录复核：公开 <code>/api/pricing</code> 与登录态 <code>/api/user/models</code> 均显示 27 个模型。</li>
 <li>后续如果新增更快档位，必须有真实更快上游资源、优先级或限流差异支撑。</li>
 </ul>
-</section>
-<section class="section"><h2>2026-05-26 17:53 CST</h2>
-<h3>直接验证上游 `moma.cmecloud.cn` 的 API key POST</h3>
+<h2>2026-05-26 17:53 CST</h2>
+<h3>直接验证上游 <code>moma.cmecloud.cn</code> 的 API key POST</h3>
 <p>变更内容：</p>
 <ul>
 <li>继续按 RAM 子账号链路排查新模型不可用原因，重点核对是否存在可直接用于上游 MaaS 的真实 API key。</li>
@@ -620,5 +703,4 @@
 <li>这轮验证证明当前环境里拿到的是 ecloud 会话痕迹，不是可用于 <code>moma.cmecloud.cn</code> 的真实 MaaS API key。</li>
 <li>因为没有拿到可用 API key，本轮无法完成“真实基于 API key 的 POST 成功验证”。</li>
 <li>后续要继续做真正的上游 POST 成功验证，需要一把已经在 RAM 子账号里创建好的 MaaS API key，或者一个能够直接进入该子账号控制台的有效登录会话。</li>
-</ul>
-</section></div></body></html>
+</ul></section></div></body></html>

@@ -1,5 +1,35 @@
 # XD API 工作记录
 
+## 2026-06-14 15:10 CST
+
+### 定位并修复 DaleAI 补全价格锁定状态
+
+- 直接读取 live `/api/option/` 复核后确认：`CompletionRatioMeta.locked=true` 当前不是“所有 `-dale` 模型都锁”，而是命中了 7 个公开 Dale 别名和 1 个隐藏 Dale 别名：
+  - 公开：`gpt-5.4-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale`、`claude-opus-4-6-dale`、`claude-opus-4-7-dale`、`claude-opus-4-8-dale`、`claude-sonnet-4-6-dale`
+  - 隐藏：`gpt-5.4-openai-compact-dale`
+- 同一 GPT 渠道中的 `codex-auto-review-dale` 没有锁定，因此根因不是 “Dale 渠道整体有问题”，而是公开 alias 名本身触发了 live 锁定元数据。
+- canary 证据先落在隐藏别名上：`gpt-5.4-openai-compact-dale` 在 live `CompletionRatioMeta` 里先返回 `{"ratio":6,"locked":true}`；改名为 `openai-gpt-5.4-openai-compact-dale`，并同步更新 channel `models`、`model_mapping` 以及 `ModelRatio` / `CompletionRatio` / `CacheRatio` / `CreateCacheRatio` key 后，live 返回 `{"ratio":6,"locked":false}`。
+- 在 canary 成立后，已对 live DaleAI 公共别名做整组迁移：
+  - GPT: `gpt-5.4-dale` -> `openai-gpt-5.4-dale`
+  - GPT: `gpt-5.5-dale` -> `openai-gpt-5.5-dale`
+  - GPT: `gpt-5.5-openai-compact-dale` -> `openai-gpt-5.5-openai-compact-dale`
+  - GPT hidden: `gpt-5.4-openai-compact-dale` -> `openai-gpt-5.4-openai-compact-dale`
+  - GPT hidden: `gpt-5.4-mini-dale` -> `openai-gpt-5.4-mini-dale`
+  - Claude: `claude-opus-4-7-dale` -> `anthropic-opus-4-7-dale`
+  - Claude: `claude-opus-4-6-dale` -> `anthropic-opus-4-6-dale`
+  - Claude: `claude-opus-4-8-dale` -> `anthropic-opus-4-8-dale`
+  - Claude: `claude-sonnet-4-6-dale` -> `anthropic-sonnet-4-6-dale`
+- live 配置层同步修改了 DaleAI 两个渠道 `#6` / `#7` 的 `models` 与 `model_mapping`，并把相关 ratio key 全部迁移到新 alias 名上；其中 `openai-gpt-5.5-dale` 额外把历史残留的 `CompletionRatio=0` 修正回 `6`。
+- 修复后再次读取 live `CompletionRatioMeta`，当前已不存在任何仍然 `locked=true` 的 `-dale` 公共别名；`/api/user/models`、`/api/channel/models_enabled` 和公开 `/api/pricing` 也都已刷新到新 alias 名。
+- 代表性 live `channel/test` 复核：
+  - `openai-gpt-5.4-dale`：非流式 `2.321s`，流式 `2.025s`
+  - `openai-gpt-5.5-dale`：非流式 `1.993s`，流式 `3.634s`
+  - `anthropic-opus-4-6-dale`：非流式 `3.551s`，流式 `2.101s`
+  - `anthropic-sonnet-4-6-dale`：非流式 `1.818s`，流式 `3.067s`
+- 当前残留 caveat 只剩一个：`openai-gpt-5.4-openai-compact-dale` 已解锁，但仍因 distributor `No available channel ... under group daleGPT专属` 保持隐藏，不计入当前公开数。
+- 本轮同时把“新增公开 alias 后必须检查 live `CompletionRatioMeta.locked`”补入 skill pipeline 和公开《新模型测试流程》，作为后续发布前 gate。
+- 证据：[`dale_alias_unlock_20260614.json`](../evidence/dale_alias_unlock_20260614.json)
+
 ## 2026-06-13 18:15 CST
 
 ### 修复 DaleAI / CTYun 公开目录漂移并同步 GitHub Pages
