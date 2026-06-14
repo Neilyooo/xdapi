@@ -5,88 +5,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>新模型测试流程</title>
   <style>
-    :root{--bg:#f6f8fc;--card:#fff;--text:#172033;--muted:#5f6b85;--line:#d9e1f2;--accent:#0f6fff}
-    *{box-sizing:border-box}
-    body{margin:0;background:#f6f8fc;color:var(--text);font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-    .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 72px}
+    body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+    .wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}
     .topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .topbar a{color:#174ea6;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
+    .topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
     .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}
     .hero h1{margin:0 0 8px;font-size:32px}
     .hero p{margin:0;color:rgba(255,255,255,.88)}
-    .section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
-    h2{margin:0 0 12px;font-size:21px}
-    ul{margin:8px 0 0 22px;padding:0}
+    .section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
+    h1{font-size:30px;margin:0 0 16px}
+    h2{margin:22px 0 10px;font-size:21px}
+    h3{margin:16px 0 8px;font-size:17px}
+    p{margin:8px 0}
+    ul,ol{margin:8px 0 0 22px;padding:0}
     li{margin:6px 0}
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}
+    th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}
+    th{background:#f8fbff;color:#27406e;position:sticky;top:0}
     code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}
+    pre code{background:transparent;border:0;color:inherit;padding:0}
     a{color:#174ea6}
   </style>
+  
 </head>
-<body><div class="wrap">
-  <nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav>
-  <section class="hero"><h1>新模型测试流程</h1><p>把新模型验证改成矩阵流程，先找上游真实可用路径，再决定是否进入 XDAPI 中转接入。</p></section>
-
-  <section class="section">
-    <h2>默认顺序</h2>
-    <ul>
-      <li>先测 <code>moma.cmecloud.cn</code>，再测 <code>zhenze-huhehaote.cmecloud.cn</code>。</li>
-      <li>每个上游先测 <code>POST /v1/chat/completions</code>。</li>
-      <li>只有当 chat 的所有模型名变体都失败后，才扩展到 <code>POST /v1/responses</code>。</li>
-      <li>上游直连确认成功后，才进入 XDAPI relay / channel / pricing 验证。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>模型名变体</h2>
-    <ul>
-      <li>每个候选先试裸名，再试 vendor 前缀名。</li>
-      <li>示例：<code>qwen3.6-plus</code> -> <code>qwen/qwen3.6-plus</code>。</li>
-      <li>若上游详情页给出更明确的原文名，以原文名为准。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>记录字段</h2>
-    <ul>
-      <li>host、endpoint、model、stream 开关。</li>
-      <li>HTTP 状态码、request id、content-type。</li>
-      <li>首段响应片段。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>XDAPI 接入后验证</h2>
-    <ul>
-      <li>复核 live channel 的 <code>base_url</code>、<code>models</code>、<code>group</code>、<code>model_mapping</code>，不能以本地代码或旧记录代替线上配置。</li>
-      <li>先跑管理员态 <code>channel/test/{channel_id}</code>，确认请求能到正确上游。</li>
-      <li>再跑操练场同路径 <code>POST /pg/chat/completions</code>，分别测 <code>stream=false</code> 和至少一个 <code>stream=true</code> smoke test。</li>
-      <li>如果操练场报 <code>SSE Error: openai_error</code>，先检查返回体是否为错误 JSON、渠道 <code>base_url</code> 是否指向临时隧道或旧上游，以及 <code>group</code> 是否仍在用 <code>auto</code>。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>早停规则</h2>
-    <ul>
-      <li>找到第一个双流式成功组合后立即停止。</li>
-      <li>已确认成功的等价组合不再重复测试。</li>
-      <li>只有全部 chat 变体失败后才进入 responses。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>当前已验证样例</h2>
-    <ul>
-      <li><code>qwen3.6-plus</code> 在 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 上，使用 <code>model=qwen/qwen3.6-plus</code> 时，stream 与 non-stream 都返回 200。</li>
-      <li><code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 也已通过同一路径验证。</li>
-      <li>2026-05-27 11:13 CST 线上 XDAPI 已修复 Moma 渠道 <code>base_url</code>，7 个 Moma 新模型通过操练场 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 验证；<code>qwen3.5-plus</code> 额外通过 <code>stream=true</code> smoke test。</li>
-    </ul>
-  </section>
-
-  <section class="section">
-    <h2>本地脚本</h2>
-    <ul>
-      <li><code>scripts/model_probe_matrix.py</code></li>
-    </ul>
-  </section>
-</div></body>
-</html>
+<body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a><a href="./group-permissions.html">倍率分组</a></nav><section class="hero"><h1>新模型测试流程</h1><p>把新模型验证改成矩阵流程，并把 live alias 锁定检查纳入发布前 gate。</p></section><section class="section"><h1>新模型测试流程</h1>
+<p>更新时间：2026-06-14 15:10 CST</p>
+<h2>目标</h2>
+<p>把新模型验证从“单点试打”改成可复用的矩阵流程，减少重复 probe、减少误判、减少后续回溯成本。</p>
+<h2>默认顺序</h2>
+<ol>
+<li>先测上游 <code>moma.cmecloud.cn</code>。</li>
+<li>再测上游 <code>zhenze-huhehaote.cmecloud.cn</code>。</li>
+<li>每个上游都先测 <code>POST /v1/chat/completions</code>。</li>
+<li>只有当 <code>chat/completions</code> 的所有模型名变体都失败后，才扩展到 <code>POST /v1/responses</code>。</li>
+<li>只有当上游直连已经确认成功后，才进入 XDAPI relay / channel / pricing 验证。</li>
+</ol>
+<h2>模型名变体</h2>
+<p>对每个候选模型，先试裸名，再试上游 vendor 前缀名。</p>
+<p>例如：</p>
+<ul>
+<li><code>qwen3.6-plus</code></li>
+<li><code>qwen/qwen3.6-plus</code></li>
+</ul>
+<p>对其他 Qwen 候选同样处理；如果有更明确的上游原文名，以原文名为准。</p>
+<h2>请求维度</h2>
+<p>每个成功候选都要确认这两个维度：</p>
+<ul>
+<li><code>stream=false</code></li>
+<li><code>stream=true</code></li>
+</ul>
+<p>只有两种都成功，才能认为该路径可用。</p>
+<h2>记录字段</h2>
+<p>每次 probe 记录：</p>
+<ul>
+<li>上游 host</li>
+<li>endpoint</li>
+<li>model 名</li>
+<li>stream 开关</li>
+<li>HTTP 状态码</li>
+<li><code>request-id</code> / <code>x-request-id</code></li>
+<li>响应头 <code>content-type</code></li>
+<li>首段响应片段</li>
+</ul>
+<h2>XDAPI 接入后验证</h2>
+<p>上游直连成功不等于操练场可用。接入 XDAPI 后还要固定做五步：</p>
+<ol>
+<li>复核 live channel 的 <code>base_url</code>、<code>models</code>、<code>group</code>、<code>model_mapping</code>，不能以本地代码或旧记录代替线上配置。</li>
+<li>先跑管理员态 <code>channel/test/{channel_id}</code>，确认请求能到正确上游。</li>
+<li>再跑操练场同路径 <code>POST /pg/chat/completions</code>，分别测 <code>stream=false</code> 和至少一个 <code>stream=true</code> smoke test。</li>
+<li>再读一次 live <code>/api/option/</code> 里的 <code>CompletionRatioMeta</code>，检查刚新增的公开别名是否出现意外 <code>locked=true</code>。</li>
+<li>如果 public alias 命中 <code>locked=true</code>，直接阻塞发布；先修 alias 命名、channel <code>models</code> / <code>model_mapping</code> 和 ratio key，再重新验证。</li>
+</ol>
+<p>如果操练场报 <code>SSE Error: openai_error</code>，先检查：</p>
+<ul>
+<li>是否返回了错误 JSON 而不是标准 <code>text/event-stream</code> chunk。</li>
+<li>对应渠道 <code>base_url</code> 是否指向临时隧道、代理或旧上游。</li>
+<li><code>group</code> 是否为公开倍率组 <code>1x/3x/5x</code>，不要再使用 <code>auto</code>。</li>
+</ul>
+<p>如果管理员价格页出现“补全价格已锁定”，优先检查：</p>
+<ul>
+<li>live <code>/api/option/</code> 的 <code>CompletionRatioMeta</code> 是否对该公开别名返回了 <code>locked=true</code>。</li>
+<li>这是不是 alias 命名触发，而不是渠道整体问题。2026-06-14 的 DaleAI 复核已证明：同一 GPT 渠道里 <code>codex-auto-review-dale</code> 不锁，但 <code>gpt-5.*-dale</code> 会锁；同理 <code>claude-opus-4* -dale</code>、<code>claude-sonnet-4* -dale</code> 也会锁。</li>
+<li>先做 canary rename，再同步修改 channel <code>models</code>、<code>model_mapping</code>、<code>ModelRatio</code>、<code>CompletionRatio</code>、<code>CacheRatio</code>、<code>CreateCacheRatio</code> 对应 key。</li>
+</ul>
+<h2>早停规则</h2>
+<ol>
+<li>找到第一个 <code>host + endpoint + model variant</code> 的双流式成功组合后立刻停止。</li>
+<li>已经确认成功的组合，不再用等价变体重复测试。</li>
+<li>若某个组合只通过了非流式，不继续把它当最终成功。</li>
+<li>如果所有 <code>chat/completions</code> 组合失败，再进入 <code>responses</code>。</li>
+</ol>
+<h2>当前已验证的成功样例</h2>
+<ul>
+<li><code>qwen3.6-plus</code> 在 <code>https://moma.cmecloud.cn/v1/chat/completions</code> 上，使用 <code>model=qwen/qwen3.6-plus</code> 时，<code>stream=true</code> 和 <code>stream=false</code> 都返回 <code>200</code>。</li>
+<li><code>qwen3-vl-plus</code>、<code>qwen-mt-plus</code>、<code>qwen3-omni-flash</code>、<code>qwen-mt-flash</code>、<code>qwen3.5-plus</code>、<code>qwen3-max</code> 也都已经通过同一上游直连路径。</li>
+<li>2026-05-27 11:13 CST 线上 XDAPI 已修复 Moma 渠道 <code>base_url</code>，7 个 Moma 新模型通过操练场 <code>/pg/chat/completions</code>、<code>group=1x</code>、<code>stream=false</code> 验证；<code>qwen3.5-plus</code> 额外通过 <code>stream=true</code> smoke test。</li>
+<li>2026-06-14 12:02 CST DaleAI 解锁样例：<code>gpt-5.4-openai-compact-dale</code> 在 live <code>CompletionRatioMeta</code> 中为 <code>{"ratio":6,"locked":true}</code>；改名为 <code>openai-gpt-5.4-openai-compact-dale</code> 并同步 channel / ratio key 后，live <code>CompletionRatioMeta</code> 变为 <code>{"ratio":6,"locked":false}</code>。这一步已经纳入发布前 gate。</li>
+</ul>
+<h2>本地脚本</h2>
+<p>仓库内提供：</p>
+<ul>
+<li><code>scripts/model_probe_matrix.py</code></li>
+</ul>
+<p>它会按以上顺序自动运行矩阵，并输出每次请求的状态、请求 ID 和响应片段。</p></section></div></body></html>

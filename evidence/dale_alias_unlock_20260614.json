@@ -1,0 +1,115 @@
+{
+  "timestamp_cst": "2026-06-14 12:02 CST",
+  "scope": "live_xdapi_dale_alias_unlock",
+  "site": "https://api.xingdingwangluo.cn",
+  "before_locked_public_aliases": [
+    "gpt-5.4-dale",
+    "gpt-5.5-dale",
+    "gpt-5.5-openai-compact-dale",
+    "claude-opus-4-6-dale",
+    "claude-opus-4-7-dale",
+    "claude-opus-4-8-dale",
+    "claude-sonnet-4-6-dale"
+  ],
+  "before_locked_hidden_aliases": [
+    "gpt-5.4-openai-compact-dale"
+  ],
+  "same_channel_not_locked_control": [
+    "codex-auto-review-dale"
+  ],
+  "canary": {
+    "before": {
+      "alias": "gpt-5.4-openai-compact-dale",
+      "completion_ratio_meta": {
+        "ratio": 6,
+        "locked": true
+      }
+    },
+    "after": {
+      "alias": "openai-gpt-5.4-openai-compact-dale",
+      "completion_ratio_meta": {
+        "ratio": 6,
+        "locked": false
+      }
+    }
+  },
+  "migration": {
+    "gpt_aliases": {
+      "gpt-5.4-dale": "openai-gpt-5.4-dale",
+      "gpt-5.5-dale": "openai-gpt-5.5-dale",
+      "gpt-5.5-openai-compact-dale": "openai-gpt-5.5-openai-compact-dale",
+      "gpt-5.4-openai-compact-dale": "openai-gpt-5.4-openai-compact-dale",
+      "gpt-5.4-mini-dale": "openai-gpt-5.4-mini-dale"
+    },
+    "claude_aliases": {
+      "claude-opus-4-7-dale": "anthropic-opus-4-7-dale",
+      "claude-opus-4-6-dale": "anthropic-opus-4-6-dale",
+      "claude-opus-4-8-dale": "anthropic-opus-4-8-dale",
+      "claude-sonnet-4-6-dale": "anthropic-sonnet-4-6-dale"
+    },
+    "updated_live_keys": [
+      "channel_6.models",
+      "channel_6.model_mapping",
+      "channel_7.models",
+      "channel_7.model_mapping",
+      "ModelRatio",
+      "CompletionRatio",
+      "CacheRatio",
+      "CreateCacheRatio"
+    ],
+    "explicit_ratio_fix": {
+      "alias": "openai-gpt-5.5-dale",
+      "completion_ratio": 6
+    }
+  },
+  "post_change_public_aliases": [
+    "codex-auto-review-dale",
+    "openai-gpt-5.4-dale",
+    "openai-gpt-5.5-dale",
+    "openai-gpt-5.5-openai-compact-dale",
+    "anthropic-opus-4-7-dale",
+    "anthropic-opus-4-6-dale",
+    "anthropic-opus-4-8-dale",
+    "anthropic-sonnet-4-6-dale"
+  ],
+  "post_change_hidden_aliases": [
+    "openai-gpt-5.4-openai-compact-dale",
+    "openai-gpt-5.4-mini-dale"
+  ],
+  "post_change_locked_dale_aliases": [],
+  "representative_channel_tests": [
+    {
+      "alias": "openai-gpt-5.4-dale",
+      "stream_false_seconds": 2.321,
+      "stream_true_seconds": 2.025,
+      "success": true
+    },
+    {
+      "alias": "openai-gpt-5.5-dale",
+      "stream_false_seconds": 1.993,
+      "stream_true_seconds": 3.634,
+      "success": true
+    },
+    {
+      "alias": "anthropic-opus-4-6-dale",
+      "stream_false_seconds": 3.551,
+      "stream_true_seconds": 2.101,
+      "success": true
+    },
+    {
+      "alias": "anthropic-sonnet-4-6-dale",
+      "stream_false_seconds": 1.818,
+      "stream_true_seconds": 3.067,
+      "success": true
+    }
+  ],
+  "remaining_caveat": {
+    "alias": "openai-gpt-5.4-openai-compact-dale",
+    "state": "hidden",
+    "reason": "No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)"
+  },
+  "notes": [
+    "Evidence is redacted and excludes cookies, passwords, API keys, and token values.",
+    "This file records live XDAPI behavior only and does not rely on local newapi source code."
+  ]
+}
