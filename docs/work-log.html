@@ -1,35 +1,32 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XD API 工作记录</title>
-  <style>
-    body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-    .wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}
-    .topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}
-    .hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}
-    .hero h1{margin:0 0 8px;font-size:32px}
-    .hero p{margin:0;color:rgba(255,255,255,.88)}
-    .section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}
-    h1{font-size:30px;margin:0 0 16px}
-    h2{margin:22px 0 10px;font-size:21px}
-    h3{margin:16px 0 8px;font-size:17px}
-    p{margin:8px 0}
-    ul,ol{margin:8px 0 0 22px;padding:0}
-    li{margin:6px 0}
-    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}
-    th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}
-    th{background:#f8fbff;color:#27406e;position:sticky;top:0}
-    code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-    pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}
-    pre code{background:transparent;border:0;color:inherit;padding:0}
-    a{color:#174ea6}
-  </style>
-  
-</head>
-<body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="section"><h1>XD API 工作记录</h1>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-06-16 00:09 CST</h2>
+<h3>轮换 CTYun Coding 上游 key 并按最小改动完成 live 验证</h3>
+<ul>
+<li>目标对象：live 渠道 <code>#8 CTYun Coding - 企业类大模型</code>，对外 alias 为 <code>glm-5-pro-coding-ctyun</code>。</li>
+<li>执行方案：严格按方案 A 操作，只替换该渠道已经耗尽额度的 CTYun coding-plan upstream apikey；不改 <code>base_url</code>、<code>group</code>、<code>models</code>、<code>model_mapping</code>、定价、分组或用户侧 token。</li>
+<li>变更前 live 渠道基线：</li>
+<li><code>base_url = https://wishub-x6.ctyun.cn/coding</code></li>
+<li><code>group = 1x,3x,5x</code></li>
+<li><code>tag = ctyun-coding-glm</code></li>
+<li><code>models</code> 与 <code>model_mapping</code> 都仍包含 <code>glm-5-pro-coding-ctyun</code></li>
+<li>先做上游直连验证，再做 XDAPI relay 验证：</li>
+<li>新 key 直连 <code>POST https://wishub-x6.ctyun.cn/coding/v1/chat/completions</code></li>
+<li><code>GLM-5-Pro</code> 非流式 <code>3657.72ms</code>，HTTP 200</li>
+<li><code>GLM-5-Pro</code> 流式 <code>1874.24ms</code>，HTTP 200</li>
+<li>替换 key 后立即做 live <code>channel/test/8</code>：</li>
+<li><code>glm-5-pro-coding-ctyun</code> 非流式 <code>2.096s</code>，HTTP 200 / <code>success=true</code></li>
+<li><code>glm-5-pro-coding-ctyun</code> 流式 <code>2.531s</code>，HTTP 200 / <code>success=true</code></li>
+<li>再做 XDAPI 最终 relay 验证：</li>
+<li>创建临时 <code>1x</code> token</li>
+<li>调 <code>POST https://api.xingdingwangluo.cn/v1/chat/completions</code></li>
+<li><code>model=glm-5-pro-coding-ctyun</code> 返回 HTTP 200，<code>2566.63ms</code></li>
+<li>临时 token 已删除</li>
+<li>补充检查：</li>
+<li>公开 <code>/api/pricing</code> 仍包含 <code>glm-5-pro-coding-ctyun</code></li>
+<li>live <code>CompletionRatioMeta</code> 对该 alias 没有异常锁定项</li>
+<li>结论：这次 key 轮换对用户侧是无感的，用户继续使用原 XDAPI URL、原 XDAPI token、原模型名即可。</li>
+<li>证据：<a href="../evidence/ctyun_coding_keyrotate_20260616.json"><code>ctyun_coding_keyrotate_20260616.json</code></a></li>
+</ul>
 <h2>2026-06-14 15:10 CST</h2>
 <h3>定位并修复 DaleAI 补全价格锁定状态</h3>
 <ul>

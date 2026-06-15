@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-06-16 00:09:19 CST",
+  "change_scope": "方案A：只替换 CTYun-Coding 上游 apikey，不改 group/models/model_mapping/pricing",
+  "upstream": {
+    "base": "https://wishub-x6.ctyun.cn/coding",
+    "chat_endpoint": "https://wishub-x6.ctyun.cn/coding/v1/chat/completions",
+    "key_redacted": "cp_847***05f5",
+    "tests": [
+      {
+        "tested_model": "GLM-5-Pro",
+        "stream": false,
+        "status": 200,
+        "elapsed_ms": 3657.72,
+        "snippet": "{\"code\":0,\"id\":\"chatcmpl-178153976003628000009890b798\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"reasoning_content\":\"1.  **分析请求：** 用户要求我*仅*回复“\"},\"finish_reason\":\"length\"}],\"created\":1781539761,\"model\":\"glm-51\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":16,\"prompt_tokens\":8,\"total_tokens\":24,\"com"
+      },
+      {
+        "tested_model": "GLM-5-Pro",
+        "stream": true,
+        "status": 200,
+        "elapsed_ms": 1874.24,
+        "snippet": "data: {\"code\":0,\"id\":\"chatcmpl-1781539763440763000046ab3059\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null}}],\"created\":1781539764,\"model\":\"glm-51\",\"object\":\"chat.completion.chunk\",\"usage\":null}\\n\\ndata: {\"code\":0,\"id\":\"chatcmpl-1781539763440763000046ab3059\",\"choices\":[{\"index\""
+      }
+    ],
+    "passed_model": "GLM-5-Pro"
+  },
+  "xdapi": {
+    "snapshots": {
+      "options": "/private/tmp/xdapi_ctyun_coding_keyrotate_20260616/options_before.json",
+      "channels": "/private/tmp/xdapi_ctyun_coding_keyrotate_20260616/channels_before.json",
+      "plans": "/private/tmp/xdapi_ctyun_coding_keyrotate_20260616/plans_before.json",
+      "users": "/private/tmp/xdapi_ctyun_coding_keyrotate_20260616/users_before.json",
+      "pricing_before": "/private/tmp/xdapi_ctyun_coding_keyrotate_20260616/pricing_before.json"
+    },
+    "channel_before": {
+      "id": 8,
+      "name": "CTYun Coding - 企业类大模型",
+      "base_url": "https://wishub-x6.ctyun.cn/coding",
+      "group": "1x,3x,5x",
+      "priority": 10,
+      "weight": 100,
+      "tag": "ctyun-coding-glm",
+      "models_contains_alias": true,
+      "model_mapping_contains_alias": true,
+      "key_redacted_before": "masked_by_api"
+    },
+    "channel_update": {
+      "channel_id": 8,
+      "channel_name": "CTYun Coding - 企业类大模型",
+      "changed_field": "key",
+      "new_key_redacted": "cp_847***05f5"
+    },
+    "channel_tests": [
+      {
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.096,
+        "message": ""
+      },
+      {
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.531,
+        "message": ""
+      }
+    ],
+    "relay_test": {
+      "group": "1x",
+      "http_status": 200,
+      "elapsed_ms": 2566.63,
+      "snippet": "{\"code\":0,\"id\":\"chatcmpl-17815397705984120000350aac4d\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"reasoning_content\":\"1.  **分析请求：** 用户要求我*仅*回复“\"},\"finish_reason\":\"length\"}],\"created\":1781539771,\"model\":\"glm-51\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":16,\"prompt_tokens\":8,\"total_tokens\":24,\"com"
+    },
+    "pricing_check": {
+      "found_alias": true,
+      "groups": null
+    },
+    "completion_meta_check": null,
+    "cleanup": {
+      "token_id": 45,
+      "success": true
+    }
+  }
+}

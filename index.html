@@ -58,12 +58,12 @@
 
     <section class="hero">
       <h1>中国移动 MaaS 与 XD API 模型横向对比进度表</h1>
-      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用公开零售模型。当前 live <code>/api/pricing</code> 可见总数为 <code>76</code>，其中公开 CMCC token 模型 <code>34</code> 个、CTYun <code>-ctyun</code> 别名 <code>35</code> 个、DaleAI <code>-dale</code> 别名 <code>8</code> 个。2026-06-14 12:02 CST 已完成 DaleAI 补全价格锁定元数据排查与 live alias 解锁迁移，并把当前状态同步回 GitHub Pages。</p>
+      <p>本页保留模型测试证据，同时同步最新运营框架：2026-05-18 起，业务分组改为 1x / 3x / 5x 倍率体系；三个倍率组都能调用公开零售模型。当前 live <code>/api/pricing</code> 可见总数为 <code>76</code>，其中公开 CMCC token 模型 <code>34</code> 个、CTYun <code>-ctyun</code> 别名 <code>35</code> 个、DaleAI <code>-dale</code> 别名 <code>8</code> 个。2026-06-16 00:09 CST 已完成 CTYun Coding 渠道上游 key 轮换，并按既定 pipeline 复核直连、<code>channel/test</code> 与 relay。</p>
       <div class="chips">
-        <span class="chip">更新时间：2026-06-14 15:10 CST</span>
+        <span class="chip">更新时间：2026-06-16 00:09 CST</span>
         <span class="chip">操练场复测：2026-05-28 14:31 CST</span>
         <span class="chip">站点：api.xingdingwangluo.cn</span>
-        <span class="chip">Dale 解锁证据：dale_alias_unlock_20260614.json</span>
+        <span class="chip">CTYun Coding 轮换证据：ctyun_coding_keyrotate_20260616.json</span>
       </div>
     </section>
 
@@ -103,6 +103,7 @@
         <li>控制台详情页提取到 <code>56/56</code> 个模型的 API 文档入口；后续已基于内部授权 API key 做过 direct POST 健康检查，其中 <code>54</code> 个 token 模型直连通过，<code>2</code> 个图片/按次计费模型未做消耗式生成测试。</li>
         <li>结合天翼云官方计费说明页，当前 <code>37/56</code> 个模型提取到可核对 token 价格行；其余模型标记为未提取到自助价格或可能需客户经理/工单开通。</li>
         <li>最新 live <code>/api/pricing</code> 总数为 <code>76</code>，其中 CTYun <code>-ctyun</code> 当前可见 <code>35</code> 个；<code>glm-5-pro-coding-ctyun</code> 已在公开目录中。</li>
+        <li>2026-06-16 00:09 CST 已按最小改动方案轮换 `#8 CTYun Coding - 企业类大模型` 的上游 apikey：保留 <code>base_url=https://wishub-x6.ctyun.cn/coding</code>、<code>group=1x,3x,5x</code>、模型映射与定价不变；新 key 直连 `GLM-5-Pro` 双流式通过，XDAPI `channel/test/8` 与临时 `1x` token relay 均返回 <code>200</code>。</li>
         <li>历史上通过过 relay 的 <code>bge-m3-ctyun</code>、<code>bge-reranker-v2-m3-ctyun</code>、<code>bge-reranker-large-ctyun</code> 在 2026-06-13 复测时返回上游 <code>429 免费额度已结束，请开通付费</code>，因此当前继续隐藏。</li>
         <li>报告入口：<a href="./docs/ctyun-model-audit.html">天翼云模型审计</a>、<a href="./docs/mobile-ctyun-comparison.html">移动/天翼对比</a>、<a href="./docs/enterprise-b2b-strategy.html">企业接入策略</a>、<a href="./docs/enterprise-routing-groups.html">企业分组详解</a>。</li>
       </ul>

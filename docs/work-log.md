@@ -1,5 +1,34 @@
 # XD API 工作记录
 
+## 2026-06-16 00:09 CST
+
+### 轮换 CTYun Coding 上游 key 并按最小改动完成 live 验证
+
+- 目标对象：live 渠道 `#8 CTYun Coding - 企业类大模型`，对外 alias 为 `glm-5-pro-coding-ctyun`。
+- 执行方案：严格按方案 A 操作，只替换该渠道已经耗尽额度的 CTYun coding-plan upstream apikey；不改 `base_url`、`group`、`models`、`model_mapping`、定价、分组或用户侧 token。
+- 变更前 live 渠道基线：
+  - `base_url = https://wishub-x6.ctyun.cn/coding`
+  - `group = 1x,3x,5x`
+  - `tag = ctyun-coding-glm`
+  - `models` 与 `model_mapping` 都仍包含 `glm-5-pro-coding-ctyun`
+- 先做上游直连验证，再做 XDAPI relay 验证：
+  - 新 key 直连 `POST https://wishub-x6.ctyun.cn/coding/v1/chat/completions`
+  - `GLM-5-Pro` 非流式 `3657.72ms`，HTTP 200
+  - `GLM-5-Pro` 流式 `1874.24ms`，HTTP 200
+- 替换 key 后立即做 live `channel/test/8`：
+  - `glm-5-pro-coding-ctyun` 非流式 `2.096s`，HTTP 200 / `success=true`
+  - `glm-5-pro-coding-ctyun` 流式 `2.531s`，HTTP 200 / `success=true`
+- 再做 XDAPI 最终 relay 验证：
+  - 创建临时 `1x` token
+  - 调 `POST https://api.xingdingwangluo.cn/v1/chat/completions`
+  - `model=glm-5-pro-coding-ctyun` 返回 HTTP 200，`2566.63ms`
+  - 临时 token 已删除
+- 补充检查：
+  - 公开 `/api/pricing` 仍包含 `glm-5-pro-coding-ctyun`
+  - live `CompletionRatioMeta` 对该 alias 没有异常锁定项
+- 结论：这次 key 轮换对用户侧是无感的，用户继续使用原 XDAPI URL、原 XDAPI token、原模型名即可。
+- 证据：[`ctyun_coding_keyrotate_20260616.json`](../evidence/ctyun_coding_keyrotate_20260616.json)
+
 ## 2026-06-14 15:10 CST
 
 ### 定位并修复 DaleAI 补全价格锁定状态
