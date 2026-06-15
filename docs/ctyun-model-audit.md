@@ -1,6 +1,6 @@
 # 天翼云 MaaS 模型清单审计
 
-更新时间：2026-06-13 18:15 CST
+更新时间：2026-06-16 00:09 CST
 
 ## 结论
 
@@ -10,8 +10,27 @@
 - `37/56` 个模型提取到可核对的 token 价格行；其余模型控制台可见但未提取到自助价格，或页面提示需客户经理/工单开通，不能强行填价格。
 - 后续已基于内部授权 API key 做过真实 CTYun direct POST 健康检查：`54` 个 token 模型直连通过，`2` 个图片/按次计费模型未做消耗式生成测试。
 - 当前 XDAPI 公共 `/api/pricing` 中可见 `35` 个 `-ctyun` 别名；`glm-5-pro-coding-ctyun` 已在公开目录中。
+- `glm-5-pro-coding-ctyun` 当前走独立 live 渠道 `#8 CTYun Coding - 企业类大模型`，上游路径为 `https://wishub-x6.ctyun.cn/coding/v1/chat/completions`。
+- 2026-06-16 00:09 CST 已按“只换 key、不动其余字段”的最小改动方案完成一次 live key 轮换：新 key 直连 `GLM-5-Pro` 的非流式/流式都返回 `200`；XDAPI `channel/test/8` 与临时 `1x` token relay 也都返回 `200`。
 - 历史上已验证通过的 3 个 fixed-endpoint 别名 `bge-m3-ctyun`、`bge-reranker-v2-m3-ctyun`、`bge-reranker-large-ctyun` 在 2026-06-13 relay 复核时返回上游 `429 免费额度已结束，请开通付费`，因此当前继续隐藏，不把它们写成“现网公开可用”。
 - 公开文档不保存账号密码、API key 或完整 relay token；只保留脱敏结论和证据链接。
+
+## 2026-06-16 CTYun Coding 轮换验证
+
+- 变更对象：`#8 CTYun Coding - 企业类大模型`
+- 变更范围：只替换耗尽额度的 CTYun coding-plan apikey；`base_url`、`group=1x,3x,5x`、`models=glm-5-pro-coding-ctyun`、`model_mapping=GLM-5-Pro` 与定价保持不变。
+- 上游直连：
+  - 非流式 `3657.72ms`，HTTP 200
+  - 流式 `1874.24ms`，HTTP 200
+- XDAPI admin `channel/test/8`：
+  - 非流式 `2.096s`，HTTP 200 / `success=true`
+  - 流式 `2.531s`，HTTP 200 / `success=true`
+- XDAPI relay：
+  - 临时 `1x` token 调 `POST /v1/chat/completions`
+  - `model=glm-5-pro-coding-ctyun` 返回 HTTP 200，`2566.63ms`
+  - 临时 token 已删除
+- 结论：`glm-5-pro-coding-ctyun` 当前 live 链路正常，新 key 已接管；用户侧无需改 URL、token 或模型名。
+- 脱敏证据：[`ctyun_coding_keyrotate_20260616.json`](../evidence/ctyun_coding_keyrotate_20260616.json)
 
 ## 模型明细
 
