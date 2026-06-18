@@ -1,17 +1,16 @@
 # DaleAI 渠道接入与模型验证记录
 
-更新时间：2026-06-14 15:10 CST
+更新时间：2026-06-18 14:55 CST
 
 ## 摘要
 
-- 已在 XDAPI 线上新增/更新 DaleAI 供应商和两个逻辑渠道：
+- XDAPI live 当前维护 2 条 Dale 公开逻辑渠道：
   - `#6 DaleAI GPT Codex - Public Alias`
   - `#7 DaleAI Claude - Public Alias`
-- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `8` 个，均使用显式 `-dale` 后缀，避免与其他渠道同名模型混淆。
+- 当前公开到 `/api/pricing` 的 DaleAI 别名为 `8` 个。
 - live `/api/pricing` 当前总数为 `76`。
-- 2026-06-14 已确认 DaleAI “补全价格已锁定”问题不是整条渠道故障，而是公开 alias 名在 live `CompletionRatioMeta` 上触发了锁定元数据。当前公开别名已迁移到 `openai-* -dale` / `anthropic-* -dale` 形式，并完成 live 解锁。
-- 重要修正：11:31 CST 的早期结论只覆盖“定价页原始模型名 + `www.daleai.shop/v1/chat/completions` + 当前 channel test”，未完整覆盖历史/变体模型名和备用 URL。15:31 CST 已补充模型名/URL 矩阵，发现 `gpt-5.4` 与 `gpt-5.4-openai-compact` 可稳定接入，已重新上架。
-- 2026-06-13 18:15 CST 再次复核发现公开可见性发生漂移：5 个 GPT/Codex 别名中有 4 个被模型元数据 `status=0` 隐藏。已恢复其中 4 个，`gpt-5.4-openai-compact-dale` 暂不恢复，因为当前 runtime 仍报 distributor 无可用渠道。
+- 2026-06-14 已完成 Dale 公共 alias 的 `CompletionRatioMeta.locked` 解锁迁移。
+- 2026-06-18 已确认本轮 Dale 故障根因不是 Dale 网站整体异常，而是 XDAPI live 渠道 `#6` / `#7` 保存的上游 token 已失效；替换为新的 Dale **无限制** token 后，GPT relay 与 Claude 的 OpenAI / Anthropic 双协议 relay 均恢复。
 
 ## 当前公开映射
 
@@ -26,6 +25,108 @@
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-opus-4-8-dale` | `claude-opus-4-8` |
 | `DaleAI Claude - Public Alias` | `1x,3x,5x` | `anthropic-sonnet-4-6-dale` | `claude-sonnet-4-6` |
 
+## 2026-06-18 live 渠道 key 修复与 Claude Anthropic relay 复核
+
+### 根因定位
+
+| 检查点 | 结果 |
+| --- | --- |
+| Dale 网站账号登录 | 正常，`POST /api/user/login` 返回 `200` |
+| Dale 直连 GPT | 正常，使用 Dale `default` 组新 token 直连 `gpt-5.5`、`codex-auto-review`、`gpt-5.4-openai-compact` 均返回 `200` |
+| Dale 直连 Claude OpenAI 兼容 | 正常，使用 Dale `Anthropic官方key中转` 组新 token 直连 `claude-opus-4-8`、`claude-sonnet-4-6` 返回 `200` |
+| Dale 直连 Claude Anthropic 兼容 | 正常，`POST /v1/messages` 对 `claude-opus-4-8`、`claude-sonnet-4-6` 返回 `200` |
+| XDAPI `channel/test/6` 旧状态 | 先前统一报 `401 Invalid token` |
+| XDAPI `channel/test/7` 旧状态 | `endpoint_type=openai` 与 `endpoint_type=anthropic` 都统一报 `401 Invalid token` |
+| 结论 | 故障点在 `XDAPI -> Dale` 渠道凭据层，不在 Dale 网站整体，不在模型名映射，也不在 XDAPI 是否存在 `/v1/messages` 路由 |
+
+### live 最小改动
+
+- channel `#6 DaleAI GPT Codex - Public Alias`
+  - 上游 key 替换为新的 Dale **无限制 GPT token**
+  - Dale 上游 group：`default`
+- channel `#7 DaleAI Claude - Public Alias`
+  - 上游 key 替换为新的 Dale **无限制 Claude token**
+  - Dale 上游 group：`Anthropic官方key中转`
+- 保持不变：
+  - `base_url=https://www.daleai.shop`
+  - `group=1x,3x,5x`
+  - `models`
+  - `model_mapping`
+  - 定价和 ratio key
+
+### XDAPI live 验证结果
+
+#### GPT / Codex channel `#6`
+
+| 模型 | endpoint_type | stream | HTTP | 结果 | 备注 |
+| --- | --- | --- | --- | --- | --- |
+| `codex-auto-review-dale` | `openai` | `false` | 200 | 通过 | `3.127s` |
+| `codex-auto-review-dale` | `openai` | `true` | 200 | 通过 | `2.324s` |
+| `openai-gpt-5.4-dale` | `openai` | `false` | 200 | 通过 | `2.950s` |
+| `openai-gpt-5.4-dale` | `openai` | `true` | 200 | 通过 | 首次 `502`，复检恢复 `2.357s` |
+| `openai-gpt-5.4-openai-compact-dale` | `openai` | `false` | 200 | 通过 | `1.920s` |
+| `openai-gpt-5.4-openai-compact-dale` | `openai` | `true` | 200 | 通过 | 首次 distributor 失败，复检恢复 `2.818s`；但公共 relay 仍不稳定，见 caveat |
+| `openai-gpt-5.5-dale` | `openai` | `false` | 200 | 部分通过 | 首次 `429`，复检为上游瞬时 `502`；但最终 XDAPI 临时 token relay 返回 `200` |
+| `openai-gpt-5.5-dale` | `openai` | `true` | 200 | 通过 | `3.357s` |
+| `openai-gpt-5.5-openai-compact-dale` | `openai` | `false` | 200 | 通过 | 首次 `502`，复检恢复 `3.477s` |
+| `openai-gpt-5.5-openai-compact-dale` | `openai` | `true` | 200 | 通过 | `3.802s` |
+
+#### Claude channel `#7`
+
+| 模型 | endpoint_type | stream | HTTP | 结果 | 耗时 |
+| --- | --- | --- | --- | --- | --- |
+| `anthropic-opus-4-7-dale` | `openai` | `false` | 200 | 通过 | `1.363s` |
+| `anthropic-opus-4-7-dale` | `openai` | `true` | 200 | 通过 | `1.833s` |
+| `anthropic-opus-4-7-dale` | `anthropic` | `false` | 200 | 通过 | `1.677s` |
+| `anthropic-opus-4-7-dale` | `anthropic` | `true` | 200 | 通过 | `3.638s` |
+| `anthropic-opus-4-6-dale` | `openai` | `false` | 200 | 通过 | `2.826s` |
+| `anthropic-opus-4-6-dale` | `openai` | `true` | 200 | 通过 | `2.642s` |
+| `anthropic-opus-4-6-dale` | `anthropic` | `false` | 200 | 通过 | `3.127s` |
+| `anthropic-opus-4-6-dale` | `anthropic` | `true` | 200 | 通过 | `2.774s` |
+| `anthropic-opus-4-8-dale` | `openai` | `false` | 200 | 通过 | `2.097s` |
+| `anthropic-opus-4-8-dale` | `openai` | `true` | 200 | 通过 | `3.074s` |
+| `anthropic-opus-4-8-dale` | `anthropic` | `false` | 200 | 通过 | `2.192s` |
+| `anthropic-opus-4-8-dale` | `anthropic` | `true` | 200 | 通过 | `2.590s` |
+| `anthropic-sonnet-4-6-dale` | `openai` | `false` | 200 | 通过 | `2.114s` |
+| `anthropic-sonnet-4-6-dale` | `openai` | `true` | 200 | 通过 | `1.729s` |
+| `anthropic-sonnet-4-6-dale` | `anthropic` | `false` | 200 | 通过 | `1.875s` |
+| `anthropic-sonnet-4-6-dale` | `anthropic` | `true` | 200 | 通过 | `1.966s` |
+
+### XDAPI 临时 token relay 结果
+
+| 路径 | 模型 | HTTP | 结果 | 耗时 | 响应片段 |
+| --- | --- | --- | --- | --- | --- |
+| `POST /v1/chat/completions` | `openai-gpt-5.5-dale` | 200 | 通过 | `7203.94ms` | `model=gpt-5.5; content=ok` |
+| `POST /v1/chat/completions` | `codex-auto-review-dale` | 200 | 通过 | `2425.27ms` | `model=codex-auto-review; content=ok` |
+| `POST /v1/chat/completions` | `anthropic-opus-4-8-dale` | 200 | 通过 | `2229.17ms` | `model=claude-opus-4-8; content=ok` |
+| `GET /v1/models` | Claude-compatible probe | 200 | 通过 | `18.94ms` | 返回 4 个 Claude Dale alias |
+| `POST /v1/messages` | `anthropic-opus-4-8-dale` | 200 | 通过 | `1774.48ms` | `type=message; content=ok` |
+| `POST /v1/messages` | `anthropic-sonnet-4-6-dale` | 200 | 通过 | `3209.18ms` | `type=message; content=ok` |
+
+### Claude / Anthropic 兼容方式
+
+- OpenAI-compatible 客户端：
+  - `Base URL`: `https://api.xingdingwangluo.cn/v1`
+  - model: `anthropic-opus-4-8-dale` 等 Claude Dale alias
+- Anthropic-compatible 客户端：
+  - `Base URL`: `https://api.xingdingwangluo.cn`
+  - 请求路径：`/v1/messages`
+  - 鉴权头：`x-api-key`
+  - 额外头：`anthropic-version: 2023-06-01`
+
+这次 live 复核已经证明：XDAPI 当前对 Dale Claude 模型同时支持 OpenAI-compatible 和 Anthropic-compatible 两条调用链路。
+
+脱敏证据：[`dale_repair_20260618.json`](../evidence/dale_repair_20260618.json)
+
+### 当前仍隐藏的 Dale alias
+
+| 模型 | 当前结论 |
+| --- | --- |
+| `openai-gpt-5.4-openai-compact-dale` | 这次在 refreshed channel key 下，admin `channel/test` 已能通过；但临时恢复公开后，公共 relay 仍先后返回 `429 cooling/rate limit` 和 `503 No available channel for model gpt-5.4-openai-compact under group GPT特惠反代`，因此已立即恢复 `status=0`，继续隐藏 |
+| `openai-gpt-5.4-mini-dale` | exact 非流式返回 `400 openai_error`；prefix/latest 变体不可用 |
+| `claude-fable-5-dale` | exact OpenAI-compatible chat 返回 `400 bad_response_status_code`；未作为稳定 chat 路径公开 |
+| `gpt-image-2-dale` | 图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略 |
+
 ## 2026-06-14 补全价格锁定元数据排查与修复
 
 | 项目 | 结果 |
@@ -38,8 +139,7 @@
 | 结论 | 根因是公开 alias 名触发了 live 锁定元数据，不是上游 key、base_url、group 或整个渠道整体故障 |
 | live 修复动作 | 迁移 GPT 别名到 `openai-gpt-* -dale`，迁移 Claude 别名到 `anthropic-* -dale`，并同步更新 `models`、`model_mapping`、`ModelRatio`、`CompletionRatio`、`CacheRatio`、`CreateCacheRatio` |
 | 修复后状态 | live `CompletionRatioMeta` 中已无剩余 `locked=true` 的公共 `-dale` 别名 |
-| 代表性 channel/test | `openai-gpt-5.4-dale` 2.321s/2.025s；`openai-gpt-5.5-dale` 1.993s/3.634s；`anthropic-opus-4-6-dale` 3.551s/2.101s；`anthropic-sonnet-4-6-dale` 1.818s/3.067s |
-| 当前残留 caveat | `openai-gpt-5.4-openai-compact-dale` 已解锁但继续隐藏，因为当前 distributor 仍返回 `No available channel ... under group daleGPT专属` |
+| 当前残留 caveat | `openai-gpt-5.4-openai-compact-dale` 已解锁，但 2026-06-18 公共 relay 复核仍然不稳定，因此继续隐藏 |
 
 补充说明：
 
@@ -52,87 +152,18 @@
 | 项目 | 结果 |
 | --- | --- |
 | 漂移前 live `/api/pricing` | 总数 `72`，其中 `-dale` 仅剩 `4` 个 |
-| 漂移原因 | `codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.4-openai-compact-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale` 的模型元数据 `status` 被压成 `0`，但渠道与 ratio 仍在 |
-| 已恢复公开 | `codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.5-dale`、`gpt-5.5-openai-compact-dale` |
-| 保持隐藏 | `gpt-5.4-openai-compact-dale` |
-| `gpt-5.4-openai-compact-dale` 当前原因 | admin `channel/test/6` 在 `stream=false/true` 下都返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)` |
+| 漂移原因 | 多个 Dale GPT/Codex alias 的模型元数据 `status` 被压成 `0`，但渠道与 ratio 仍在 |
+| 已恢复公开 | `codex-auto-review-dale`、`openai-gpt-5.4-dale`、`openai-gpt-5.5-dale`、`openai-gpt-5.5-openai-compact-dale` |
+| 保持隐藏 | `openai-gpt-5.4-openai-compact-dale` |
 | 复核后的 live `/api/pricing` | 总数 `76`，其中 `-dale` 为 `8` 个 |
-
-补充说明：
-
-- 临时 XDAPI `1x` relay 复核：`codex-auto-review-dale`、`gpt-5.4-dale`、`gpt-5.5-dale` 均返回 HTTP `200`。
-- `gpt-5.5-openai-compact-dale` 首次 relay 命中过一次上游并发 `429`，随后重试返回 HTTP `200`，因此判定为上游瞬时并发/配额现象，不作为永久下线依据。
-- 这次修复说明：公开模型“消失”不一定是渠道被删，也可能只是模型元数据 `status` 漂成 `0`。
-
-## 2026-06-12 GPT 5.5 复测与上线
-
-| 模型 | 层级 | stream | HTTP | 结果 | 耗时 | 响应片段 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `gpt-5.5` | DaleAI direct | `false` | 200 | 通过 | 22521.18 ms | `model=gpt-5.4-mini; content=ok` |
-| `gpt-5.5` | DaleAI direct | `true` | 200 | 通过 | 8445.86 ms | `model=gpt-5.4-mini; SSE ok` |
-| `gpt-5.5-openai-compact` | DaleAI direct | `false` | 200 | 通过 | 5876.71 ms | `model=codex-auto-review; content=ok` |
-| `gpt-5.5-openai-compact` | DaleAI direct | `true` | 200 | 通过 | 7135.70 ms | `model=codex-auto-review; SSE ok` |
-| `gpt-5.5-dale` | XDAPI channel/test | `false` | 200 | 通过 | 2.952s | `ok` |
-| `gpt-5.5-dale` | XDAPI channel/test | `true` | 200 | 通过 | 1.758s | `ok` |
-| `gpt-5.5-openai-compact-dale` | XDAPI channel/test | `false` | 200 | 通过 | 3.831s | `ok` |
-| `gpt-5.5-openai-compact-dale` | XDAPI channel/test | `true` | 200 | 通过 | 2.772s | `ok` |
-| `gpt-5.5-dale` | XDAPI temporary token relay | `false` | 200 | 通过 | 1594.59 ms | `model=gpt-5.4-mini; content=ok` |
-| `gpt-5.5-openai-compact-dale` | XDAPI temporary token relay | `false` | 200 | 通过 | 28371.01 ms | `model=codex-auto-review; content=ok` |
-
-备注：这两个模型已经可通过 XDAPI 调用，但 DaleAI 返回体里的 `model` 字段目前显示上游内部路由模型名：`gpt-5.5` 返回 `gpt-5.4-mini`，`gpt-5.5-openai-compact` 返回 `codex-auto-review`。这不是 XDAPI 改名导致，直接调用 DaleAI 时也出现同样字段。
-
-证据：[`daleai_gpt55_retest_20260612.json`](../evidence/daleai_gpt55_retest_20260612.json)。
-
-## XDAPI channel/test 结果
-
-| 模型 | 渠道 | stream | HTTP | 结果 | 耗时 | 响应片段 |
-| --- | --- | --- | --- | --- | --- | --- |
-| `codex-auto-review-dale` | `DaleAI GPT Codex - Public Alias` | `False` | 200 | 通过 | 1.901s | `ok` |
-| `codex-auto-review-dale` | `DaleAI GPT Codex - Public Alias` | `True` | 200 | 通过 | 2.522s | `ok` |
-| `claude-opus-4-7-dale` | `DaleAI Claude - Public Alias` | `False` | 200 | 通过 | 2.695s | `ok` |
-| `claude-opus-4-7-dale` | `DaleAI Claude - Public Alias` | `True` | 200 | 通过 | 2.466s | `ok` |
-| `claude-opus-4-6-dale` | `DaleAI Claude - Public Alias` | `False` | 200 | 通过 | 2.875s | `ok` |
-| `claude-opus-4-6-dale` | `DaleAI Claude - Public Alias` | `True` | 200 | 通过 | 3.969s | `ok` |
-| `claude-opus-4-8-dale` | `DaleAI Claude - Public Alias` | `False` | 200 | 通过 | 2.134s | `ok` |
-| `claude-opus-4-8-dale` | `DaleAI Claude - Public Alias` | `True` | 200 | 通过 | 2.324s | `ok` |
-| `claude-sonnet-4-6-dale` | `DaleAI Claude - Public Alias` | `False` | 200 | 通过 | 34.728s | `ok` |
-| `claude-sonnet-4-6-dale` | `DaleAI Claude - Public Alias` | `True` | 200 | 通过 | 3.621s | `ok` |
-| `gpt-5.4-dale` | `DaleAI GPT Codex - Public Alias` | `False` | 200 | 通过 | 16.244s | `ok` |
-| `gpt-5.4-dale` | `DaleAI GPT Codex - Public Alias` | `True` | 200 | 通过 | 29.768s | `ok` |
-## 临时 token relay 结果
-
-| 模型 | HTTP | 耗时 | 响应片段 |
-| --- | --- | --- | --- |
-| `codex-auto-review-dale` | 200 | 3082.73 ms | `{"id":"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa","object":"chat.completion","created":1781146882,"model":` |
-| `gpt-5.4-dale` | 200 | 41679.42 ms | `{"id":"resp_0b5320b319f57a4f016a2a60d002bc819b8c97048f77b3f9f1","object":"chat.completion","created":1781162230,"model":` |
-| `gpt-5.5-dale` | 200 | 5268.02 ms | `model=gpt-5.4-mini; content=ok` |
-| `gpt-5.5-openai-compact-dale` | 200 | 2246.22 ms | `model=codex-auto-review; content=ok` |
-
-临时 token 已删除；公开证据只保留脱敏 token ref。
-
-## 补测矩阵结论
-
-| 候选模型 | 结果 | 证据摘要 |
-| --- | --- | --- |
-| `gpt-5.5-openai-compact` | `direct_fail` | www.daleai.shop/v1/chat/completions model=gpt-5.5-openai-compact status=400 snippet={"error":{"message":"openai_error","type":"bad_response_status_code","param":"","code":"bad_response_status_code"}} |
-| `gpt-5.5` | `direct_pass` | www.daleai.shop/v1/chat/completions model=gpt-5.5 non-stream 200; stream=400 |
-| `gpt-5.4` | `direct_pass` | www.daleai.shop/v1/chat/completions model=gpt-5.4 non-stream 200; stream=200 |
-| `gpt-5.4-mini` | `direct_fail` | www.daleai.shop/v1/chat/completions model=gpt-5.4-mini status=400 snippet={"error":{"message":"openai_error","type":"bad_response_status_code","param":"","code":"bad_response_status_code"}} |
-| `gpt-5.4-openai-compact` | `direct_pass` | www.daleai.shop/v1/chat/completions model=gpt-5.4-openai-compact non-stream 200; stream=200 |
-| `claude-fable-5` | `direct_fail` | www.daleai.shop/v1/chat/completions model=claude-fable-5 status=400 snippet={"error":{"message":"bad response status code 400 (request id: 202606110711268684935898268d9d6L6g25lAj)","type":"bad_response_status_code"," |
-| `gpt-image-2` | `not_chat_shape` | checked 3 variants/endpoints; no chat success |
-
-## 仍未公开的模型
-
-| 模型 | 原因 |
-| --- | --- |
-| `openai-gpt-5.4-openai-compact-dale` | 2026-06-14 已完成 alias 解锁，但当前 admin `channel/test/6` 仍返回 `No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)`；因此继续隐藏。 |
-| `openai-gpt-5.4-mini-dale` | exact 非流式返回 400 `openai_error`；prefix/latest 变体不可用。 |
-| `claude-fable-5-dale` | exact OpenAI-compatible chat 返回 400 `bad_response_status_code`；Anthropic-prefixed 变体不可用。 |
-| `gpt-image-2-dale` | 图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略。 |
 
 ## 操作备注
 
-- 本轮暴露了早期 DaleAI 测试流程的不足：不能只用定价页模型名做一次 channel test 后下结论。
-- 后续新增第三方模型应先执行：`/v1/models` 运行时列表、exact name、常见 provider prefix、必要 endpoint/base URL 变体、非流式和流式双模式，再决定是否接入 XDAPI。
+- 本轮暴露了 DaleAI 测试流程里一个必须固定下来的点：**上游 token 有效不等于上游 group 对所有模型家族都可用**。
+- GPT/Codex 与 Claude 应分别用各自 Dale 可用 group 下生成的 token 做直连验证，不能拿 `default` 组 token 去证明 Claude 链路。
+- 后续新增或修复 Dale 模型，至少应完成：
+  - Dale 直连验证
+  - XDAPI `channel/test`
+  - XDAPI 最终 relay
+  - 对 Claude 模型额外验证 `GET /v1/models` 与 `POST /v1/messages`
 - 完整 token、密码和 cookie 不写入 GitHub Pages；公开文档只保留脱敏证据。

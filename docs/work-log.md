@@ -1,5 +1,72 @@
 # XD API 工作记录
 
+## 2026-06-18 14:55 CST
+
+### 修复 DaleAI live 渠道失效 key，并完成 Claude Anthropic relay 复核
+
+- 先把 Dale 链路拆成三段复查：
+  - Dale 站点账号是否正常
+  - XDAPI 渠道保存的 Dale 上游 key 是否有效
+  - XDAPI relay 的 OpenAI / Anthropic 协议路径是否都能通
+- 先前失败根因已确认不是 Dale 网站整体异常，也不是 XDAPI 缺少 `/v1/messages` 路由，而是 **live Dale 渠道 `#6` / `#7` 保存的上游 token 已失效**。
+- 直接上游对照证据：
+  - 用 Dale 账号创建新的**无限制** GPT token（上游 group=`default`），直连 `https://www.daleai.shop/v1/chat/completions`：
+    - `gpt-5.5` HTTP 200
+    - `codex-auto-review` HTTP 200
+    - `gpt-5.4-openai-compact` HTTP 200
+  - 用 Dale 账号创建新的**无限制** Claude token（上游 group=`Anthropic官方key中转`），直连：
+    - `POST /v1/chat/completions` `claude-opus-4-8` HTTP 200
+    - `POST /v1/messages` `claude-opus-4-8` HTTP 200
+    - `POST /v1/chat/completions` `claude-sonnet-4-6` HTTP 200
+    - `POST /v1/messages` `claude-sonnet-4-6` HTTP 200
+- live 最小改动：
+  - 只替换 `#6 DaleAI GPT Codex - Public Alias` 的上游 key
+  - 只替换 `#7 DaleAI Claude - Public Alias` 的上游 key
+  - 不改 `base_url`、`group`、`models`、`model_mapping`、定价和公开分组
+- 替换后 XDAPI 管理员态验证：
+  - GPT channel `#6`：
+    - `codex-auto-review-dale` 非流式/流式通过
+    - `openai-gpt-5.4-dale` 非流式/流式通过（第一次流式 `502`，重试恢复 `200`）
+    - `openai-gpt-5.5-dale` 流式通过；非流式出现一次上游 `429`，复检为上游瞬时 `502 openai_error`
+    - `openai-gpt-5.5-openai-compact-dale` 非流式/流式通过（第一次非流式 `502`，重试恢复 `200`）
+    - `openai-gpt-5.4-openai-compact-dale` 非流式/流式都能通过 channel/test，但公共 relay 复核仍不稳定，见下方 caveat
+  - Claude channel `#7`：
+    - `anthropic-opus-4-7-dale`
+    - `anthropic-opus-4-6-dale`
+    - `anthropic-opus-4-8-dale`
+    - `anthropic-sonnet-4-6-dale`
+    - 以上 4 个别名全部通过：
+      - `endpoint_type=openai` 非流式 / 流式
+      - `endpoint_type=anthropic` 非流式 / 流式
+- 替换后 XDAPI 最终 relay 验证：
+  - 临时 `1x` token 调 `POST /v1/chat/completions`
+    - `openai-gpt-5.5-dale` HTTP 200
+    - `codex-auto-review-dale` HTTP 200
+    - `anthropic-opus-4-8-dale` HTTP 200
+  - 临时 `1x` token 以 Claude 兼容方式调用：
+    - `GET https://api.xingdingwangluo.cn/v1/models`，头部 `x-api-key + anthropic-version`，HTTP 200，并列出 4 个 Claude Dale alias
+    - `POST https://api.xingdingwangluo.cn/v1/messages`
+      - `anthropic-opus-4-8-dale` HTTP 200
+      - `anthropic-sonnet-4-6-dale` HTTP 200
+  - 临时 token 已删除
+- Claude / Anthropic 兼容结论：
+  - XDAPI live 的 Claude 兼容路径已确认可用
+  - 对 Claude 兼容客户端，base URL 应使用 `https://api.xingdingwangluo.cn`
+  - 客户端请求路径应为 `/v1/messages`
+  - 鉴权头应为 `x-api-key`
+  - 还需带 `anthropic-version: 2023-06-01`
+- `openai-gpt-5.4-openai-compact-dale` 跟进：
+  - 这次先临时恢复了模型元数据 `status=1`
+  - 公开 relay 复检第一下返回 `429 cooling/rate limit`
+  - 再复检一次返回 `503 No available channel for model gpt-5.4-openai-compact under group GPT特惠反代`
+  - 因此不满足“稳定公开”的标准，已立即恢复为 `status=0`
+  - 最终公开 `-dale` 数量仍为 `8`
+- 结论：
+  - Dale 上游现在是正常的
+  - XDAPI live 的 OpenAI relay 与 Anthropic relay 都是正常可用的
+  - 这次真正修复点是 **把失效的 Dale 渠道 key 替换成新的、按上游 group 正确分开的无限制 token**
+- 证据：[`dale_repair_20260618.json`](../evidence/dale_repair_20260618.json)
+
 ## 2026-06-16 00:09 CST
 
 ### 轮换 CTYun Coding 上游 key 并按最小改动完成 live 验证

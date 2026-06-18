@@ -30,17 +30,16 @@
   
 </head>
 <body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./work-log.html">工作记录</a><a href="../evidence/dale_alias_unlock_20260614.json">解锁证据</a><a href="../evidence/daleai_gpt55_retest_20260612.json">GPT 5.5 复测证据</a></nav><section class="section"><h1>DaleAI 渠道接入与模型验证记录</h1>
-<p>更新时间：2026-06-14 15:10 CST</p>
+<p>更新时间：2026-06-18 14:55 CST</p>
 <h2>摘要</h2>
 <ul>
-<li>已在 XDAPI 线上新增/更新 DaleAI 供应商和两个逻辑渠道：</li>
+<li>XDAPI live 当前维护 2 条 Dale 公开逻辑渠道：</li>
 <li><code>#6 DaleAI GPT Codex - Public Alias</code></li>
 <li><code>#7 DaleAI Claude - Public Alias</code></li>
-<li>当前公开到 <code>/api/pricing</code> 的 DaleAI 别名为 <code>8</code> 个，均使用显式 <code>-dale</code> 后缀，避免与其他渠道同名模型混淆。</li>
+<li>当前公开到 <code>/api/pricing</code> 的 DaleAI 别名为 <code>8</code> 个。</li>
 <li>live <code>/api/pricing</code> 当前总数为 <code>76</code>。</li>
-<li>2026-06-14 已确认 DaleAI “补全价格已锁定”问题不是整条渠道故障，而是公开 alias 名在 live <code>CompletionRatioMeta</code> 上触发了锁定元数据。当前公开别名已迁移到 <code>openai-* -dale</code> / <code>anthropic-* -dale</code> 形式，并完成 live 解锁。</li>
-<li>重要修正：11:31 CST 的早期结论只覆盖“定价页原始模型名 + <code>www.daleai.shop/v1/chat/completions</code> + 当前 channel test”，未完整覆盖历史/变体模型名和备用 URL。15:31 CST 已补充模型名/URL 矩阵，发现 <code>gpt-5.4</code> 与 <code>gpt-5.4-openai-compact</code> 可稳定接入，已重新上架。</li>
-<li>2026-06-13 18:15 CST 再次复核发现公开可见性发生漂移：5 个 GPT/Codex 别名中有 4 个被模型元数据 <code>status=0</code> 隐藏。已恢复其中 4 个，<code>gpt-5.4-openai-compact-dale</code> 暂不恢复，因为当前 runtime 仍报 distributor 无可用渠道。</li>
+<li>2026-06-14 已完成 Dale 公共 alias 的 <code>CompletionRatioMeta.locked</code> 解锁迁移。</li>
+<li>2026-06-18 已确认本轮 Dale 故障根因不是 Dale 网站整体异常，而是 XDAPI live 渠道 <code>#6</code> / <code>#7</code> 保存的上游 token 已失效；替换为新的 Dale <strong>无限制</strong> token 后，GPT relay 与 Claude 的 OpenAI / Anthropic 双协议 relay 均恢复。</li>
 </ul>
 <h2>当前公开映射</h2>
 <table>
@@ -103,6 +102,403 @@
 </tr>
 </tbody>
 </table>
+<h2>2026-06-18 live 渠道 key 修复与 Claude Anthropic relay 复核</h2>
+<h3>根因定位</h3>
+<table>
+<thead>
+<tr>
+<th>检查点</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dale 网站账号登录</td>
+<td>正常，<code>POST /api/user/login</code> 返回 <code>200</code></td>
+</tr>
+<tr>
+<td>Dale 直连 GPT</td>
+<td>正常，使用 Dale <code>default</code> 组新 token 直连 <code>gpt-5.5</code>、<code>codex-auto-review</code>、<code>gpt-5.4-openai-compact</code> 均返回 <code>200</code></td>
+</tr>
+<tr>
+<td>Dale 直连 Claude OpenAI 兼容</td>
+<td>正常，使用 Dale <code>Anthropic官方key中转</code> 组新 token 直连 <code>claude-opus-4-8</code>、<code>claude-sonnet-4-6</code> 返回 <code>200</code></td>
+</tr>
+<tr>
+<td>Dale 直连 Claude Anthropic 兼容</td>
+<td>正常，<code>POST /v1/messages</code> 对 <code>claude-opus-4-8</code>、<code>claude-sonnet-4-6</code> 返回 <code>200</code></td>
+</tr>
+<tr>
+<td>XDAPI <code>channel/test/6</code> 旧状态</td>
+<td>先前统一报 <code>401 Invalid token</code></td>
+</tr>
+<tr>
+<td>XDAPI <code>channel/test/7</code> 旧状态</td>
+<td><code>endpoint_type=openai</code> 与 <code>endpoint_type=anthropic</code> 都统一报 <code>401 Invalid token</code></td>
+</tr>
+<tr>
+<td>结论</td>
+<td>故障点在 <code>XDAPI -&gt; Dale</code> 渠道凭据层，不在 Dale 网站整体，不在模型名映射，也不在 XDAPI 是否存在 <code>/v1/messages</code> 路由</td>
+</tr>
+</tbody>
+</table>
+<h3>live 最小改动</h3>
+<ul>
+<li>channel <code>#6 DaleAI GPT Codex - Public Alias</code></li>
+<li>上游 key 替换为新的 Dale <strong>无限制 GPT token</strong></li>
+<li>Dale 上游 group：<code>default</code></li>
+<li>channel <code>#7 DaleAI Claude - Public Alias</code></li>
+<li>上游 key 替换为新的 Dale <strong>无限制 Claude token</strong></li>
+<li>Dale 上游 group：<code>Anthropic官方key中转</code></li>
+<li>保持不变：</li>
+<li><code>base_url=https://www.daleai.shop</code></li>
+<li><code>group=1x,3x,5x</code></li>
+<li><code>models</code></li>
+<li><code>model_mapping</code></li>
+<li>定价和 ratio key</li>
+</ul>
+<h3>XDAPI live 验证结果</h3>
+<h4>GPT / Codex channel <code>#6</code></h4>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>endpoint_type</th>
+<th>stream</th>
+<th>HTTP</th>
+<th>结果</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>codex-auto-review-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.127s</code></td>
+</tr>
+<tr>
+<td><code>codex-auto-review-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.324s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.4-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.950s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.4-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td>首次 <code>502</code>，复检恢复 <code>2.357s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.4-openai-compact-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.920s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.4-openai-compact-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td>首次 distributor 失败，复检恢复 <code>2.818s</code>；但公共 relay 仍不稳定，见 caveat</td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.5-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>部分通过</td>
+<td>首次 <code>429</code>，复检为上游瞬时 <code>502</code>；但最终 XDAPI 临时 token relay 返回 <code>200</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.5-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.357s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.5-openai-compact-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td>首次 <code>502</code>，复检恢复 <code>3.477s</code></td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.5-openai-compact-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.802s</code></td>
+</tr>
+</tbody>
+</table>
+<h4>Claude channel <code>#7</code></h4>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>endpoint_type</th>
+<th>stream</th>
+<th>HTTP</th>
+<th>结果</th>
+<th>耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>anthropic-opus-4-7-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.363s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-7-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.833s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-7-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.677s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-7-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.638s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-6-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.826s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-6-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.642s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-6-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.127s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-6-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.774s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.097s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3.074s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.192s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.590s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-sonnet-4-6-dale</code></td>
+<td><code>openai</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2.114s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-sonnet-4-6-dale</code></td>
+<td><code>openai</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.729s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-sonnet-4-6-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>false</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.875s</code></td>
+</tr>
+<tr>
+<td><code>anthropic-sonnet-4-6-dale</code></td>
+<td><code>anthropic</code></td>
+<td><code>true</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1.966s</code></td>
+</tr>
+</tbody>
+</table>
+<h3>XDAPI 临时 token relay 结果</h3>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>模型</th>
+<th>HTTP</th>
+<th>结果</th>
+<th>耗时</th>
+<th>响应片段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /v1/chat/completions</code></td>
+<td><code>openai-gpt-5.5-dale</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>7203.94ms</code></td>
+<td><code>model=gpt-5.5; content=ok</code></td>
+</tr>
+<tr>
+<td><code>POST /v1/chat/completions</code></td>
+<td><code>codex-auto-review-dale</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2425.27ms</code></td>
+<td><code>model=codex-auto-review; content=ok</code></td>
+</tr>
+<tr>
+<td><code>POST /v1/chat/completions</code></td>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>2229.17ms</code></td>
+<td><code>model=claude-opus-4-8; content=ok</code></td>
+</tr>
+<tr>
+<td><code>GET /v1/models</code></td>
+<td>Claude-compatible probe</td>
+<td>200</td>
+<td>通过</td>
+<td><code>18.94ms</code></td>
+<td>返回 4 个 Claude Dale alias</td>
+</tr>
+<tr>
+<td><code>POST /v1/messages</code></td>
+<td><code>anthropic-opus-4-8-dale</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>1774.48ms</code></td>
+<td><code>type=message; content=ok</code></td>
+</tr>
+<tr>
+<td><code>POST /v1/messages</code></td>
+<td><code>anthropic-sonnet-4-6-dale</code></td>
+<td>200</td>
+<td>通过</td>
+<td><code>3209.18ms</code></td>
+<td><code>type=message; content=ok</code></td>
+</tr>
+</tbody>
+</table>
+<h3>Claude / Anthropic 兼容方式</h3>
+<ul>
+<li>OpenAI-compatible 客户端：</li>
+<li><code>Base URL</code>: <code>https://api.xingdingwangluo.cn/v1</code></li>
+<li>model: <code>anthropic-opus-4-8-dale</code> 等 Claude Dale alias</li>
+<li>Anthropic-compatible 客户端：</li>
+<li><code>Base URL</code>: <code>https://api.xingdingwangluo.cn</code></li>
+<li>请求路径：<code>/v1/messages</code></li>
+<li>鉴权头：<code>x-api-key</code></li>
+<li>额外头：<code>anthropic-version: 2023-06-01</code></li>
+</ul>
+<p>这次 live 复核已经证明：XDAPI 当前对 Dale Claude 模型同时支持 OpenAI-compatible 和 Anthropic-compatible 两条调用链路。</p>
+<p>脱敏证据：<a href="../evidence/dale_repair_20260618.json"><code>dale_repair_20260618.json</code></a></p>
+<h3>当前仍隐藏的 Dale alias</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>当前结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>openai-gpt-5.4-openai-compact-dale</code></td>
+<td>这次在 refreshed channel key 下，admin <code>channel/test</code> 已能通过；但临时恢复公开后，公共 relay 仍先后返回 <code>429 cooling/rate limit</code> 和 <code>503 No available channel for model gpt-5.4-openai-compact under group GPT特惠反代</code>，因此已立即恢复 <code>status=0</code>，继续隐藏</td>
+</tr>
+<tr>
+<td><code>openai-gpt-5.4-mini-dale</code></td>
+<td>exact 非流式返回 <code>400 openai_error</code>；prefix/latest 变体不可用</td>
+</tr>
+<tr>
+<td><code>claude-fable-5-dale</code></td>
+<td>exact OpenAI-compatible chat 返回 <code>400 bad_response_status_code</code>；未作为稳定 chat 路径公开</td>
+</tr>
+<tr>
+<td><code>gpt-image-2-dale</code></td>
+<td>图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略</td>
+</tr>
+</tbody>
+</table>
 <h2>2026-06-14 补全价格锁定元数据排查与修复</h2>
 <table>
 <thead>
@@ -145,12 +541,8 @@
 <td>live <code>CompletionRatioMeta</code> 中已无剩余 <code>locked=true</code> 的公共 <code>-dale</code> 别名</td>
 </tr>
 <tr>
-<td>代表性 channel/test</td>
-<td><code>openai-gpt-5.4-dale</code> 2.321s/2.025s；<code>openai-gpt-5.5-dale</code> 1.993s/3.634s；<code>anthropic-opus-4-6-dale</code> 3.551s/2.101s；<code>anthropic-sonnet-4-6-dale</code> 1.818s/3.067s</td>
-</tr>
-<tr>
 <td>当前残留 caveat</td>
-<td><code>openai-gpt-5.4-openai-compact-dale</code> 已解锁但继续隐藏，因为当前 distributor 仍返回 <code>No available channel ... under group daleGPT专属</code></td>
+<td><code>openai-gpt-5.4-openai-compact-dale</code> 已解锁，但 2026-06-18 公共 relay 复核仍然不稳定，因此继续隐藏</td>
 </tr>
 </tbody>
 </table>
@@ -175,19 +567,15 @@
 </tr>
 <tr>
 <td>漂移原因</td>
-<td><code>codex-auto-review-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.4-openai-compact-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code> 的模型元数据 <code>status</code> 被压成 <code>0</code>，但渠道与 ratio 仍在</td>
+<td>多个 Dale GPT/Codex alias 的模型元数据 <code>status</code> 被压成 <code>0</code>，但渠道与 ratio 仍在</td>
 </tr>
 <tr>
 <td>已恢复公开</td>
-<td><code>codex-auto-review-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.5-dale</code>、<code>gpt-5.5-openai-compact-dale</code></td>
+<td><code>codex-auto-review-dale</code>、<code>openai-gpt-5.4-dale</code>、<code>openai-gpt-5.5-dale</code>、<code>openai-gpt-5.5-openai-compact-dale</code></td>
 </tr>
 <tr>
 <td>保持隐藏</td>
-<td><code>gpt-5.4-openai-compact-dale</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.4-openai-compact-dale</code> 当前原因</td>
-<td>admin <code>channel/test/6</code> 在 <code>stream=false/true</code> 下都返回 <code>No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)</code></td>
+<td><code>openai-gpt-5.4-openai-compact-dale</code></td>
 </tr>
 <tr>
 <td>复核后的 live <code>/api/pricing</code></td>
@@ -195,367 +583,14 @@
 </tr>
 </tbody>
 </table>
-<p>补充说明：</p>
-<ul>
-<li>临时 XDAPI <code>1x</code> relay 复核：<code>codex-auto-review-dale</code>、<code>gpt-5.4-dale</code>、<code>gpt-5.5-dale</code> 均返回 HTTP <code>200</code>。</li>
-<li><code>gpt-5.5-openai-compact-dale</code> 首次 relay 命中过一次上游并发 <code>429</code>，随后重试返回 HTTP <code>200</code>，因此判定为上游瞬时并发/配额现象，不作为永久下线依据。</li>
-<li>这次修复说明：公开模型“消失”不一定是渠道被删，也可能只是模型元数据 <code>status</code> 漂成 <code>0</code>。</li>
-</ul>
-<h2>2026-06-12 GPT 5.5 复测与上线</h2>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>层级</th>
-<th>stream</th>
-<th>HTTP</th>
-<th>结果</th>
-<th>耗时</th>
-<th>响应片段</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>gpt-5.5</code></td>
-<td>DaleAI direct</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>22521.18 ms</td>
-<td><code>model=gpt-5.4-mini; content=ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5</code></td>
-<td>DaleAI direct</td>
-<td><code>true</code></td>
-<td>200</td>
-<td>通过</td>
-<td>8445.86 ms</td>
-<td><code>model=gpt-5.4-mini; SSE ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact</code></td>
-<td>DaleAI direct</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>5876.71 ms</td>
-<td><code>model=codex-auto-review; content=ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact</code></td>
-<td>DaleAI direct</td>
-<td><code>true</code></td>
-<td>200</td>
-<td>通过</td>
-<td>7135.70 ms</td>
-<td><code>model=codex-auto-review; SSE ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-dale</code></td>
-<td>XDAPI channel/test</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.952s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-dale</code></td>
-<td>XDAPI channel/test</td>
-<td><code>true</code></td>
-<td>200</td>
-<td>通过</td>
-<td>1.758s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact-dale</code></td>
-<td>XDAPI channel/test</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>3.831s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact-dale</code></td>
-<td>XDAPI channel/test</td>
-<td><code>true</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.772s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-dale</code></td>
-<td>XDAPI temporary token relay</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>1594.59 ms</td>
-<td><code>model=gpt-5.4-mini; content=ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact-dale</code></td>
-<td>XDAPI temporary token relay</td>
-<td><code>false</code></td>
-<td>200</td>
-<td>通过</td>
-<td>28371.01 ms</td>
-<td><code>model=codex-auto-review; content=ok</code></td>
-</tr>
-</tbody>
-</table>
-<p>备注：这两个模型已经可通过 XDAPI 调用，但 DaleAI 返回体里的 <code>model</code> 字段目前显示上游内部路由模型名：<code>gpt-5.5</code> 返回 <code>gpt-5.4-mini</code>，<code>gpt-5.5-openai-compact</code> 返回 <code>codex-auto-review</code>。这不是 XDAPI 改名导致，直接调用 DaleAI 时也出现同样字段。</p>
-<p>证据：<a href="../evidence/daleai_gpt55_retest_20260612.json"><code>daleai_gpt55_retest_20260612.json</code></a>。</p>
-<h2>XDAPI channel/test 结果</h2>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>渠道</th>
-<th>stream</th>
-<th>HTTP</th>
-<th>结果</th>
-<th>耗时</th>
-<th>响应片段</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>codex-auto-review-dale</code></td>
-<td><code>DaleAI GPT Codex - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>1.901s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>codex-auto-review-dale</code></td>
-<td><code>DaleAI GPT Codex - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.522s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-7-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.695s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-7-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.466s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-6-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.875s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-6-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>3.969s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-8-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.134s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-opus-4-8-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>2.324s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-sonnet-4-6-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>34.728s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>claude-sonnet-4-6-dale</code></td>
-<td><code>DaleAI Claude - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>3.621s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.4-dale</code></td>
-<td><code>DaleAI GPT Codex - Public Alias</code></td>
-<td><code>False</code></td>
-<td>200</td>
-<td>通过</td>
-<td>16.244s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.4-dale</code></td>
-<td><code>DaleAI GPT Codex - Public Alias</code></td>
-<td><code>True</code></td>
-<td>200</td>
-<td>通过</td>
-<td>29.768s</td>
-<td><code>ok</code></td>
-</tr>
-<tr>
-<td>## 临时 token relay 结果</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>HTTP</th>
-<th>耗时</th>
-<th>响应片段</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>codex-auto-review-dale</code></td>
-<td>200</td>
-<td>3082.73 ms</td>
-<td><code>{"id":"resp_07d96a0da3bd0100016a2a2501dc908190973fcf8ebfb272fa","object":"chat.completion","created":1781146882,"model":</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.4-dale</code></td>
-<td>200</td>
-<td>41679.42 ms</td>
-<td><code>{"id":"resp_0b5320b319f57a4f016a2a60d002bc819b8c97048f77b3f9f1","object":"chat.completion","created":1781162230,"model":</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-dale</code></td>
-<td>200</td>
-<td>5268.02 ms</td>
-<td><code>model=gpt-5.4-mini; content=ok</code></td>
-</tr>
-<tr>
-<td><code>gpt-5.5-openai-compact-dale</code></td>
-<td>200</td>
-<td>2246.22 ms</td>
-<td><code>model=codex-auto-review; content=ok</code></td>
-</tr>
-</tbody>
-</table>
-<p>临时 token 已删除；公开证据只保留脱敏 token ref。</p>
-<h2>补测矩阵结论</h2>
-<table>
-<thead>
-<tr>
-<th>候选模型</th>
-<th>结果</th>
-<th>证据摘要</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>gpt-5.5-openai-compact</code></td>
-<td><code>direct_fail</code></td>
-<td>www.daleai.shop/v1/chat/completions model=gpt-5.5-openai-compact status=400 snippet={"error":{"message":"openai_error","type":"bad_response_status_code","param":"","code":"bad_response_status_code"}}</td>
-</tr>
-<tr>
-<td><code>gpt-5.5</code></td>
-<td><code>direct_pass</code></td>
-<td>www.daleai.shop/v1/chat/completions model=gpt-5.5 non-stream 200; stream=400</td>
-</tr>
-<tr>
-<td><code>gpt-5.4</code></td>
-<td><code>direct_pass</code></td>
-<td>www.daleai.shop/v1/chat/completions model=gpt-5.4 non-stream 200; stream=200</td>
-</tr>
-<tr>
-<td><code>gpt-5.4-mini</code></td>
-<td><code>direct_fail</code></td>
-<td>www.daleai.shop/v1/chat/completions model=gpt-5.4-mini status=400 snippet={"error":{"message":"openai_error","type":"bad_response_status_code","param":"","code":"bad_response_status_code"}}</td>
-</tr>
-<tr>
-<td><code>gpt-5.4-openai-compact</code></td>
-<td><code>direct_pass</code></td>
-<td>www.daleai.shop/v1/chat/completions model=gpt-5.4-openai-compact non-stream 200; stream=200</td>
-</tr>
-<tr>
-<td><code>claude-fable-5</code></td>
-<td><code>direct_fail</code></td>
-<td>www.daleai.shop/v1/chat/completions model=claude-fable-5 status=400 snippet={"error":{"message":"bad response status code 400 (request id: 202606110711268684935898268d9d6L6g25lAj)","type":"bad_response_status_code","</td>
-</tr>
-<tr>
-<td><code>gpt-image-2</code></td>
-<td><code>not_chat_shape</code></td>
-<td>checked 3 variants/endpoints; no chat success</td>
-</tr>
-</tbody>
-</table>
-<h2>仍未公开的模型</h2>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>原因</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>openai-gpt-5.4-openai-compact-dale</code></td>
-<td>2026-06-14 已完成 alias 解锁，但当前 admin <code>channel/test/6</code> 仍返回 <code>No available channel for model gpt-5.4-openai-compact under group daleGPT专属 (distributor)</code>；因此继续隐藏。</td>
-</tr>
-<tr>
-<td><code>openai-gpt-5.4-mini-dale</code></td>
-<td>exact 非流式返回 400 <code>openai_error</code>；prefix/latest 变体不可用。</td>
-</tr>
-<tr>
-<td><code>claude-fable-5-dale</code></td>
-<td>exact OpenAI-compatible chat 返回 400 <code>bad_response_status_code</code>；Anthropic-prefixed 变体不可用。</td>
-</tr>
-<tr>
-<td><code>gpt-image-2-dale</code></td>
-<td>图片按次计费模型，不是 token chat completion 形态；需要单独图片接口和计费策略。</td>
-</tr>
-</tbody>
-</table>
 <h2>操作备注</h2>
 <ul>
-<li>本轮暴露了早期 DaleAI 测试流程的不足：不能只用定价页模型名做一次 channel test 后下结论。</li>
-<li>后续新增第三方模型应先执行：<code>/v1/models</code> 运行时列表、exact name、常见 provider prefix、必要 endpoint/base URL 变体、非流式和流式双模式，再决定是否接入 XDAPI。</li>
+<li>本轮暴露了 DaleAI 测试流程里一个必须固定下来的点：<strong>上游 token 有效不等于上游 group 对所有模型家族都可用</strong>。</li>
+<li>GPT/Codex 与 Claude 应分别用各自 Dale 可用 group 下生成的 token 做直连验证，不能拿 <code>default</code> 组 token 去证明 Claude 链路。</li>
+<li>后续新增或修复 Dale 模型，至少应完成：</li>
+<li>Dale 直连验证</li>
+<li>XDAPI <code>channel/test</code></li>
+<li>XDAPI 最终 relay</li>
+<li>对 Claude 模型额外验证 <code>GET /v1/models</code> 与 <code>POST /v1/messages</code></li>
 <li>完整 token、密码和 cookie 不写入 GitHub Pages；公开文档只保留脱敏证据。</li>
 </ul></section></div></body></html>
