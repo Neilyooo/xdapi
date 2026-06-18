@@ -1,0 +1,494 @@
+{
+  "timestamp": "2026-06-18 14:55:25 CST",
+  "dale": {
+    "tokens": {
+      "gpt": {
+        "id": 242,
+        "name": "xdapi-dale-gpt-live-unlimited-20260618",
+        "group": "default",
+        "key_redacted": "zqiEy1***caub"
+      },
+      "claude": {
+        "id": 243,
+        "name": "xdapi-dale-claude-live-unlimited-20260618",
+        "group": "Anthropic官方key中转",
+        "key_redacted": "eaGg0s***F3Qw"
+      }
+    },
+    "direct_tests": [
+      {
+        "protocol": "openai",
+        "group": "default",
+        "model": "gpt-5.5",
+        "http_status": 200,
+        "elapsed_ms": 6649.9,
+        "snippet": "{\"id\":\"resp_0be82f4eb32a17e6016a339662bff881979db09a6bfe47739c\",\"object\":\"chat.completion\",\"created\":1781765733,\"model\":\"gpt-5.5\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"total_tokens\":5094,\"prompt_tokens_details\":{\"cached_tokens\":4864}}}"
+      },
+      {
+        "protocol": "openai",
+        "group": "default",
+        "model": "codex-auto-review",
+        "http_status": 200,
+        "elapsed_ms": 2136.79,
+        "snippet": "{\"id\":\"resp_0f903f6da4caf09c016a3396665f048190b85a0ea2de03aed2\",\"object\":\"chat.completion\",\"created\":1781765735,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1449,\"completion_tokens\":5,\"total_tokens\":1454}}"
+      },
+      {
+        "protocol": "openai",
+        "group": "default",
+        "model": "gpt-5.4-openai-compact",
+        "http_status": 200,
+        "elapsed_ms": 1144.25,
+        "snippet": "{\"id\":\"resp_0ccc73f06aa1b9e1016a33966804188191952e10b1d326c3b3\",\"object\":\"chat.completion\",\"created\":1781765736,\"model\":\"gpt-5.4\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"total_tokens\":5094,\"prompt_tokens_details\":{\"cached_tokens\":4864}}}"
+      },
+      {
+        "protocol": "openai",
+        "group": "Anthropic官方key中转",
+        "model": "claude-opus-4-8",
+        "http_status": 200,
+        "elapsed_ms": 1829.76,
+        "snippet": "{\"id\":\"msg_01M5XKRJWPNkDb46wAjb1jcU\",\"model\":\"claude-opus-4-8\",\"object\":\"chat.completion\",\"created\":1781765738,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":12,\"completion_tokens\":4,\"total_tokens\":16,\"usage_semantic\":\"openai\",\"usage_source\":\"anthropic\",\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0},\""
+      },
+      {
+        "protocol": "anthropic",
+        "group": "Anthropic官方key中转",
+        "model": "claude-opus-4-8",
+        "http_status": 200,
+        "elapsed_ms": 1743.93,
+        "snippet": "{\"model\":\"claude-opus-4-8\",\"id\":\"msg_01PgqkhS111ypLkHptbAxDPS\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":12,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"output_tokens\":4,\"output_tokens_details\":{\"think"
+      },
+      {
+        "protocol": "openai",
+        "group": "Anthropic官方key中转",
+        "model": "claude-sonnet-4-6",
+        "http_status": 200,
+        "elapsed_ms": 1320.56,
+        "snippet": "{\"id\":\"msg_01LoadCnW2Y6BvrtmfLoXB9V\",\"model\":\"claude-sonnet-4-6\",\"object\":\"chat.completion\",\"created\":1781765741,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":13,\"completion_tokens\":4,\"total_tokens\":17,\"usage_semantic\":\"openai\",\"usage_source\":\"anthropic\",\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0}"
+      },
+      {
+        "protocol": "anthropic",
+        "group": "Anthropic官方key中转",
+        "model": "claude-sonnet-4-6",
+        "http_status": 200,
+        "elapsed_ms": 1416.27,
+        "snippet": "{\"model\":\"claude-sonnet-4-6\",\"id\":\"msg_01RfjGFeCXdKFoyoWjyxQkPs\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":13,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"output_tokens\":4,\"service_tier\":\"standard\",\"in"
+      }
+    ]
+  },
+  "xdapi": {
+    "snapshots": {
+      "options": "redacted_local_snapshot_path",
+      "channels": "redacted_local_snapshot_path",
+      "plans": "redacted_local_snapshot_path",
+      "users": "redacted_local_snapshot_path",
+      "pricing_before": "redacted_local_snapshot_path"
+    },
+    "channels_before": {
+      "6": {
+        "name": "DaleAI GPT Codex - Public Alias",
+        "base_url": "https://www.daleai.shop",
+        "group": "1x,3x,5x",
+        "models": "codex-auto-review-dale,openai-gpt-5.4-dale,openai-gpt-5.4-openai-compact-dale,openai-gpt-5.5-dale,openai-gpt-5.5-openai-compact-dale"
+      },
+      "7": {
+        "name": "DaleAI Claude - Public Alias",
+        "base_url": "https://www.daleai.shop",
+        "group": "1x,3x,5x",
+        "models": "anthropic-opus-4-7-dale,anthropic-opus-4-6-dale,anthropic-opus-4-8-dale,anthropic-sonnet-4-6-dale"
+      }
+    },
+    "channel_updates": {
+      "6": {
+        "name": "DaleAI GPT Codex - Public Alias",
+        "key_redacted": "zqiEy1***caub"
+      },
+      "7": {
+        "name": "DaleAI Claude - Public Alias",
+        "key_redacted": "eaGg0s***F3Qw"
+      }
+    },
+    "channel_tests": [
+      {
+        "channel_id": 6,
+        "model": "codex-auto-review-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.127,
+        "message": ""
+      },
+      {
+        "channel_id": 6,
+        "model": "codex-auto-review-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.324,
+        "message": ""
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.4-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.95,
+        "message": ""
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.4-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": false,
+        "time_s": 0,
+        "message": "bad response status code 502, message: openai_error, body: {\"error\":{\"message\":\"openai_error\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.4-openai-compact-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.92,
+        "message": ""
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.4-openai-compact-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": false,
+        "time_s": 0,
+        "message": "bad response status code 503, message: No available channel for model gpt-5.4-openai-compact under group GPT特惠反代 (distributor) (request id: 202606180655547489856468268d9d6LmOVdUA5), body: {\"error\":{\"message\":\"No available channel for model gpt-5.4-openai-compact under group GPT特惠反代 (distributor) (request id: 202606180655547489856468268d9d6LmOVdUA5)\",\"type\":\"new_api_error\",\"param\":\"\",\"code\":\"model_not_found\"}}"
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.5-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": false,
+        "time_s": 0,
+        "message": "bad response status code 429, message: Rate limit exceeded, body: {\"error\":{\"message\":\"Rate limit exceeded\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.5-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.357,
+        "message": ""
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.5-openai-compact-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": false,
+        "time_s": 0,
+        "message": "bad response status code 502, message: openai_error, body: {\"error\":{\"message\":\"openai_error\",\"type\":\"bad_response_status_code\",\"param\":\"\",\"code\":\"bad_response_status_code\"}}"
+      },
+      {
+        "channel_id": 6,
+        "model": "openai-gpt-5.5-openai-compact-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.802,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-7-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.363,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-7-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.833,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-7-dale",
+        "endpoint_type": "anthropic",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.677,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-7-dale",
+        "endpoint_type": "anthropic",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.638,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-6-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.826,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-6-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.642,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-6-dale",
+        "endpoint_type": "anthropic",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.127,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-6-dale",
+        "endpoint_type": "anthropic",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.774,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-8-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.097,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-8-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 3.074,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-8-dale",
+        "endpoint_type": "anthropic",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.192,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-opus-4-8-dale",
+        "endpoint_type": "anthropic",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.59,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-sonnet-4-6-dale",
+        "endpoint_type": "openai",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 2.114,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-sonnet-4-6-dale",
+        "endpoint_type": "openai",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.729,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-sonnet-4-6-dale",
+        "endpoint_type": "anthropic",
+        "stream": false,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.875,
+        "message": ""
+      },
+      {
+        "channel_id": 7,
+        "model": "anthropic-sonnet-4-6-dale",
+        "endpoint_type": "anthropic",
+        "stream": true,
+        "http_status": 200,
+        "success": true,
+        "time_s": 1.966,
+        "message": ""
+      }
+    ],
+    "relay_tests": [
+      {
+        "protocol": "openai",
+        "model": "openai-gpt-5.5-dale",
+        "http_status": 200,
+        "elapsed_ms": 7203.94,
+        "snippet": "{\"id\":\"resp_0c4932becb014bcf016a3396ba8274819689d10cab18f643a0\",\"object\":\"chat.completion\",\"created\":1781765819,\"model\":\"gpt-5.5\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":5089,\"completion_tokens\":5,\"total_tokens\":5094,\"prompt_tokens_details\":{\"cached_tokens\":4864}}}"
+      },
+      {
+        "protocol": "openai",
+        "model": "codex-auto-review-dale",
+        "http_status": 200,
+        "elapsed_ms": 2425.27,
+        "snippet": "{\"id\":\"resp_06e72925bda6b583016a3396bcf48481948fa1c376daad57bb\",\"object\":\"chat.completion\",\"created\":1781765821,\"model\":\"codex-auto-review\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":1449,\"completion_tokens\":5,\"total_tokens\":1454}}"
+      },
+      {
+        "protocol": "openai",
+        "model": "anthropic-opus-4-8-dale",
+        "http_status": 200,
+        "elapsed_ms": 2229.17,
+        "snippet": "{\"id\":\"msg_01KiDr3wRPWQTPgBkypLkKiA\",\"model\":\"claude-opus-4-8\",\"object\":\"chat.completion\",\"created\":1781765823,\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"ok\"},\"finish_reason\":\"stop\"}],\"usage\":{\"prompt_tokens\":12,\"completion_tokens\":4,\"total_tokens\":16,\"usage_semantic\":\"openai\",\"usage_source\":\"anthropic\",\"prompt_tokens_details\":{\"cached_tokens\":0,\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0},\""
+      },
+      {
+        "protocol": "anthropic-models",
+        "model": "*",
+        "http_status": 200,
+        "elapsed_ms": 18.94,
+        "snippet": "{\"data\":[{\"id\":\"anthropic-opus-4-6-dale\",\"created_at\":\"2021-07-20T10:40:00Z\",\"display_name\":\"anthropic-opus-4-6-dale\",\"type\":\"model\"},{\"id\":\"anthropic-opus-4-7-dale\",\"created_at\":\"2021-07-20T10:40:00Z\",\"display_name\":\"anthropic-opus-4-7-dale\",\"type\":\"model\"},{\"id\":\"anthropic-opus-4-8-dale\",\"created_at\":\"2021-07-20T10:40:00Z\",\"display_name\":\"anthropic-opus-4-8-dale\",\"type\":\"model\"},{\"id\":\"anthropic-sonnet-4-6-dale\",\"c"
+      },
+      {
+        "protocol": "anthropic",
+        "model": "anthropic-opus-4-8-dale",
+        "http_status": 200,
+        "elapsed_ms": 1774.48,
+        "snippet": "{\"id\":\"msg_01PNNjbctDMvr7EZdAWKQJ3e\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"stop_reason\":\"end_turn\",\"model\":\"claude-opus-4-8\",\"usage\":{\"input_tokens\":12,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":4,\"claude_cache_creation_5_m_tokens\":0,\"claude_cache_creation_1_h_tokens\":0}}"
+      },
+      {
+        "protocol": "anthropic",
+        "model": "anthropic-sonnet-4-6-dale",
+        "http_status": 200,
+        "elapsed_ms": 3209.18,
+        "snippet": "{\"id\":\"msg_018S8kdxnnPBERyoVVjz9nZp\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"type\":\"text\",\"text\":\"ok\"}],\"stop_reason\":\"end_turn\",\"model\":\"claude-sonnet-4-6\",\"usage\":{\"input_tokens\":13,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":4,\"claude_cache_creation_5_m_tokens\":0,\"claude_cache_creation_1_h_tokens\":0}}"
+      }
+    ],
+    "temp_token_cleanup": {
+      "token_id": 49,
+      "success": true
+    },
+    "pricing_after": {
+      "dale_visible_count": 8,
+      "dale_visible_models": [
+        "openai-gpt-5.5-openai-compact-dale",
+        "anthropic-opus-4-6-dale",
+        "anthropic-opus-4-8-dale",
+        "openai-gpt-5.5-dale",
+        "codex-auto-review-dale",
+        "anthropic-opus-4-7-dale",
+        "openai-gpt-5.4-dale",
+        "anthropic-sonnet-4-6-dale"
+      ]
+    },
+    "visibility_checks": {
+      "user_models_snippet": "{\"data\":[\"qwen-mt-flash\",\"qwen-mt-plus\",\"qwen3-max\",\"qwen3-omni-flash\",\"qwen3-vl-plus\",\"qwen3.5-plus\",\"qwen3.6-plus\",\"anthropic-opus-4-6-dale\",\"anthropic-opus-4-7-dale\",\"anthropic-opus-4-8-dale\",\"anthropic-sonnet-4-6-dale\",\"bge-base-zh-v1.5\",\"bge-m3\",\"bge-m3-ctyun\",\"bge-reranker-large-ctyun\",\"bge-reranker-v2-m3\",\"bge-reranker-v2-m3-ctyun\",\"codex-auto-review-dale\",\"deepseek-r1\",\"deepseek-r1-0528\",\"deepseek-r1-0528-cty",
+      "models_enabled_snippet": "{\"data\":[\"anthropic-opus-4-6-dale\",\"anthropic-opus-4-7-dale\",\"anthropic-opus-4-8-dale\",\"anthropic-sonnet-4-6-dale\",\"bge-base-zh-v1.5\",\"bge-m3\",\"bge-m3-ctyun\",\"bge-reranker-large-ctyun\",\"bge-reranker-v2-m3\",\"bge-reranker-v2-m3-ctyun\",\"codex-auto-review-dale\",\"deepseek-r1\",\"deepseek-r1-0528\",\"deepseek-r1-0528-ctyun\",\"deepseek-r1-ctyun\",\"deepseek-r1-distill-llama-70b\",\"deepseek-r1-distill-llama-70b-ctyun\",\"deepseek-r1-d"
+    },
+    "completion_ratio_meta_snapshot": {
+      "codex-auto-review-dale": {
+        "ratio": 6,
+        "locked": false
+      },
+      "openai-gpt-5.4-dale": {
+        "ratio": 6,
+        "locked": false
+      },
+      "openai-gpt-5.4-openai-compact-dale": {
+        "ratio": 6,
+        "locked": false
+      },
+      "openai-gpt-5.5-dale": {
+        "ratio": 6,
+        "locked": false
+      },
+      "openai-gpt-5.5-openai-compact-dale": {
+        "ratio": 6,
+        "locked": false
+      },
+      "anthropic-opus-4-7-dale": {
+        "ratio": 3.333333333333,
+        "locked": false
+      },
+      "anthropic-opus-4-6-dale": {
+        "ratio": 3.333333333333,
+        "locked": false
+      },
+      "anthropic-opus-4-8-dale": {
+        "ratio": 3.333333333333,
+        "locked": false
+      },
+      "anthropic-sonnet-4-6-dale": {
+        "ratio": 3,
+        "locked": false
+      }
+    },
+    "compact_alias_followup": {
+      "model": "openai-gpt-5.4-openai-compact-dale",
+      "temporarily_enabled": true,
+      "first_public_relay": {
+        "http_status": 429,
+        "message": "All credentials for model gpt-5.4 are cooling down"
+      },
+      "retry_1": {
+        "http_status": 429,
+        "message": "Upstream rate limit exceeded, please retry later"
+      },
+      "retry_2": {
+        "http_status": 503,
+        "message": "No available channel for model gpt-5.4-openai-compact under group GPT特惠反代 (distributor)"
+      },
+      "final_action": "reverted model metadata status back to 0",
+      "reason": "public relay not stable enough for release",
+      "public_dale_count_final": 8
+    }
+  }
+}

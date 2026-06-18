@@ -1,6 +1,6 @@
 # 新模型测试流程
 
-更新时间：2026-06-14 15:10 CST
+更新时间：2026-06-18 14:55 CST
 
 ## 目标
 
@@ -13,6 +13,8 @@
 3. 每个上游都先测 `POST /v1/chat/completions`。
 4. 只有当 `chat/completions` 的所有模型名变体都失败后，才扩展到 `POST /v1/responses`。
 5. 只有当上游直连已经确认成功后，才进入 XDAPI relay / channel / pricing 验证。
+
+如果上游本身对不同模型家族有 **group-scoped entitlement**，先确认你用来做直连验证的 upstream token 本身就属于该模型可用的上游 group。不能拿一个 GPT 组 token 去证明 Claude 可用，反过来也一样。
 
 ## 模型名变体
 
@@ -57,6 +59,19 @@
 4. 再读一次 live `/api/option/` 里的 `CompletionRatioMeta`，检查刚新增的公开别名是否出现意外 `locked=true`。
 5. 如果 public alias 命中 `locked=true`，直接阻塞发布；先修 alias 命名、channel `models` / `model_mapping` 和 ratio key，再重新验证。
 
+如果目标模型同时面向 OpenAI-compatible 和 Anthropic-compatible 客户端，还要额外固定做：
+
+6. `GET /v1/models` Claude-compatible probe。
+7. `POST /v1/messages` 最小 Anthropic relay。
+
+对客户端文档要写清楚：
+
+- OpenAI-compatible base URL：`https://api.xingdingwangluo.cn/v1`
+- Claude-compatible base URL：`https://api.xingdingwangluo.cn`
+- Claude-compatible 请求路径：`/v1/messages`
+- Claude-compatible 鉴权头：`x-api-key`
+- Claude-compatible 版本头：`anthropic-version: 2023-06-01`
+
 如果操练场报 `SSE Error: openai_error`，先检查：
 
 - 是否返回了错误 JSON 而不是标准 `text/event-stream` chunk。
@@ -82,6 +97,10 @@
 - `qwen3-vl-plus`、`qwen-mt-plus`、`qwen3-omni-flash`、`qwen-mt-flash`、`qwen3.5-plus`、`qwen3-max` 也都已经通过同一上游直连路径。
 - 2026-05-27 11:13 CST 线上 XDAPI 已修复 Moma 渠道 `base_url`，7 个 Moma 新模型通过操练场 `/pg/chat/completions`、`group=1x`、`stream=false` 验证；`qwen3.5-plus` 额外通过 `stream=true` smoke test。
 - 2026-06-14 12:02 CST DaleAI 解锁样例：`gpt-5.4-openai-compact-dale` 在 live `CompletionRatioMeta` 中为 `{"ratio":6,"locked":true}`；改名为 `openai-gpt-5.4-openai-compact-dale` 并同步 channel / ratio key 后，live `CompletionRatioMeta` 变为 `{"ratio":6,"locked":false}`。这一步已经纳入发布前 gate。
+- 2026-06-18 14:55 CST DaleAI credential repair 样例：Dale GPT token 必须来自 Dale `default` 可用组，Claude token 必须来自 Dale `Anthropic官方key中转` 可用组。替换 XDAPI live 渠道 `#6/#7` 的失效上游 token 后：
+  - `POST /v1/chat/completions` 对 `openai-gpt-5.5-dale` 返回 `200`
+  - `GET /v1/models` Claude-compatible probe 返回 `200`
+  - `POST /v1/messages` 对 `anthropic-opus-4-8-dale` 返回 `200`
 
 ## 本地脚本
 
