@@ -1,4 +1,18 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-07-22 11:51 CST</h2>
+<h3>新增 DaleAI GPT 原价资源独立池，并完成计价、缓存与稳定性验证</h3>
+<ul>
+<li>新增 live 渠道 <code>#36 DaleAI GPT 原价资源 - 独立池</code>，类型为 OpenAI-compatible，上游为 <code>https://www.daleai.shop</code>，仅绑定 <code>1x</code>。</li>
+<li>映射：<code>openai-gpt-5.5-openai-compact-original -&gt; gpt-5.5-openai-compact</code>；GPT 5.6 的三个 XDAPI alias 分别映射到 <code>gpt-5.6-luna</code>、<code>gpt-5.6-terra</code>、<code>gpt-5.6-sol</code>。</li>
+<li>GPT 5.6 上游名称不含 <code>openai-compact</code>；该字段只属于 XDAPI 对外 alias。</li>
+<li>四个模型均使用 <code>tiered_expr</code>，显式配置输入、输出、缓存读取、缓存创建和 <code>cc1h</code>，不走 XDAPI 默认 <code>1h = 1.6x</code>。GPT 5.6 使用 272K 上下文分档。</li>
+<li>上游直连流式/非流式 <code>8/8</code> 通过；XDAPI <code>channel/test</code> <code>8/8</code> 通过；连续 relay <code>20/20</code> 通过，日志全部命中 <code>channel_id=36</code>、<code>tiered_expr</code> 和 <code>base</code> 档。</li>
+<li>五次测试 P95/最大延迟：GPT 5.5 compact <code>4.401s</code>、Luna <code>4.237s</code>、Terra <code>5.901s</code>、Sol <code>4.405s</code>。</li>
+<li>首请求后的缓存读取命中：GPT 5.5 compact <code>4/4</code>、Luna <code>4/4</code>、Sol <code>1/4</code>、Terra <code>1/4</code>。Sol/Terra 当前复用不稳定。</li>
+<li>OpenAI-compatible usage 未返回缓存创建 token 字段，因此本轮可实证缓存读取，不能从返回体实证缓存创建扣费。</li>
+<li>最终四个 alias 均为 <code>CompletionRatioMeta.locked=false</code>，临时 token 已删除，原渠道 <code>#6</code> 和 <code>#35</code> 未修改。</li>
+<li>脱敏证据：<a href="../evidence/dale_original_gpt_20260722.json"><code>dale_original_gpt_20260722.json</code></a></li>
+</ul>
 <h2>2026-06-18 14:55 CST</h2>
 <h3>修复 DaleAI live 渠道失效 key，并完成 Claude Anthropic relay 复核</h3>
 <ul>

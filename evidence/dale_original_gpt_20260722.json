@@ -1,0 +1,69 @@
+{
+  "captured_at": "2026-07-22 11:51 CST",
+  "scope": "DaleAI GPT original-price isolated channel deployment and validation",
+  "secrets_included": false,
+  "channel": {
+    "id": 36,
+    "name": "DaleAI GPT 原价资源 - 独立池",
+    "status": 1,
+    "type": "openai-compatible",
+    "base_url": "https://www.daleai.shop",
+    "group": "1x",
+    "priority": 0,
+    "weight": 0,
+    "tag": "daleai-gpt-original"
+  },
+  "models": {
+    "openai-gpt-5.5-openai-compact-original": {
+      "upstream": "gpt-5.5-openai-compact",
+      "billing_mode": "tiered_expr",
+      "billing_expr": "tier(\"base\", p * 5.0 + c * 30.0 + cr * 0.5 + cc * 5.0 + cc1h * 5.0)",
+      "completion_ratio_locked": false,
+      "success_rate": 1.0,
+      "cache_hits_after_first": 4,
+      "cache_attempts_after_first": 4,
+      "latency_ms": {"min": 2557.45, "median": 2859.56, "p95": 4400.64, "max": 4400.64}
+    },
+    "openai-gpt-5.6-luna-openai-compact-original": {
+      "upstream": "gpt-5.6-luna",
+      "billing_mode": "tiered_expr",
+      "billing_expr": "len <= 272000 ? tier(\"base\", p * 1.0 + c * 6.0 + cr * 0.1 + cc * 1.25 + cc1h * 1.25) : tier(\"tier_2\", p * 2.0 + c * 9.0 + cr * 0.2 + cc * 2.5 + cc1h * 2.5)",
+      "completion_ratio_locked": false,
+      "success_rate": 1.0,
+      "cache_hits_after_first": 4,
+      "cache_attempts_after_first": 4,
+      "latency_ms": {"min": 2791.69, "median": 3042.41, "p95": 4236.97, "max": 4236.97}
+    },
+    "openai-gpt-5.6-terra-openai-compact-original": {
+      "upstream": "gpt-5.6-terra",
+      "billing_mode": "tiered_expr",
+      "billing_expr": "len <= 272000 ? tier(\"base\", p * 2.5 + c * 15.0 + cr * 0.25 + cc * 3.125 + cc1h * 3.125) : tier(\"tier_2\", p * 5.0 + c * 22.5 + cr * 0.5 + cc * 6.25 + cc1h * 6.25)",
+      "completion_ratio_locked": false,
+      "success_rate": 1.0,
+      "cache_hits_after_first": 1,
+      "cache_attempts_after_first": 4,
+      "latency_ms": {"min": 3064.06, "median": 3546.08, "p95": 5900.6, "max": 5900.6}
+    },
+    "openai-gpt-5.6-sol-openai-compact-original": {
+      "upstream": "gpt-5.6-sol",
+      "billing_mode": "tiered_expr",
+      "billing_expr": "len <= 272000 ? tier(\"base\", p * 5.0 + c * 30.0 + cr * 0.5 + cc * 6.25 + cc1h * 6.25) : tier(\"tier_2\", p * 10.0 + c * 45.0 + cr * 1.0 + cc * 12.5 + cc1h * 12.5)",
+      "completion_ratio_locked": false,
+      "success_rate": 1.0,
+      "cache_hits_after_first": 1,
+      "cache_attempts_after_first": 4,
+      "latency_ms": {"min": 2460.13, "median": 2959.99, "p95": 4404.87, "max": 4404.87}
+    }
+  },
+  "validation": {
+    "direct_upstream_stream_matrix": {"passed": 8, "total": 8},
+    "xdapi_channel_test_stream_matrix": {"passed": 8, "total": 8},
+    "relay_stability_requests": {"passed": 20, "total": 20},
+    "observed_channel_ids": [36],
+    "observed_billing_modes": ["tiered_expr"],
+    "observed_tiers": ["base"],
+    "temporary_token_deleted": true,
+    "existing_channels_unchanged": [6, 35]
+  },
+  "caveat": "OpenAI-compatible usage exposed cached_tokens but not cache-creation token fields. Cache reads were observed; cache-create billing could not be proven from these runtime responses."
+}

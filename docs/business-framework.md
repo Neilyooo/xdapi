@@ -1,6 +1,6 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-30 11:08 CST
+更新时间：2026-07-22 11:51 CST
 
 ## 当前结论
 
@@ -17,6 +17,7 @@
 - 2026-05-27 00:26 CST 已把 7 个通过 `moma.cmecloud.cn` 双态验证的新模型正式接入 XDAPI 公共 relay；`gui-plus` 和 `glm-5.1` 仍失败并保持不公开。
 - 2026-05-29 18:33 CST 新增天翼云 MaaS 渠道审计与企业接入策略：企业价格、私有分组、专属渠道、额度和审计建议放在 XDAPI/New API 侧，上游 MaaS 只作为成本和资源供应层。
 - 2026-05-30 11:08 CST 补充企业私有分组与同模型多渠道成本路由说明：路由能按 `group + model` 选中具体 `channel_id`，但默认扣费按模型价和分组倍率，不按渠道成本自动变价；企业合同价建议用私有 group / `GroupRatio` / `GroupGroupRatio` / 专属渠道实现。
+- 2026-07-22 11:51 CST 新增 `#36 DaleAI GPT 原价资源 - 独立池`，使用四个独立 `-original` alias，仅绑定 `1x`。四个模型都改用 `tiered_expr` 显式定义输入、输出、缓存读取、缓存创建和 1h 缓存创建价格；GPT 5.6 另按 272K 上下文边界分两档，避免继承 XDAPI 默认缓存倍率。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程
@@ -45,6 +46,7 @@
 | `China Mobile MaaS - Huhehaote` | 20 个标准/常用模型 | `1x,3x,5x` | 常规文本、视觉、向量、排序模型 |
 | `China Mobile MaaS - Huhehaote Premium` | 7 个高成本推理/72B/VL 模型 | `1x,3x,5x` | 高成本模型独立维护和观测，不再作为访问限制 |
 | `China Mobile MaaS - Moma` | 7 个已验证 Qwen 新模型 | `1x,3x,5x` | 新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订 |
+| `DaleAI GPT 原价资源 - 独立池` | GPT 5.5 compact 与 GPT 5.6 Luna/Terra/Sol 独立 alias | `1x` | 原价资源独立路由；使用可编辑 `tiered_expr` 和显式 `cc/cc1h` 价格 |
 
 ## 前台公开目录
 

@@ -1,5 +1,40 @@
 # XD API 工作记录
 
+## 2026-07-22 11:51 CST
+
+### 新增 DaleAI GPT 原价资源独立池，并完成计价、缓存与稳定性验证
+
+- 新增 live 渠道 `#36 DaleAI GPT 原价资源 - 独立池`：
+  - 类型：OpenAI-compatible
+  - 上游：`https://www.daleai.shop`
+  - 分组：仅 `1x`
+  - 与原有 DaleAI、FYAPIs 渠道使用不同 XDAPI alias，不参与原有模型路由
+- 模型映射：
+  - `openai-gpt-5.5-openai-compact-original -> gpt-5.5-openai-compact`
+  - `openai-gpt-5.6-luna-openai-compact-original -> gpt-5.6-luna`
+  - `openai-gpt-5.6-terra-openai-compact-original -> gpt-5.6-terra`
+  - `openai-gpt-5.6-sol-openai-compact-original -> gpt-5.6-sol`
+- GPT 5.6 上游名称为 `gpt-5.6-luna/terra/sol`；`openai-compact-original` 只是 XDAPI 对外别名后缀。
+- 四个模型全部使用 `tiered_expr`，缓存读取、缓存创建和 `1h` 缓存创建都显式写入表达式，不走 XDAPI 默认 `1h = 1.6x`：
+  - GPT 5.5 compact：输入 `5`、输出 `30`、缓存读取 `0.5`、缓存创建/1h 创建 `5` 元/1M tokens
+  - GPT 5.6 Luna：272K 内 `1/6/0.1/1.25`；超过 272K 为 `2/9/0.2/2.5`
+  - GPT 5.6 Terra：272K 内 `2.5/15/0.25/3.125`；超过 272K 为 `5/22.5/0.5/6.25`
+  - GPT 5.6 Sol：272K 内 `5/30/0.5/6.25`；超过 272K 为 `10/45/1/12.5`
+  - 上述四个数字依次为输入、输出、缓存读取、缓存创建/1h 创建价格，单位均为元/1M tokens
+- 验证结果：
+  - 上游直连流式/非流式 `8/8` 通过
+  - XDAPI `channel/test` 流式/非流式 `8/8` 通过
+  - 每模型连续 5 次 relay，总计 `20/20` HTTP 200；消费日志全部命中 `channel_id=36`、`billing_mode=tiered_expr`、`matched_tier=base`
+  - 五次稳定性测试的 P95/最大延迟：GPT 5.5 compact `4.401s`、Luna `4.237s`、Terra `5.901s`、Sol `4.405s`
+- 缓存读取观测：
+  - GPT 5.5 compact：首请求后 `4/4` 次出现 `cached_tokens`
+  - GPT 5.6 Luna：首请求后 `4/4` 次出现 `cached_tokens`
+  - GPT 5.6 Sol：首请求后 `1/4` 次命中
+  - GPT 5.6 Terra：首请求后 `1/4` 次命中
+  - Sol/Terra 当前缓存复用不稳定；OpenAI-compatible usage 未返回 cache-create token 字段，因此只能实证缓存读取，不能从本轮返回体实证缓存创建扣费
+- 最终安全检查：四个别名均为 `CompletionRatioMeta.locked=false`；临时验证 token 已删除；原渠道 `#6` 和 `#35` 未修改。
+- 脱敏证据：[`dale_original_gpt_20260722.json`](../evidence/dale_original_gpt_20260722.json)
+
 ## 2026-06-18 14:55 CST
 
 ### 修复 DaleAI live 渠道失效 key，并完成 Claude Anthropic relay 复核
