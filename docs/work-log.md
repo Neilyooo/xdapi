@@ -1,5 +1,16 @@
 # XD API 工作记录
 
+## 2026-07-27 22:51 CST
+
+### 本地 XDAPI Ops Portal 增加文生图测试、图片预览与独立计价
+
+- `python -m llm_compare.server` 新增 `image` 路由，按 OpenAI-compatible `POST /v1/images/generations` 调用文生图模型。
+- 页面可独立填写图片尺寸、质量、张数、响应格式、图片输入价和图片输出价；显式价格按图片 Token 直接计算，不使用 XDAPI 默认模型倍率。
+- 支持拆分显示文本输入、图片输入、文本输出、图片输出 Token，并把 Base64 返回验证为 PNG/JPEG/WebP 后落盘预览。
+- 使用 `openai-gpt-image-v2` 完成真实 XDAPI relay：HTTP 200，耗时 `27.48s`，usage 为文本输入 24、图片输出 229 tokens，生成有效的 787,920-byte 图片。
+- 计价夹具按文本输入 `1`、图片输入 `3`、图片输出 `2` 元/1M tokens 配置，页面结果为文本输入 `0.000024`、图片输出 `0.000458`、合计 `0.000482` 元，计算一致。
+- 临时验证令牌和含临时令牌的历史记录均已删除；本轮只增强本地运维工具，没有修改 live 渠道或正式模型价格。
+
 ## 2026-07-27 22:22 CST
 
 ### 接入 PandaTokens GPT Image 2，并完成图像 relay 与计费验证
