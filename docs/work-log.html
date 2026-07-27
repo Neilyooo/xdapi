@@ -4,9 +4,10 @@
 <ul>
 <li>新增 live 渠道 <code>#43 PandaTokens GPT Image 2</code>，上游为 <code>https://api.pandatokens.xyz</code>，映射 <code>openai-gpt-image-v2 -&gt; gpt-image-2</code>，覆盖 <code>1x/3x/5x</code>。</li>
 <li>模型元数据 <code>#93</code> 只声明 <code>POST /v1/images/generations</code>。</li>
+<li>模型元数据已归入 live <code>OpenAI</code> 供应商（<code>vendor_id=8</code>），可在模型广场的 OpenAI 供应商筛选下显示。</li>
 <li>上游直连 HTTP 200，耗时 <code>18.77s</code>；XDAPI 渠道测试 HTTP 200，耗时 <code>103.98s</code>。</li>
 <li>临时 <code>1x</code> 用户令牌 relay HTTP 200，耗时 <code>28.48s</code>，返回有效 PNG；usage 为输入 34、输出图像 229 tokens。</li>
-<li>消费日志命中 <code>channel_id=43</code> 和 <code>tiered_expr</code>。商业价格待确认，渠道验证后保持手动禁用。</li>
+<li>消费日志命中 <code>channel_id=43</code> 和 <code>tiered_expr</code>。商业价格待确认；供应商归类时渠道 live 回读已为启用状态，正式计费前必须替换占位价格。</li>
 <li>临时令牌已删除；管理员认证流程改为优先使用仓库外私密凭据文件并复用单个 HTTP Session。</li>
 <li>脱敏证据：<a href="../evidence/panda_gpt_image2_20260727.json"><code>panda_gpt_image2_20260727.json</code></a></li>
 </ul>

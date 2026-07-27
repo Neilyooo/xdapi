@@ -18,7 +18,7 @@
 - 2026-05-29 18:33 CST 新增天翼云 MaaS 渠道审计与企业接入策略：企业价格、私有分组、专属渠道、额度和审计建议放在 XDAPI/New API 侧，上游 MaaS 只作为成本和资源供应层。
 - 2026-05-30 11:08 CST 补充企业私有分组与同模型多渠道成本路由说明：路由能按 `group + model` 选中具体 `channel_id`，但默认扣费按模型价和分组倍率，不按渠道成本自动变价；企业合同价建议用私有 group / `GroupRatio` / `GroupGroupRatio` / 专属渠道实现。
 - 2026-07-22 11:51 CST 新增 `#36 DaleAI GPT 原价资源 - 独立池`，使用四个独立 `-original` alias，仅绑定 `1x`。四个模型都改用 `tiered_expr` 显式定义输入、输出、缓存读取、缓存创建和 1h 缓存创建价格；GPT 5.6 另按 272K 上下文边界分两档，避免继承 XDAPI 默认缓存倍率。
-- 2026-07-27 22:22 CST 新增 `#43 PandaTokens GPT Image 2` 和稳定别名 `openai-gpt-image-v2`。图像生成和 token 计费链路已验证，但商业价格待确认，因此渠道保持手动禁用。
+- 2026-07-27 22:22 CST 新增 `#43 PandaTokens GPT Image 2` 和稳定别名 `openai-gpt-image-v2`。图像生成和 token 计费链路已验证；当前渠道已启用，但商业价格仍为待确认占位值。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程
@@ -49,7 +49,7 @@
 | `China Mobile MaaS - Huhehaote Premium` | 7 个高成本推理/72B/VL 模型 | `1x,3x,5x` | 高成本模型独立维护和观测，不再作为访问限制 |
 | `China Mobile MaaS - Moma` | 7 个已验证 Qwen 新模型 | `1x,3x,5x` | 新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订 |
 | `DaleAI GPT 原价资源 - 独立池` | GPT 5.5 compact 与 GPT 5.6 Luna/Terra/Sol 独立 alias | `1x` | 原价资源独立路由；使用可编辑 `tiered_expr` 和显式 `cc/cc1h` 价格 |
-| `PandaTokens GPT Image 2` | `openai-gpt-image-v2 -> gpt-image-2` | `1x,3x,5x` | 图像生成备用渠道；验证通过，商业价格确认前保持禁用 |
+| `PandaTokens GPT Image 2` | `openai-gpt-image-v2 -> gpt-image-2` | `1x,3x,5x` | 图像生成渠道；验证通过且当前已启用，商业价格仍待确认 |
 
 ## 前台公开目录
 

@@ -10,8 +10,12 @@
   "xdapi": {
     "channel_id": 43,
     "channel_name": "PandaTokens GPT Image 2",
-    "final_channel_status": "manually_disabled",
+    "final_channel_status": "enabled",
     "public_alias": "openai-gpt-image-v2",
+    "vendor": {
+      "id": 8,
+      "name": "OpenAI"
+    },
     "upstream_model": "gpt-image-2",
     "groups": [
       "1x",
@@ -41,7 +45,7 @@
   },
   "caveats": [
     "The commercial upstream price is not yet confirmed.",
-    "The channel remains manually disabled until the operator sets an approved selling price.",
+    "The channel is currently enabled, but the operator must replace the placeholder expression before treating customer pricing as approved.",
     "No API keys, passwords, cookies, or administrator tokens are included in this evidence."
   ]
 }
