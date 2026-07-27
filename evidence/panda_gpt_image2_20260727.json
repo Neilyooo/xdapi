@@ -1,0 +1,47 @@
+{
+  "timestamp_cst": "2026-07-27 22:22",
+  "upstream": {
+    "base_url": "https://api.pandatokens.xyz",
+    "model": "gpt-image-2",
+    "direct_http_status": 200,
+    "direct_elapsed_seconds": 18.772,
+    "credential": "redacted"
+  },
+  "xdapi": {
+    "channel_id": 43,
+    "channel_name": "PandaTokens GPT Image 2",
+    "final_channel_status": "manually_disabled",
+    "public_alias": "openai-gpt-image-v2",
+    "upstream_model": "gpt-image-2",
+    "groups": [
+      "1x",
+      "3x",
+      "5x"
+    ],
+    "endpoint": "POST /v1/images/generations",
+    "channel_test": {
+      "http_status": 200,
+      "elapsed_seconds": 103.976
+    },
+    "relay_test": {
+      "http_status": 200,
+      "elapsed_seconds": 28.484,
+      "input_tokens": 34,
+      "output_image_tokens": 229,
+      "valid_png": true
+    },
+    "billing": {
+      "mode": "tiered_expr",
+      "tier": "price_pending",
+      "operator_editable": true,
+      "commercial_price_confirmed": false
+    },
+    "consumption_log_channel_id": 43,
+    "temporary_token_deleted": true
+  },
+  "caveats": [
+    "The commercial upstream price is not yet confirmed.",
+    "The channel remains manually disabled until the operator sets an approved selling price.",
+    "No API keys, passwords, cookies, or administrator tokens are included in this evidence."
+  ]
+}

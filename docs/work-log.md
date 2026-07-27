@@ -1,5 +1,18 @@
 # XD API 工作记录
 
+## 2026-07-27 22:22 CST
+
+### 接入 PandaTokens GPT Image 2，并完成图像 relay 与计费验证
+
+- 新增 live 渠道 `#43 PandaTokens GPT Image 2`，上游为 `https://api.pandatokens.xyz`，模型映射为 `openai-gpt-image-v2 -> gpt-image-2`，覆盖 `1x/3x/5x`。
+- 新增模型元数据 `#93`，对外只声明 `POST /v1/images/generations`，不把图像模型误标为聊天端点。
+- 上游直连生成 HTTP 200，耗时 `18.77s`；XDAPI 管理员渠道测试 HTTP 200，耗时 `103.98s`。
+- 临时 `1x` 用户令牌调用 XDAPI `/v1/images/generations` HTTP 200，耗时 `28.48s`，成功返回有效 PNG。
+- relay usage 为输入 34 tokens、输出图像 229 tokens；消费日志命中 `channel_id=43` 和 `billing_mode=tiered_expr`。
+- 由于商业上游价格尚未确认，当前使用显式、可编辑的 `price_pending` 表达式，不继承系统模型倍率；验证后渠道保持手动禁用。
+- 临时验证令牌已删除。管理员认证流程同时改为优先使用仓库外私密凭据文件并复用单个 HTTP Session，禁止以修改管理员、数据库或重启服务作为认证恢复手段。
+- 脱敏证据：[`panda_gpt_image2_20260727.json`](../evidence/panda_gpt_image2_20260727.json)
+
 ## 2026-07-22 11:51 CST
 
 ### 新增 DaleAI GPT 原价资源独立池，并完成计价、缓存与稳定性验证

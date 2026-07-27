@@ -1,4 +1,15 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-07-27 22:22 CST</h2>
+<h3>接入 PandaTokens GPT Image 2，并完成图像 relay 与计费验证</h3>
+<ul>
+<li>新增 live 渠道 <code>#43 PandaTokens GPT Image 2</code>，上游为 <code>https://api.pandatokens.xyz</code>，映射 <code>openai-gpt-image-v2 -&gt; gpt-image-2</code>，覆盖 <code>1x/3x/5x</code>。</li>
+<li>模型元数据 <code>#93</code> 只声明 <code>POST /v1/images/generations</code>。</li>
+<li>上游直连 HTTP 200，耗时 <code>18.77s</code>；XDAPI 渠道测试 HTTP 200，耗时 <code>103.98s</code>。</li>
+<li>临时 <code>1x</code> 用户令牌 relay HTTP 200，耗时 <code>28.48s</code>，返回有效 PNG；usage 为输入 34、输出图像 229 tokens。</li>
+<li>消费日志命中 <code>channel_id=43</code> 和 <code>tiered_expr</code>。商业价格待确认，渠道验证后保持手动禁用。</li>
+<li>临时令牌已删除；管理员认证流程改为优先使用仓库外私密凭据文件并复用单个 HTTP Session。</li>
+<li>脱敏证据：<a href="../evidence/panda_gpt_image2_20260727.json"><code>panda_gpt_image2_20260727.json</code></a></li>
+</ul>
 <h2>2026-07-22 11:51 CST</h2>
 <h3>新增 DaleAI GPT 原价资源独立池，并完成计价、缓存与稳定性验证</h3>
 <ul>
