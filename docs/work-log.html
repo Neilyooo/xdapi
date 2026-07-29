@@ -1,4 +1,19 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-07-29 18:31 CST</h2>
+<h3>接入 Seedance 2.0 火山兼容备用渠道，并完成异步任务与 Token 结算验证</h3>
+<ul>
+<li>上游暴露 <code>doubao-seedance-2.0</code>，且 <code>/v1/videos</code> 与 <code>/api/v3/contents/generations/tasks</code> 均可提交任务。</li>
+<li>直连 4 秒 720p 任务提交耗时 <code>0.526s</code>，约 <code>149s</code> 完成；原生任务详情返回 <code>87,300 total_tokens</code>，OpenAI 包装响应不返回 usage。</li>
+<li>新增 live 渠道 <code>#45 Seedance 2.0 火山兼容备用</code>，使用豆包视频 type <code>54</code>，映射 <code>doubao-seedance-2.0 -&gt; doubao-seedance-2.0</code>，配置 <code>1x/3x/5x</code>。</li>
+<li>隔离 relay 提交 HTTP 200，耗时 <code>0.761s</code>；任务约 <code>134s</code> 完成，任务表记录 <code>channel_id=45</code>、<code>87,300 total_tokens</code> 和有效视频结果。</li>
+<li>XDAPI 先预扣 <code>4,887,500</code> quota，再按 usage 重算为 <code>1,706,715 = 87,300 × 19.55</code>；售价来自可编辑 <code>ModelRatio=19.55</code>。</li>
+<li>同一上游直连任务显示有效倍率 <code>23</code>；当前售价低约 <code>15%</code>，商业价格尚未通过。</li>
+<li>模型元数据 <code>#88</code> 的端点从 <code>openai</code> 修正为 <code>openai-video</code>。</li>
+<li>live rc.4 对启用模型限制的 Token 存在视频任务 fetch 403 误判；无限制临时 Token 查询两种公开任务端点均为 HTTP 200。</li>
+<li>上游仅提供 HTTP；HTTPS、正式价格和受限 Token 轮询修复都是启用前置条件。</li>
+<li>临时 Token 已删除，测试别名已移除，渠道最终为禁用状态，未接入客户流量。</li>
+<li>脱敏证据：<a href="../evidence/seedance_volc_20260729.json"><code>seedance_volc_20260729.json</code></a></li>
+</ul>
 <h2>2026-07-27 22:51 CST</h2>
 <h3>本地 XDAPI Ops Portal 增加文生图测试、图片预览与独立计价</h3>
 <ul>

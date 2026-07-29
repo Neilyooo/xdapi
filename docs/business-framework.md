@@ -1,6 +1,6 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-07-27 22:22 CST
+更新时间：2026-07-29 18:31 CST
 
 ## 当前结论
 
@@ -19,6 +19,7 @@
 - 2026-05-30 11:08 CST 补充企业私有分组与同模型多渠道成本路由说明：路由能按 `group + model` 选中具体 `channel_id`，但默认扣费按模型价和分组倍率，不按渠道成本自动变价；企业合同价建议用私有 group / `GroupRatio` / `GroupGroupRatio` / 专属渠道实现。
 - 2026-07-22 11:51 CST 新增 `#36 DaleAI GPT 原价资源 - 独立池`，使用四个独立 `-original` alias，仅绑定 `1x`。四个模型都改用 `tiered_expr` 显式定义输入、输出、缓存读取、缓存创建和 1h 缓存创建价格；GPT 5.6 另按 272K 上下文边界分两档，避免继承 XDAPI 默认缓存倍率。
 - 2026-07-27 22:22 CST 新增 `#43 PandaTokens GPT Image 2` 和稳定别名 `openai-gpt-image-v2`。图像生成和 token 计费链路已验证；当前渠道已启用，但商业价格仍为待确认占位值。
+- 2026-07-29 18:31 CST 新增并验证 `#45 Seedance 2.0 火山兼容备用`。XDAPI 通过豆包视频 type 54 读取原生任务 usage 并按 Token 重算；由于上游仅提供 HTTP、现有售价低于本轮观察到的上游有效倍率，渠道最终保持禁用。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程
@@ -50,6 +51,7 @@
 | `China Mobile MaaS - Moma` | 7 个已验证 Qwen 新模型 | `1x,3x,5x` | 新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订 |
 | `DaleAI GPT 原价资源 - 独立池` | GPT 5.5 compact 与 GPT 5.6 Luna/Terra/Sol 独立 alias | `1x` | 原价资源独立路由；使用可编辑 `tiered_expr` 和显式 `cc/cc1h` 价格 |
 | `PandaTokens GPT Image 2` | `openai-gpt-image-v2 -> gpt-image-2` | `1x,3x,5x` | 图像生成渠道；验证通过且当前已启用，商业价格仍待确认 |
+| `Seedance 2.0 火山兼容备用` | `doubao-seedance-2.0 -> doubao-seedance-2.0` | `1x,3x,5x` | 豆包视频 type 54；技术与 Token 结算验证通过，因 HTTP 传输和价格风险保持禁用 |
 
 ## 前台公开目录
 
