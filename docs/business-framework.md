@@ -1,6 +1,6 @@
 # XD API 业务框架与分组策略
 
-更新时间：2026-05-30 11:08 CST
+更新时间：2026-07-29 18:31 CST
 
 ## 当前结论
 
@@ -17,6 +17,7 @@
 - 2026-05-27 00:26 CST 已把 7 个通过 `moma.cmecloud.cn` 双态验证的新模型正式接入 XDAPI 公共 relay；`gui-plus` 和 `glm-5.1` 仍失败并保持不公开。
 - 2026-05-29 18:33 CST 新增天翼云 MaaS 渠道审计与企业接入策略：企业价格、私有分组、专属渠道、额度和审计建议放在 XDAPI/New API 侧，上游 MaaS 只作为成本和资源供应层。
 - 2026-05-30 11:08 CST 补充企业私有分组与同模型多渠道成本路由说明：路由能按 `group + model` 选中具体 `channel_id`，但默认扣费按模型价和分组倍率，不按渠道成本自动变价；企业合同价建议用私有 group / `GroupRatio` / `GroupGroupRatio` / 专属渠道实现。
+- 2026-07-29 18:31 CST 新增并验证 `#45 Seedance 2.0 火山兼容备用`。XDAPI 通过豆包视频 type 54 读取原生任务 usage 并按 Token 重算；由于上游仅提供 HTTP、现有售价低于本轮观察到的上游有效倍率，渠道最终保持禁用。
 - 未来如果接入更快上游线路，可以新增速度档位，例如 `fast_1_5x`、`priority_2x`，但必须由实际响应速度或资源池差异支撑。
 
 ## 新模型接入流程
@@ -45,6 +46,7 @@
 | `China Mobile MaaS - Huhehaote` | 20 个标准/常用模型 | `1x,3x,5x` | 常规文本、视觉、向量、排序模型 |
 | `China Mobile MaaS - Huhehaote Premium` | 7 个高成本推理/72B/VL 模型 | `1x,3x,5x` | 高成本模型独立维护和观测，不再作为访问限制 |
 | `China Mobile MaaS - Moma` | 7 个已验证 Qwen 新模型 | `1x,3x,5x` | 新增 relay 渠道，当前按临时 1x 展示，后续按官方价格再修订 |
+| `Seedance 2.0 火山兼容备用` | `doubao-seedance-2.0 -> doubao-seedance-2.0` | `1x,3x,5x` | 豆包视频 type 54；技术与 Token 结算验证通过，因 HTTP 传输和价格风险保持禁用 |
 
 ## 前台公开目录
 

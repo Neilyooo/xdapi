@@ -1,5 +1,21 @@
 # XD API 工作记录
 
+## 2026-07-29 18:31 CST
+
+### 接入 Seedance 2.0 火山兼容备用渠道，并完成异步任务与 Token 结算验证
+
+- 上游模型列表暴露 `doubao-seedance-2.0`；`/v1/videos` 和 `/api/v3/contents/generations/tasks` 均可提交任务。
+- 直连 4 秒 720p 任务提交耗时 `0.526s`，约 `149s` 完成；原生火山任务详情返回 `87,300 total_tokens`，而 OpenAI `/v1/videos` 包装响应不返回 usage。
+- 新增 live 渠道 `#45 Seedance 2.0 火山兼容备用`，使用豆包视频 type `54`，映射 `doubao-seedance-2.0 -> doubao-seedance-2.0`，配置分组 `1x/3x/5x`。
+- 隔离 relay 提交 HTTP 200，耗时 `0.761s`；后台任务约 `134s` 完成，任务表明确记录 `channel_id=45`、`87,300 total_tokens` 和有效视频结果。
+- XDAPI 先预扣 `4,887,500` quota，再按原生 usage 重算为 `1,706,715 = 87,300 × 19.55`。模型价格来自可编辑 `ModelRatio=19.55`，不是代码锁定默认价。
+- 同一上游直连任务记录为 `2,007,900 / 87,300 = 23` 的有效倍率；当前售价 `19.55` 低约 `15%`，商业价格尚未通过。
+- 模型元数据 `#88` 的端点从普通 `openai` 修正为 `openai-video`。
+- live rc.4 对“启用模型限制”的 Token 存在视频任务轮询误判：fetch 请求没有 model 字段，会返回 403；无限制临时 Token 查询 `/v1/video/generations/{id}` 和 `/v1/videos/{id}` 均为 HTTP 200。
+- 上游目前仅提供 HTTP，不能保护 API Key、Prompt 和媒体传输。HTTPS、正式成本价以及受限 Token 轮询修复都是启用前置条件。
+- 两个临时 Token 已删除，测试别名已从价格选项移除，渠道最终为 `status=2`（禁用），未接入客户流量。
+- 脱敏证据：[`seedance_volc_20260729.json`](../evidence/seedance_volc_20260729.json)
+
 ## 2026-06-18 14:55 CST
 
 ### 修复 DaleAI live 渠道失效 key，并完成 Claude Anthropic relay 复核

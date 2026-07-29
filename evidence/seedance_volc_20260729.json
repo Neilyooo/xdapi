@@ -1,0 +1,58 @@
+{
+  "timestamp_cst": "2026-07-29 18:31",
+  "upstream": {
+    "base_url": "http://193.112.168.206:3000",
+    "model": "doubao-seedance-2.0",
+    "credential": "redacted",
+    "direct_submit_http_status": 200,
+    "direct_submit_elapsed_seconds": 0.526,
+    "direct_completion_seconds": 149,
+    "native_total_tokens": 87300,
+    "native_quota": 2007900,
+    "effective_ratio": 23
+  },
+  "xdapi": {
+    "live_version": "v1.0.0-rc.4",
+    "channel_id": 45,
+    "channel_name": "Seedance 2.0 火山兼容备用",
+    "channel_type": 54,
+    "final_channel_status": "disabled",
+    "public_model": "doubao-seedance-2.0",
+    "upstream_model": "doubao-seedance-2.0",
+    "groups": [
+      "1x",
+      "3x",
+      "5x"
+    ],
+    "endpoint": "POST /v1/video/generations",
+    "relay_submit_http_status": 200,
+    "relay_submit_elapsed_seconds": 0.761,
+    "relay_completion_seconds": 134,
+    "relay_total_tokens": 87300,
+    "billing": {
+      "mode": "operator_editable_model_ratio",
+      "model_ratio": 19.55,
+      "pre_consumed_quota": 4887500,
+      "actual_quota": 1706715,
+      "price_approved": false
+    },
+    "model_meta": {
+      "id": 88,
+      "endpoint_before": "openai",
+      "endpoint_after": "openai-video"
+    },
+    "task_fetch": {
+      "model_limited_token_http_status": 403,
+      "unrestricted_token_v1_video_generations_http_status": 200,
+      "unrestricted_token_v1_videos_http_status": 200
+    },
+    "temporary_tokens_deleted": true,
+    "temporary_probe_alias_removed": true
+  },
+  "release_blockers": [
+    "The upstream only provides plain HTTP, so credentials and request contents are not transport-encrypted.",
+    "The current XDAPI ratio 19.55 is about 15 percent lower than the observed upstream effective ratio 23.",
+    "Live rc.4 rejects video-task polling when the caller token enables per-token model limits."
+  ],
+  "secrets_included": false
+}
