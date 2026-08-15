@@ -1,4 +1,14 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-08-15 18:55 CST</h2>
+<h3>XDAPI-NG 完成无需公网备案的隔离 TLS 与渠道 40 流程验收</h3>
+<ul>
+<li>在独立天翼云验证节点新增仅绑定 <code>127.0.0.1:19443</code> 的私有 TLS 网关，通过 SSH 本地转发验证准确域名、私有 CA、HTTP/1.1、HTTP/2、安全响应头和管理路径隔离；未开放公网 <code>80/443/8080</code>。</li>
+<li>完成渠道 40 的真实上游标准化流程：<code>openai-gpt-5.6-sol-group -&gt; gpt-5.6-sol</code>，包含直连非流式/流式、Relay 连续 5 次非流式、Relay 流式、未授权边界、请求关联、计费和回滚。</li>
+<li>Relay 五次稳定性请求总耗时为 min <code>1.764307s</code>、P50 <code>1.907115s</code>、P95/最大 <code>2.753928s</code>；首个请求后的四次均观察到缓存读取，命中率 <code>4/4</code>，累计缓存读取 <code>7,168</code> tokens。</li>
+<li>5 分钟缓存创建价格保持独立可编辑但本轮上游 usage 未暴露创建 TTL，因此标记为“已配置、运行时未实证”；1 小时缓存创建继续保持“待审批”，没有继承 XDAPI 默认 <code>1.6x</code>。</li>
+<li>验证完成后只停止隔离 TLS 网关和 SSH 转发，模型恢复 <code>DISABLED</code>，隔离节点只保留回环诊断入口；原生产域名与服务未修改、未重启，固定校验仍返回 HTTP 200。</li>
+<li>该结果只证明功能管线、TLS 协议、稳定性、缓存、计费与回滚闭环。证据明确标记 <code>ISOLATED_TLS_ONLY</code> 和 <code>satisfies_public_ingress=false</code>；天翼备案接入、公网 TCP 443、公有 CA 和外网 HTTPS 仍需单独验收。</li>
+</ul>
 <h2>2026-07-29 18:31 CST</h2>
 <h3>接入 Seedance 2.0 火山兼容备用渠道，并完成异步任务与 Token 结算验证</h3>
 <ul>
