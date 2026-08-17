@@ -1,4 +1,16 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-08-17 12:17 CST</h2>
+<h3>XDAPI-NG 完成多实例运行时、协议矩阵、恢复演练与安全加固阶段验收</h3>
+<ul>
+<li>在隔离环境完成 Redis 运行时租约、队列和熔断状态，并由两个 Platform API 实例共同提供服务；异步任务可以跨实例读取和推进，节点状态能够收敛。</li>
+<li>标准验证矩阵覆盖 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages、图像生成和异步视频五类协议，共 22 个验证尝试；请求、实际渠道、规范化 usage 与五维计费记录能够关联核对。</li>
+<li>新增 Prometheus 指标和仅记录元数据的 JSONL 运行日志。客户、健康探针和故障注入流量继续分开统计；日志不保存 Prompt、Completion 或密钥字段，默认保留 30 天并自动清理过期运行日志。</li>
+<li>容量与故障验证通过：基线 <code>32/32</code>、30 秒短时 soak <code>111/111</code>，并覆盖排队、超时、熔断、节点摘除和租约恢复。该结果是阶段门禁，不等价于生产容量承诺。</li>
+<li>完成自动备份和独立命名空间恢复演练，验证数据库导入、Redis、应用启动、镜像归档、校验和、无主机端口暴露以及受保护服务不变；演练资源按审计要求保留。</li>
+<li>安全层完成 KMS-ready v2 信封、密钥不可回读与重包裹、配置编辑/验证/审批/审计四角色职责分离、SBOM 和依赖审计。<code>govulncheck</code> 因工具不可用被明确记录为待补门禁，其余本轮供应链检查通过。</li>
+<li>最终聚合验收和证据清单校验通过；渠道 40 保持禁用，未接触生产 XDAPI、真实上游、支付或公网入口。</li>
+<li>当前估算：整体平台工程完成度约 <code>80%</code>，隔离核心链路约 <code>90%</code>，生产就绪度约 <code>58%</code>。下一阶段进入不切流的生产就绪基础建设：高可用基础设施、外部可观测性与长稳压测、云 KMS、异地恢复、签名供应链和真实渠道灰度工具。</li>
+</ul>
 <h2>2026-08-16 23:35 CST</h2>
 <h3>XDAPI-NG 完成配置发布、三层验证与流量分类阶段验收</h3>
 <ul>

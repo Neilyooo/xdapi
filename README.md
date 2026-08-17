@@ -2,7 +2,7 @@
 
 This repository publishes the China Mobile MaaS and XD API model progress report.
 
-Current live status as of 2026-05-18 11:11 CST: the XD API frontend catalog exposes 27 CMCC token-priced models, and public business groups are `1x`, `3x`, and `5x`.
+Current engineering status as of 2026-08-17 12:17 CST: XDAPI-NG has passed its isolated multi-instance runtime, five-protocol validation matrix, observability, short soak/fault, restore-drill, and security-control stage gates. Channel 40 remains disabled, and this stage did not modify production XDAPI, real upstream traffic, payment, or public ingress. Public business groups remain `1x`, `3x`, and `5x`.
 
 - GitHub Pages entry: `index.html`
 - Beginner tutorial page: `docs/cli-ide-setup-tutorial.html`

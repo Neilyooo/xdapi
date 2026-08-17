@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 业务框架与分组策略</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 业务框架与分组策略</h1><p>XDAPI / MaaS 运营文档</p></section>
-<p>更新时间：2026-08-16 23:35 CST</p>
+<p>更新时间：2026-08-17 12:17 CST</p>
 <section class="section"><h2>XDAPI-NG 隔离控制与发布框架</h2>
 <ul>
 <li>模型、物理资源池、逻辑渠道、密钥引用、模型映射和价格策略已经成为独立配置对象。同一公共模型允许绑定多个渠道，并通过优先级、权重和用户组路由，客户侧模型名保持稳定。</li>
@@ -8,8 +8,12 @@
 <li>所有线上候选配置必须走 <code>DRAFT -&gt; VALIDATING -&gt; APPROVED -&gt; ENABLED</code>，每次发布都有版本、脱敏差异、审计、备份、受保护容器检查和回滚点；不允许直接编辑已生效配置。</li>
 <li>发布验证覆盖上游直连、渠道和 Relay 三层，并分别验证 OpenAI 与 Anthropic。Claude 固定执行五次缓存探针，核对 5m/1h 创建与读取、实际 <code>channel_id</code>、Token、计费、请求 ID 和脱敏证据清单。</li>
 <li>观测层分开统计客户请求、健康探针和故障注入；模型广场只使用客户流量评估健康，避免验证失败或演练流量造成“波动”。指标包括 TTFT、总延迟 P50/P95、吞吐、错误率、样本量和新鲜度，并将管理员启停状态与运行健康分开显示。</li>
-<li>2026-08-16 最终隔离验收通过：release <code>rel_9mqFt5Ukkd7HYBjTTPJ0Zw</code>、validation <code>val_gddmz4FCTh_nTHpUeu6htA</code>、run <code>config-release-20260816T152336Z</code>。渠道 40 保持禁用，生产 XDAPI、真实上游、公网入口和支付均未修改。</li>
-<li>当前隔离阶段完成；整体工程完成度估计约 68%，下一阶段集中处理多实例高可用、协议完整性、独立日志指标、容量/故障测试、恢复演练和安全加固。</li>
+<li>Redis 统一承载节点租约、排队和熔断运行态；两个 Platform API 实例经隔离网关共同服务，异步任务能够跨实例读取和推进，不再依赖单进程内存状态。</li>
+<li>协议矩阵已覆盖 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages、图像生成和异步视频，并统一关联请求 ID、实际渠道、规范化 usage 和五维计费。</li>
+<li>运行日志采用仅元数据 JSONL，默认保留 30 天并自动清理；Prompt、Completion 和密钥不进入运行日志。Prometheus 指标覆盖 TTFT、总延迟、吞吐、错误率、排队、重试、熔断和节点状态。</li>
+<li>备份、独立恢复演练、KMS-ready v2 密钥信封、四角色职责分离、SBOM 与依赖审计已通过阶段验收。外部云 KMS、长时间 soak、异地恢复和签名制品仍是生产启用前置条件。</li>
+<li>2026-08-17 聚合验收通过。渠道 40 保持禁用，生产 XDAPI、真实上游、公网入口和支付均未修改。</li>
+<li>当前估算：整体平台工程完成度约 80%，隔离核心链路约 90%，生产就绪度约 58%。下一阶段只建设不切流的生产就绪基础，不直接迁移客户流量。</li>
 </ul>
 </section>
 <section class="section"><h2>当前结论</h2>
