@@ -1,4 +1,27 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>XD API 工作记录</title><style>body{margin:0;background:#f6f8fc;color:#172033;font:15px/1.72 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}.wrap{max-width:1240px;margin:0 auto;padding:32px 20px 72px}.topbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.topbar a{color:#174ea6;background:#fff;border:1px solid #d9e1f2;border-radius:999px;padding:8px 12px;text-decoration:none;font-weight:650}.hero{background:linear-gradient(135deg,#0f172a 0%,#174ea6 100%);color:#fff;border-radius:22px;padding:32px 36px;margin-bottom:18px}.hero h1{margin:0 0 8px;font-size:32px}.section{background:#fff;border:1px solid #d9e1f2;border-radius:16px;padding:22px 24px;margin-bottom:16px;overflow:auto;box-shadow:0 10px 24px rgba(33,53,92,.05)}h2{margin:22px 0 10px;font-size:21px}h3{margin:16px 0 8px;font-size:17px}ul{margin:8px 0 0 22px;padding:0}li{margin:6px 0}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px}th,td{border-bottom:1px solid #d9e1f2;padding:9px 8px;text-align:left;vertical-align:top}th{background:#f8fbff;color:#27406e;position:sticky;top:0}code{background:#f2f5fa;border:1px solid #e1e8f4;padding:2px 6px;border-radius:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}pre{background:#0f172a;color:#e5edf8;border-radius:14px;padding:16px;overflow:auto;line-height:1.55}a{color:#174ea6}</style></head><body><div class="wrap"><nav class="topbar"><a href="../index.html">首页</a><a href="./enterprise-routing-groups.html">企业分组详解</a><a href="./enterprise-b2b-strategy.html">企业接入策略</a><a href="./business-framework.html">业务框架</a><a href="./work-log.html">工作记录</a></nav><section class="hero"><h1>XD API 工作记录</h1><p>XDAPI / MaaS 运营文档</p></section><section class="section"><h1>XD API 工作记录</h1>
+<h2>2026-09-12 18:07 CST</h2>
+<h3>X5M DeepSeek V4.1 Flash 大项目缓存、容量与延迟验证未通过</h3>
+<ul>
+<li>使用不含客户数据的 <code>Atlas Ledger</code> 合成代码仓库进行大上下文测试；每个被上游接受的流式请求约为 <code>30,873</code> 输入 token。渠道仍为非公开 <code>测试</code> 分组的 <code>#89</code>。</li>
+<li>32 次流式请求只成功 6 次：顺序 <code>4/8</code>、4 并发 <code>1/8</code>、8 并发 <code>1/16</code>。顺序成功请求总耗时 P50 <code>25.230s</code>、P95/最大 <code>80.985s</code>，首字 P50 <code>25.201s</code>、P95/最大 <code>80.981s</code>。</li>
+<li>XDAPI 分段日志显示请求写入上游 P95 只有 <code>0.996s</code>，上游首响应 P95 达 <code>80.778s</code>；成功请求共用一条 HTTP/2 连接，5 次为复用。</li>
+<li>绕过 XDAPI 的 X5M 最小直连请求返回 <code>429 rate_limit_error / gateway_queue_full</code>。随后单并发、每 60 秒一次的 3 次恢复请求仍全部 429，且没有形成 X5M token 或扣费。</li>
+<li>首个成功请求后的 5 个成功缓存候选为 <code>0/5</code> 命中，X5M 缓存创建/读取 token 也均为 0。</li>
+<li>另一个大项目非流式 HTTP 200 响应未向 XDAPI 提供可解析 usage：XDAPI 本地估算输入 <code>36,164</code>、输出 <code>0</code>，X5M 实际记录输入 <code>30,894</code>、输出 <code>373</code>。</li>
+<li>整个验证会话累计 99 个 X5M 接受请求、582,188 输入 token、12,264 输出 token，实际花费 <code>$0.0631244</code>。</li>
+<li>冷却后的最终审计中，XDAPI 状态、价格、充值、订阅计划和启用模型接口全部 HTTP 200；渠道 89 仍仅限非公开 <code>测试</code> 组，所有临时用户和令牌均已删除。</li>
+<li>结论：渠道当前只适合隔离验证，不具备公开运营条件；没有修改客户路由、容器、数据库、Redis、代理或网络。</li>
+<li>脱敏证据：<a href="../evidence/x5m_deepseek_v41_flash_20260912.json"><code>x5m_deepseek_v41_flash_20260912.json</code></a></li>
+</ul>
+<h2>2026-09-12 17:35 CST</h2>
+<h3>新增 X5M DeepSeek V4.1 Flash 隔离渠道并完成协议、缓存、延迟与并发验证</h3>
+<ul>
+<li>新增 live 渠道 <code>#89 X5M DeepSeek V4.1 Flash 可行性验证</code>，只映射 <code>deepseek-v4.1-flash-x5m -&gt; deepseek-v4.1-flash</code>，仅绑定非公开 <code>测试</code> 分组，<code>auto_ban=0</code>。</li>
+<li>上游直连、管理员渠道测试、XDAPI Chat Completions 和 Responses API 的流式/非流式组合均通过；干净 relay 批次 <code>69/69</code> 成功。</li>
+<li>顺序请求 P50 <code>1.578s</code>、P95 <code>5.662s</code>；并发 8 为 <code>24/24</code>，P50 <code>1.900s</code>、P95 <code>3.509s</code>。</li>
+<li>五次相同长前缀请求在首请求后缓存命中 <code>0/4</code>；X5M cache-read/cache-create token 也均为 0。</li>
+<li>当前计价仅用于内部验证，不是人民币零售价；临时用户和令牌已删除，未改变公开客户路由或运行基础设施。</li>
+</ul>
 <h2>2026-08-17 12:17 CST</h2>
 <h3>XDAPI-NG 完成多实例运行时、协议矩阵、恢复演练与安全加固阶段验收</h3>
 <ul>

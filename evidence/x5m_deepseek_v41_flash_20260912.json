@@ -1,0 +1,177 @@
+{
+  "timestamp": "2026-09-12 18:07 CST",
+  "scope": "X5M DeepSeek V4.1 Flash isolated feasibility validation",
+  "live_channel": {
+    "id": 89,
+    "name": "X5M DeepSeek V4.1 Flash 可行性验证",
+    "status": "enabled",
+    "group": "测试",
+    "public_group": false,
+    "anonymous_pricing_visible": false,
+    "auto_ban": false,
+    "xdapi_model": "deepseek-v4.1-flash-x5m",
+    "upstream_model": "deepseek-v4.1-flash"
+  },
+  "protocol_validation": {
+    "admin_channel_tests": {
+      "nonstream_http": 200,
+      "stream_http": 200
+    },
+    "chat_completions_relay": {
+      "requests": 69,
+      "successes": 69,
+      "success_rate": 1.0,
+      "stream_first_event_ms": 879.6,
+      "stream_first_content_ms": 1257.75
+    },
+    "responses_api": {
+      "upstream_nonstream_http": 200,
+      "upstream_stream_http": 200,
+      "xdapi_nonstream_http": 200,
+      "xdapi_stream_http": 200,
+      "xdapi_stream_first_event_ms": 722.9
+    }
+  },
+  "latency_ms": {
+    "sequential_20": {
+      "median": 1577.74,
+      "p95": 5661.61,
+      "max": 5799.56
+    },
+    "concurrency_2_requests_6": {
+      "successes": 6,
+      "median": 1964.1,
+      "p95": 2748.93,
+      "max": 2748.93
+    },
+    "concurrency_4_requests_12": {
+      "successes": 12,
+      "median": 1727.51,
+      "p95": 2828.83,
+      "max": 2828.83
+    },
+    "concurrency_8_requests_24": {
+      "successes": 24,
+      "median": 1899.72,
+      "p95": 3508.62,
+      "max": 5115.64
+    }
+  },
+  "cache_probe": {
+    "identical_long_prefix_requests": 5,
+    "prompt_tokens_per_request": 32537,
+    "hits_after_first": 0,
+    "hit_rate_after_first": 0.0,
+    "upstream_cache_read_tokens": 0,
+    "upstream_cache_creation_tokens": 0
+  },
+  "large_project_validation": {
+    "fixture": {
+      "name": "Atlas Ledger",
+      "synthetic": true,
+      "characters": 123496,
+      "accepted_prompt_tokens_per_request": 30873
+    },
+    "stream_attempts": 32,
+    "stream_successes": 6,
+    "sequential": {
+      "attempts": 8,
+      "successes": 4,
+      "total_latency_ms_median": 25229.54,
+      "total_latency_ms_p95": 80985.37,
+      "first_content_ms_median": 25200.69,
+      "first_content_ms_p95": 80980.65
+    },
+    "concurrency_4": {
+      "attempts": 8,
+      "successes": 1
+    },
+    "concurrency_8": {
+      "attempts": 16,
+      "successes": 1
+    },
+    "xdapi_upstream_timing_ms": {
+      "request_written_median": 493.0,
+      "request_written_p95": 996.0,
+      "first_response_byte_median": 20665.5,
+      "first_response_byte_p95": 80778.0
+    },
+    "transport": {
+      "http_protocol": "HTTP/2",
+      "connection_ids": 1,
+      "connection_reused_requests": 5
+    },
+    "cache": {
+      "successful_candidates_after_warmup": 5,
+      "hit_requests": 0,
+      "hit_rate": 0.0,
+      "xdapi_cached_tokens": 0,
+      "x5m_cache_read_tokens": 0,
+      "x5m_cache_creation_tokens": 0
+    },
+    "x5m_accepted_usage": {
+      "requests": 6,
+      "input_tokens": 185246,
+      "output_tokens": 98,
+      "actual_cost_usd": 0.0185638
+    },
+    "direct_failure_control": {
+      "http_status": 429,
+      "error_type": "rate_limit_error",
+      "error_code": "gateway_queue_full"
+    },
+    "low_rate_recovery": {
+      "attempts": 3,
+      "start_interval_seconds": 60,
+      "successes": 0,
+      "http_status": 429,
+      "x5m_usage_delta": 0,
+      "x5m_cost_delta_usd": 0.0
+    },
+    "nonstream_accounting_mismatch": {
+      "http_status": 200,
+      "total_latency_ms": 49380.08,
+      "xdapi_local_input_tokens": 36164,
+      "xdapi_output_tokens": 0,
+      "x5m_input_tokens": 30894,
+      "x5m_output_tokens": 373
+    },
+    "verdict": "not_ready_for_public_operation"
+  },
+  "complete_validation_session": {
+    "upstream_requests": 99,
+    "input_tokens": 582188,
+    "output_tokens": 12264,
+    "total_tokens": 594452,
+    "actual_upstream_cost_usd": 0.0631244,
+    "ending_balance_usd": 99.9468756,
+    "observed_input_usd_per_million": 0.1,
+    "observed_output_usd_per_million": 0.4,
+    "deepseek_offpeak_no_cache_reference_cost_usd": 0.0946866,
+    "observed_cost_fraction_of_official_offpeak": 0.6666666667
+  },
+  "operational_caveats": [
+    "The live XDAPI display currency is CNY, while the current test-only expression mirrors X5M USD cost numbers. It is not an approved retail price.",
+    "No prompt-cache hit or cache discount was observed.",
+    "The X5M gateway returned gateway_queue_full under the large-project workload and remained rate-limited across three 60-second-spaced recovery attempts.",
+    "One large non-stream response did not provide usage that XDAPI could account from upstream, causing local input estimation and zero recorded output.",
+    "New channel and ability state took about 35 seconds to converge in the in-memory distributor.",
+    "Five early successful logs carried a deleted probe channel id during rapid delete-and-recreate; the following 64 logs used final channel 89.",
+    "The initial small-request concurrency sample passed, but the later large-project capacity sample failed and blocks public release."
+  ],
+  "cleanup_and_health": {
+    "temporary_users_remaining": 0,
+    "temporary_tokens_deleted": true,
+    "large_project_temporary_users_remaining": 0,
+    "test_group_public": false,
+    "xdapi_model_rate_limit_enabled": false,
+    "completion_ratio_meta_locked": false,
+    "status_http": 200,
+    "pricing_http": 200,
+    "topup_http": 200,
+    "subscription_plans_http": 200,
+    "models_enabled_http": 200,
+    "post_large_test_health_apis_http_200": true,
+    "container_or_network_change": false
+  }
+}
